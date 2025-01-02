@@ -2,14 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import axios from 'axios';
-import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart.tsx';
-import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar.tsx';
-import MainContent from '../../Base/ThemeParts/PagePart/HomePart/Main/Main.tsx';
-import LeftSidebar from '../../Base/ThemeParts/PagePart/HomePart/LeftSidebar/LeftSidebar.tsx';
-import RightSidebar from '../../Base/ThemeParts/PagePart/HomePart/RightSidebar/RightSidebar.tsx';
-import { API_URL } from '../../Base/Api/Api.tsx';
-import { useData } from '../../Base/Context/DataContext.tsx';
-import { SiteData } from '../../Base/Context/DataContext.tsx';
+import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart.tsx';
+import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar.tsx';
+import MainContent from '../../base/ThemeParts/PagePart/HomePart/Main/Main.tsx';
+import LeftSidebar from '../../base/ThemeParts/PagePart/HomePart/LeftSidebar/LeftSidebar.tsx';
+import RightSidebar from '../../base/ThemeParts/PagePart/HomePart/RightSidebar/RightSidebar.tsx';
+import { API_URL } from '../../base/Api/Api.tsx';
+import { useData } from '../../base/Context/DataContext.tsx';
+import { SiteData } from '../../base/Context/DataContext.tsx';
 
 
 function Countdown({ targetDate }: { targetDate: string }) {

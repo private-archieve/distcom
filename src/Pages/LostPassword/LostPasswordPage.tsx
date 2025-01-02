@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import { API_URL } from '../../Base/Api/Api';
-import { useData } from '../../Base/Context/DataContext';
+import { API_URL } from '../../base/Api/Api';
+import { useData } from '../../base/Context/DataContext';
 import { useRouter } from 'next/navigation';
 
 function LostPasswordPage() {

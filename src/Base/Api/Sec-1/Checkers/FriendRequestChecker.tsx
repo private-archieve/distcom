@@ -1,4 +1,4 @@
-import { FriendRequest } from "../../../../Pages/Communication/components/FriendRequests";
+import { FriendRequest } from "../../../../pages/Communication/components/FriendRequests";
 
 export const isValidFriendRequest = (data: any): data is FriendRequest => {
     return typeof data.ID === 'string' &&

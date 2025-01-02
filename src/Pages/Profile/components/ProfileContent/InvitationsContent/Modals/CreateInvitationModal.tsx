@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { CreateEventInvation } from '../../../../../../Base/Api/Api';
-import { useData } from '../../../../../../Base/Context/DataContext';
+import { CreateEventInvation } from '../../../../../../base/Api/Api';
+import { useData } from '../../../../../../base/Context/DataContext';
 
 interface CreateInvitationModalProps {
     isOpen: boolean;

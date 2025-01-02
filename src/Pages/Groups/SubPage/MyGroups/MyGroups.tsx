@@ -1,9 +1,9 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../../../../Base/Api/Api';
-import { useData } from '../../../../Base/Context/DataContext';
-import { isValidMyGroups } from '../../../../Base/Api/Sec-2/Checkers/GroupsChecker';
+import { API_URL } from '../../../../base/Api/Api';
+import { useData } from '../../../../base/Context/DataContext';
+import { isValidMyGroups } from '../../../../base/Api/Sec-2/Checkers/GroupsChecker';
 import { useRouter } from 'next/navigation';
 
 export interface MyGroupInterface {

@@ -1,6 +1,6 @@
 import React from 'react';
-import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
+import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar';
 
 function About() {
   return (

@@ -1,4 +1,4 @@
-import { EventInvitation } from "../../../../Pages/Communication/components/EventInvitation";
+import { EventInvitation } from "../../../../pages/Communication/components/EventInvitation";
 
 export const isValidEventInvitation = (data: any): data is EventInvitation => {
     return typeof data.ID === 'string' &&

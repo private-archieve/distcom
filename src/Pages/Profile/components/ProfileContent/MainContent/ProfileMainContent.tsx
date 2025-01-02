@@ -4,9 +4,9 @@ import { UserData, PostType } from '../../../Profile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSliders, faThumbsUp, faComment, faShareNodes, faUserSlash, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import ReactPlayer from 'react-player';
-import { useData } from '../../../../../Base/Context/DataContext';
-import { PostSendComment, PostSendDislike, PostSendLike } from '../../../../../Base/Api/Api';
-import SharePopup from '../../../../../Base/ThemeParts/Popup/SharePopup';
+import { useData } from '../../../../../base/Context/DataContext';
+import { PostSendComment, PostSendDislike, PostSendLike } from '../../../../../base/Api/Api';
+import SharePopup from '../../../../../base/ThemeParts/Popup/SharePopup';
 
 interface ProfileMainContentProps {
   userData: UserData | null;

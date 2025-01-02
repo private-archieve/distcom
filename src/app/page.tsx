@@ -1,7 +1,7 @@
 "use client"
 import React, { Suspense } from 'react';
 
-import HomePage from '../../src/Pages/Home/HomePage.tsx';
+import HomePage from '../pages/Home/HomePage.tsx';
 // const AboutPage = dynamic(() => import('../../src/Pages/About/About.tsx'), { ssr: false });
 // const GroupsPage = dynamic(() => import('../../src/Pages/Groups/GroupsPage.tsx'), { ssr: false });
 // const CreateGroupPage = dynamic(() => import('../../src/Pages/Groups/SubPage/CreateGroups/CreateGroupsPage.tsx'), { ssr: false });

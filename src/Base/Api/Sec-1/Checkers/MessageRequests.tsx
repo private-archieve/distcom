@@ -1,4 +1,4 @@
-import { MessageRequests } from "../../../../Pages/Communication/components/MessageRequests";
+import { MessageRequests } from "../../../../pages/Communication/components/MessageRequests";
 
 export const isValidMessageRequest = (data: any): data is MessageRequests => {
     return typeof data.ID === 'string' &&

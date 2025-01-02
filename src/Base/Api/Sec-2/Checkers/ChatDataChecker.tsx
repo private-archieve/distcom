@@ -1,4 +1,4 @@
-import { ChatMessage, ChatMessageDetail } from "../../../../Pages/Message/MessagePage";
+import { ChatMessage, ChatMessageDetail } from "../../../../pages/Message/MessagePage";
 
 export const isValidChatData = (data: any): data is ChatMessage => {
     return typeof data.MessageID === 'string' &&

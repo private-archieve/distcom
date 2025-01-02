@@ -1,11 +1,11 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { useData } from '../../Base/Context/DataContext';
-import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
+import { useData } from '../../base/Context/DataContext';
+import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { PostEmailVerify } from '../../Base/Api/Api';
+import { PostEmailVerify } from '../../base/Api/Api';
 import { EmailVerificationModal } from './components/EmailVerification/EmailVerificationModal';
 import { useRouter } from 'next/navigation';
 

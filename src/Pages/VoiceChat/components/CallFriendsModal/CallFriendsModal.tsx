@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone } from '@fortawesome/free-solid-svg-icons';
-import { API_URL } from '../../../../Base/Api/Api';
-import { useData } from '../../../../Base/Context/DataContext';
+import { API_URL } from '../../../../base/Api/Api';
+import { useData } from '../../../../base/Context/DataContext';
 
 interface Friend {
     id:string;

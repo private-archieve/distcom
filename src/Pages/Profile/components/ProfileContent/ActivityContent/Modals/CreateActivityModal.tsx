@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { UserData } from '../../../../Profile';
 import { faCalendarAlt, faStar, faUser } from '@fortawesome/free-solid-svg-icons';
-import { CreateActivity } from '../../../../../../Base/Api/Api';
-import { useData } from '../../../../../../Base/Context/DataContext';
+import { CreateActivity } from '../../../../../../base/Api/Api';
+import { useData } from '../../../../../../base/Context/DataContext';
 interface ProfileActivityContentProps {
     userData: UserData | null;
     isOpen: boolean;

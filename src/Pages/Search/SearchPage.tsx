@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
-import { API_URL } from '../../Base/Api/Api';
+import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar';
+import { API_URL } from '../../base/Api/Api';
 import axios from 'axios';
-import { useData } from '../../Base/Context/DataContext';
+import { useData } from '../../base/Context/DataContext';
 import { useRouter } from 'next/navigation';
 
 interface SearchResultItem {

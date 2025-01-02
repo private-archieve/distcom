@@ -1,12 +1,12 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
+import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar';
 import FriendRequests from './components/FriendRequests';
 import EventInvitations from './components/EventInvitation';
 import GroupInvitation from './components/GroupInvitation';
 import MessageRequests from './components/MessageRequests';
-import { useData } from '../../Base/Context/DataContext';
+import { useData } from '../../base/Context/DataContext';
 import FollowRequests from './components/FollowRequests';
 import { useRouter } from 'next/navigation';
 

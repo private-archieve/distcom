@@ -1,12 +1,12 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart.tsx';
-import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar.tsx';
-import { API_URL } from '../../Base/Api/Api.tsx';
+import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart.tsx';
+import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar.tsx';
+import { API_URL } from '../../base/Api/Api.tsx';
 import CreateGroupPage from './SubPage/CreateGroups/CreateGroupsPage.tsx';
 import MyGroupsPage from './SubPage/MyGroups/MyGroups.tsx';
-import { useData } from '../../Base/Context/DataContext.tsx';
+import { useData } from '../../base/Context/DataContext.tsx';
 import { useRouter } from 'next/navigation';
 
 export type Group = {

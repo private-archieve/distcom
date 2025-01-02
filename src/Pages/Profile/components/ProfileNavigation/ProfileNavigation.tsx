@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useData } from '../../../../Base/Context/DataContext';
+import { useData } from '../../../../base/Context/DataContext';
 
 interface ProfileNavigationProps {
   onSelect: (selectedContent: string) => void;

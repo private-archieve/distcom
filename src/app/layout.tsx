@@ -1,6 +1,6 @@
 import './globals.css';
 import React from 'react';
-import { DataProvider } from '../Base/Context/DataContext';
+import { DataProvider } from '../base/Context/DataContext';
 import { init } from '@instantdb/react';
 
 

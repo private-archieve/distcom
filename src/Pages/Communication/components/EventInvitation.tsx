@@ -1,9 +1,9 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { API_URL, ApiResponseError, PostAcceptEventRequest, PostRejectEventRequest } from '../../../Base/Api/Api';
+import { API_URL, ApiResponseError, PostAcceptEventRequest, PostRejectEventRequest } from '../../../base/Api/Api';
 import axios from 'axios';
-import { useData } from '../../../Base/Context/DataContext';
-import { isValidEventInvitation } from '../../../Base/Api/Sec-1/Checkers/EventInvitationChecker';
+import { useData } from '../../../base/Context/DataContext';
+import { isValidEventInvitation } from '../../../base/Api/Sec-1/Checkers/EventInvitationChecker';
 import { RequestsNull } from '../CommunicationPage';
 
 

@@ -2,10 +2,10 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { UserData } from '../../../Profile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { useData } from '../../../../../Base/Context/DataContext';
+import { useData } from '../../../../../base/Context/DataContext';
 import axios from 'axios';
-import { isValidMyGroups } from '../../../../../Base/Api/Sec-2/Checkers/GroupsChecker';
-import { API_URL } from '../../../../../Base/Api/Api';
+import { isValidMyGroups } from '../../../../../base/Api/Sec-2/Checkers/GroupsChecker';
+import { API_URL } from '../../../../../base/Api/Api';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ProfileNavigation from '../ProfileNavigation/ProfileNavigation';
 import { Followed, Follower, Friend, UserData } from '../../Profile';
-import { useData } from '../../../../Base/Context/DataContext';
-import { PostSendFollowRequest, PostSendFriendRequest } from '../../../../Base/Api/Api';
-import SendPopup from '../../../../Base/ThemeParts/Popup/SendsPopup';
+import { useData } from '../../../../base/Context/DataContext';
+import { PostSendFollowRequest, PostSendFriendRequest } from '../../../../base/Api/Api';
+import SendPopup from '../../../../base/ThemeParts/Popup/SendsPopup';
 
 
 interface ProfileHeaderProps {

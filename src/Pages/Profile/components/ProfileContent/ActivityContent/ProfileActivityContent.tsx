@@ -5,7 +5,7 @@ import { UserData } from '../../../Profile';
 import PendingActivity from './Modals/PendingActivity';
 import PastActivity from './Modals/PastActivity';
 import CreateActivityModal from './Modals/CreateActivityModal';
-import { useData } from '../../../../../Base/Context/DataContext';
+import { useData } from '../../../../../base/Context/DataContext';
 import CreatedActivityModal from './Modals/CreatedActivity';
 
 interface ProfileActivityContentProps {

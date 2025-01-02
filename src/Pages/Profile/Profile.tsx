@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useData } from '../../Base/Context/DataContext.tsx';
-import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart.tsx';
-import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar.tsx';
+import { useData } from '../../base/Context/DataContext.tsx';
+import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart.tsx';
+import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar.tsx';
 import ProfileHeader from './components/ProfileHeader/ProfileHeader.tsx';
 import ProfileMainContent from './components/ProfileContent/MainContent/ProfileMainContent.tsx';
 import ProfileLeftSidebar from './components/ProfileLeftSidebar/ProfileLeftSidebar.tsx';
@@ -12,7 +12,7 @@ import ProfileInvitationsContent from './components/ProfileContent/InvitationsCo
 import ProfileGroupsContent from './components/ProfileContent/GroupsContent/ProfileGroupsContent.tsx';
 import ProfileActivityContent from './components/ProfileContent/ActivityContent/ProfileActivityContent.tsx';
 import ProfileFriendsContent from './components/ProfileContent/FriendsContent/ProfileFriendsContent.tsx';
-import { API_URL } from '../../Base/Api/Api.tsx';
+import { API_URL } from '../../base/Api/Api.tsx';
 import axios from 'axios'; 
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';

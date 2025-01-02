@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import VoiceCallModal from './components/VoiceCall/VoiceCall';
 import CallFriendsModal from './components/CallFriendsModal/CallFriendsModal';
 import IncomingCallModal from './components/IncomingCallModal/IncomingCallModal';
-import { useData } from '../../Base/Context/DataContext';
-import { useVoiceCall } from '../../Base/WebRTC/VoiceCallProvider';
-import { RTCStartCallPack } from '../../Base/WebRTC/Packs/RTCStartCallPack';
+import { useData } from '../../base/Context/DataContext';
+import { useVoiceCall } from '../../base/WebRTC/VoiceCallProvider';
+import { RTCStartCallPack } from '../../base/WebRTC/Packs/RTCStartCallPack';
 import { useRouter } from 'next/navigation';
 
 

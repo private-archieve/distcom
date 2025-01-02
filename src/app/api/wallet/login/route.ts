@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { checkUserExists, LoginUserWallet } from '../../../lib/database';
+import { checkUserExists, LoginUserWallet } from '../../../../lib/database';
 import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {

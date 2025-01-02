@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserData } from '../../../../Profile';
 import { faCalendarAlt, faStar, faUser } from '@fortawesome/free-solid-svg-icons';
-import { useData } from '../../../../../../Base/Context/DataContext';
+import { useData } from '../../../../../../base/Context/DataContext';
 import axios from 'axios';
-import { API_URL } from '../../../../../../Base/Api/Api';
+import { API_URL } from '../../../../../../base/Api/Api';
 import { useRouter } from 'next/navigation';
 
 interface ProfileActivityContentProps {

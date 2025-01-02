@@ -1,9 +1,9 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
-import { SiteData, useData } from '../../Base/Context/DataContext';
-import { API_URL, Postlogin } from '../../Base/Api/Api';
+import { SiteData, useData } from '../../base/Context/DataContext';
+import { API_URL, Postlogin } from '../../base/Api/Api';
 import axios from 'axios';
-import { checkMinaProvider, requestAccounts } from '../../Base/WalletProc/Wallet';
+import { checkMinaProvider, requestAccounts } from '../../base/WalletProc/Wallet';
 import { useRouter } from 'next/navigation';
 
 function Login() {

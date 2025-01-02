@@ -1,9 +1,9 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useData } from '../../../Base/Context/DataContext';
-import { API_URL, ApiResponseError, PostAcceptMessageRequest, PostRejectMessageRequest } from '../../../Base/Api/Api';
-import { isValidMessageRequest } from '../../../Base/Api/Sec-1/Checkers/MessageRequests';
+import { useData } from '../../../base/Context/DataContext';
+import { API_URL, ApiResponseError, PostAcceptMessageRequest, PostRejectMessageRequest } from '../../../base/Api/Api';
+import { isValidMessageRequest } from '../../../base/Api/Sec-1/Checkers/MessageRequests';
 
 
 export interface MessageRequests {

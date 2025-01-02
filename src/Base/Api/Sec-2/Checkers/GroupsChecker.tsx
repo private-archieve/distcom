@@ -1,4 +1,4 @@
-import { MyGroupInterface } from "../../../../Pages/Groups/SubPage/MyGroups/MyGroups";
+import { MyGroupInterface } from "../../../../pages/Groups/SubPage/MyGroups/MyGroups";
 
 export const isValidMyGroups = (data: any): data is MyGroupInterface => {
     if (!Array.isArray(data)) {

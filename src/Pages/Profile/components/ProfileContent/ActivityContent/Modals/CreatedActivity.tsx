@@ -1,7 +1,7 @@
 
 import React, { useState,useEffect } from 'react';
-import { API_URL } from '../../../../../../Base/Api/Api';
-import { useData } from '../../../../../../Base/Context/DataContext';
+import { API_URL } from '../../../../../../base/Api/Api';
+import { useData } from '../../../../../../base/Context/DataContext';
 import axios from 'axios';
 import { UserData } from '../../../../Profile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
