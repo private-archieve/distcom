@@ -1,6 +1,6 @@
 import React from 'react';
-import Header from '../../MogartBase/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../MogartBase/ThemeParts/MainPart/Navbar/Navbar';
+import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
 
 function About() {
   return (
@@ -10,8 +10,8 @@ function About() {
       <div className="flex flex-col h-screen">
        <main className="flex-1 flex justify-center items-center p-4 bg-gray-100">
           <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
-            <h1 className="text-2xl font-bold text-gray-700 mb-4">Welcome to the Mogart Network</h1>
-            <p className="text-gray-600 mb-4">Welcome to the Mogart Network, a cutting-edge SocialFi platform built on top of the Mina Protocol. Our platform is designed to foster a vibrant community where users engage, share, and display content in various forms. Whether it's through developer documentation, podcasts, product promotions, or competitive tournaments, we are here to revolutionize the way users connect and interact online.</p>
+            <h1 className="text-2xl font-bold text-gray-700 mb-4">Welcome to the Distcom Network</h1>
+            <p className="text-gray-600 mb-4">Welcome to the Distcom Network, a cutting-edge SocialFi platform built on top of the Mina Protocol. Our platform is designed to foster a vibrant community where users engage, share, and display content in various forms. Whether it's through developer documentation, podcasts, product promotions, or competitive tournaments, we are here to revolutionize the way users connect and interact online.</p>
             
             <h2 className="text-xl font-semibold text-gray-800 mb-3">Features</h2>
             <ul className="list-disc list-inside space-y-2 text-gray-600">

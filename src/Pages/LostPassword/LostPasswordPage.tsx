@@ -1,11 +1,12 @@
+"use client";
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { API_URL } from '../../MogartBase/Api/Api';
-import { useData } from '../../MogartBase/Context/DataContext';
+import { API_URL } from '../../Base/Api/Api';
+import { useData } from '../../Base/Context/DataContext';
+import { useRouter } from 'next/navigation';
 
 function LostPasswordPage() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { setSiteData } = useData();
   const formRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState('');
@@ -28,7 +29,7 @@ function LostPasswordPage() {
         
         if (status === "Ok") {
           setEmailSent(true);
-          setTimeout(() => navigate('/login'), 5000);
+          setTimeout(() => router.push('/login'), 5000);
         } else {
           setErrorMessage(message || "An error occurred during the recovery process.");
         }

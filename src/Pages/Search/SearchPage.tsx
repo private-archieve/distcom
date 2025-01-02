@@ -1,10 +1,11 @@
+"use client";
 import React, { useState, useEffect } from 'react';
-import Header from '../../MogartBase/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../MogartBase/ThemeParts/MainPart/Navbar/Navbar';
-import { API_URL } from '../../MogartBase/Api/Api';
+import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
+import { API_URL } from '../../Base/Api/Api';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useData } from '../../MogartBase/Context/DataContext';
+import { useData } from '../../Base/Context/DataContext';
+import { useRouter } from 'next/navigation';
 
 interface SearchResultItem {
   ScID: string;
@@ -17,7 +18,7 @@ const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { isLoggedIn, isLoading,siteData} = useData();
   const [searchResults, setSearchResults] = useState<SearchResultItem[]>([]);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleSearch = (e: any) => {
     e.preventDefault();
@@ -25,7 +26,7 @@ const SearchPage = () => {
 
   useEffect(() => {
     if (isLoading) return;
-    if(siteData.SiteStatus != "1") navigate('/');
+    if (siteData.SiteStatus != "1") router.push('/');
     axios.get(`${API_URL}/GetSearch`)
       .then(response => {
         if (response.status === 200) {
@@ -38,7 +39,7 @@ const SearchPage = () => {
       .catch(error => {
         if (error.code === "ERR_NETWORK") {
           console.error('Network error:', error);
-          navigate('/NetworkError');
+          router.push('/NetworkError');
         } else if (error.response) {
           console.error('Search data fetching failed:', error.response.data);
         } else {

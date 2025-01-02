@@ -1,12 +1,13 @@
-import React, { useState,useEffect, useRef } from 'react';
-import { SiteData, useData } from '../../MogartBase/Context/DataContext';
-import { API_URL, Postlogin } from '../../MogartBase/Api/Api';
-import { useNavigate } from 'react-router-dom';
+"use client";
+import React, { useState, useEffect, useRef } from 'react';
+import { SiteData, useData } from '../../Base/Context/DataContext';
+import { API_URL, Postlogin } from '../../Base/Api/Api';
 import axios from 'axios';
-import { checkMinaProvider, requestAccounts } from '../../MogartBase/WalletProc/Wallet';
+import { checkMinaProvider, requestAccounts } from '../../Base/WalletProc/Wallet';
+import { useRouter } from 'next/dist/client/router';
 
 function Login() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { userAuthID, setUserAuthID } = useData();
   const { userAuthToken, setUserAuthToken } = useData();
   const { isLoggedIn, setLoginStatus } = useData();
@@ -18,7 +19,7 @@ function Login() {
 
 
   useEffect(() => {
-    axios.get<SiteData[]>(`${API_URL}/MogartSiteData`)
+    axios.get<SiteData[]>(`${API_URL}/DistcomSiteData`)
       .then(response => {
         const siteData: SiteData = response.data[0];
         setSiteData(siteData);
@@ -26,9 +27,9 @@ function Login() {
       .catch(error => {
         if (error.code === "ERR_NETWORK") {
           console.error('Network error:', error);
-          navigate('/NetworkError');
+          router.push('/NetworkError');
         } else if (error.response) {
-          console.error('MogartSiteData data fetching failed:', error.response.data);
+          console.error('DistcomSiteData data fetching failed:', error.response.data);
         } else {
           console.error('Error:', error.message);
         }
@@ -78,9 +79,9 @@ function Login() {
           setLoginStatus(true);
           setUserAuthID(userId);
           updateData(userdata);
-          setTimeout(() => navigate('/'), 2500);
+          setTimeout(() => router.push('/'), 2500);
         }else if (status === "alreadylogged"){
-          navigate('/');
+          router.push('/');
         }else if (status === "Bad Request") {
           setErrorMessage(message);
           setTimeout(() => setErrorMessage(""), 2500)
@@ -142,11 +143,11 @@ function Login() {
           setLoginStatus(true);
           setUserAuthID(userId);
           updateData(userdata);
-          setTimeout(() => navigate('/'), 2500);
+          setTimeout(() => router.push('/'), 2500);
         }else if (status === "alreadylogged"){
           setErrorMessage(message);
           setTimeout(() => setErrorMessage(""), 2500)
-          setTimeout(() => navigate('/'), 2500)
+          setTimeout(() => router.push('/'), 2500)
         }else if (status === "Bad Request") {
           setErrorMessage(message);
           setTimeout(() => setErrorMessage(""), 2500)

@@ -1,12 +1,13 @@
+"use client"
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useData } from '../../MogartBase/Context/DataContext';
-import Header from '../../MogartBase/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../MogartBase/ThemeParts/MainPart/Navbar/Navbar';
+import { useData } from '../../Base/Context/DataContext';
+import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { PostEmailVerify } from '../../MogartBase/Api/Api';
+import { PostEmailVerify } from '../../Base/Api/Api';
 import { EmailVerificationModal } from './components/EmailVerification/EmailVerificationModal';
+import { useRouter } from 'next/navigation';
 
 const languageOptions = [
   { value: 'en', label: 'English' },
@@ -19,7 +20,7 @@ const themeOptions = [
 ];
 
 const ProfileSettingsPage = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { isLoggedIn, data, siteData, isLoading,userAuthToken } = useData();
   const [profileImage, setProfileImage] = useState('');
   const [visibleUsername, setVisibleUsername] = useState('');
@@ -42,10 +43,10 @@ const ProfileSettingsPage = () => {
 
   useEffect(() => {
     if (isLoading) return;
-    if(siteData.SiteStatus != "1") navigate('/');
+    if (siteData.SiteStatus != "1") router.push('/');
 
     if (!isLoggedIn) {
-      navigate('/login');
+      router.push('/login');
     } else {
       setProfileImage(data?.ProfileImage ||siteData?.SiteDefaultProfileBackgroundImageURL);
       setVisibleUsername(data.Displayname || '');
@@ -56,7 +57,7 @@ const ProfileSettingsPage = () => {
       setSelectedTheme(themeOptions.find(option => option.value === data.Theme) || themeOptions[0]);
       setEmailVerified(data.EmailVerified || false);
     }
-  }, [isLoggedIn, navigate, isLoading, data]);
+  }, [isLoggedIn, router, isLoading, data]);
 
   useEffect(() => {
     const now = new Date().getTime();

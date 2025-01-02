@@ -1,12 +1,13 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays, faEye, faFolderOpen, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { API_URL } from '../../MogartBase/Api/Api';
-import Header from '../../MogartBase/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../MogartBase/ThemeParts/MainPart/Navbar/Navbar';
-import { useNavigate } from 'react-router-dom';
-import { useData } from '../../MogartBase/Context/DataContext';
+import { API_URL } from '../../Base/Api/Api';
+import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
+import { useData } from '../../Base/Context/DataContext';
+import { useRouter } from 'next/navigation';
 
 interface Blog {
   Bid: number;
@@ -31,12 +32,12 @@ const Blog: React.FC = () => {
   const [authors, setAuthors] = useState<string[]>([]);
   const [selectedAuthor, setSelectedAuthor] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     if (isLoading) return;
     if (siteData && siteData.SiteStatus !== "1") {
-      navigate('/');
+      router.push('/');
       return; 
     }
 
@@ -53,7 +54,7 @@ const Blog: React.FC = () => {
     };
   
     fetchBlogs();
-  }, [isLoading, siteData, navigate]); 
+  }, [isLoading, siteData, router]); 
   
 
   useEffect(() => {
@@ -87,7 +88,7 @@ const Blog: React.FC = () => {
   const handleErrors = (error:any) => {
     if (error.code === "ERR_NETWORK") {
       console.error('Network error:', error);
-      navigate('/NetworkError');
+      router.push('/NetworkError');
     } else if (error.response) {
       console.error('Blogs data fetching failed:', error.response.data);
     } else {
@@ -165,7 +166,7 @@ const Blog: React.FC = () => {
           {filteredBlogs.map((blog) => (
             <div key={blog.Bid} className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
               <a href={`/Blogs/${blog.Bauthor.replace(' ','')}/${blog.Burl}`}>
-                <img className="w-full h-48 object-fit rounded-t-lg" src={blog.Bimage} alt={blog.Bdesc|| blog.Bname+" - Mogart Network"} />
+                <img className="w-full h-48 object-fit rounded-t-lg" src={blog.Bimage} alt={blog.Bdesc || blog.Bname + " - Distcom Network"} />
               </a>
               <div className="p-4">
                 <h2 className="text-lg font-semibold text-gray-900 mb-2">{blog.Bname}</h2>

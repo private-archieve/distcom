@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import VoiceCallModal from './components/VoiceCall/VoiceCall';
 import CallFriendsModal from './components/CallFriendsModal/CallFriendsModal';
 import IncomingCallModal from './components/IncomingCallModal/IncomingCallModal';
-import { useData } from '../../MogartBase/Context/DataContext';
-import { useNavigate } from 'react-router-dom';
-import { useVoiceCall } from '../../MogartBase/WebRTC/VoiceCallProvider';
-import { RTCStartCallPack } from '../../MogartBase/WebRTC/Packs/RTCStartCallPack';
+import { useData } from '../../Base/Context/DataContext';
+import { useVoiceCall } from '../../Base/WebRTC/VoiceCallProvider';
+import { RTCStartCallPack } from '../../Base/WebRTC/Packs/RTCStartCallPack';
+import { useRouter } from 'next/navigation';
 
 
 interface VoiceChatProps {
@@ -15,7 +15,7 @@ interface VoiceChatProps {
 
 
 const VoiceChat: React.FC<VoiceChatProps> = ({ isCallModalOpen, setIsCallModalOpen }) => {
-    const navigate = useNavigate();
+    const router = useRouter();
     const { isLoggedIn, isLoading, data,siteData } = useData();
     const { startCall, isCallModalOpen: isVoiceCallModalOpen, setCallStatus: setVoiceCallStatus } = useVoiceCall();
     const [isCalling, setIsCalling] = useState(false);
@@ -26,11 +26,11 @@ const VoiceChat: React.FC<VoiceChatProps> = ({ isCallModalOpen, setIsCallModalOp
 
     useEffect(() => {
         if (isLoading) return;
-        if(siteData.SiteStatus != "1") navigate('/');
+        if (siteData.SiteStatus != "1") router.push('/');
         if (!isLoggedIn) {
-            navigate('/login');
+            router.push('/login');
         }
-    }, [isLoggedIn, isLoading, navigate, data?.UserName]);
+    }, [isLoggedIn, isLoading, router, data?.UserName]);
 
     const handleStartCall = async (friendName: string, friendImage: string, friendId: string) => {
   

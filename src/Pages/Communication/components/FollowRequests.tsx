@@ -1,8 +1,9 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL, ApiResponseError, PostAcceptFollowRequest, PostRejectFollowRequest } from '../../../MogartBase/Api/Api';
-import { useData } from '../../../MogartBase/Context/DataContext';
-import { isValidFriendRequest } from '../../../MogartBase/Api/Sec-1/Checkers/FriendRequestChecker';
+import { API_URL, ApiResponseError, PostAcceptFollowRequest, PostRejectFollowRequest } from '../../../Base/Api/Api';
+import { useData } from '../../../Base/Context/DataContext';
+import { isValidFriendRequest } from '../../../Base/Api/Sec-1/Checkers/FriendRequestChecker';
 
 export interface FollowRequest {
     ID: number;

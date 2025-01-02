@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserData } from '../../../../Profile';
 import { faCalendarAlt, faStar, faUser } from '@fortawesome/free-solid-svg-icons';
-import { useData } from '../../../../../../MogartBase/Context/DataContext';
-import { useNavigate } from 'react-router-dom';
+import { useData } from '../../../../../../Base/Context/DataContext';
 import axios from 'axios';
-import { API_URL } from '../../../../../../MogartBase/Api/Api';
+import { API_URL } from '../../../../../../Base/Api/Api';
+import { useRouter } from 'next/navigation';
 
 interface ProfileActivityContentProps {
     userData: UserData | null;
@@ -25,7 +25,7 @@ interface Activity {
 }
 
 const PastActivity: React.FC<ProfileActivityContentProps> = ({ userData, isOpen, onClose, onSubmit }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [activities, setActivities] = useState<Activity[]>([]);
   const { isLoggedIn,data, isLoading,userAuthToken } = useData();
 
@@ -39,7 +39,7 @@ const PastActivity: React.FC<ProfileActivityContentProps> = ({ userData, isOpen,
     if (isLoading) return;
   
     if (!isLoggedIn) {
-      navigate('/login');
+      router.push('/login');
       return; 
     }
   
@@ -61,7 +61,7 @@ const PastActivity: React.FC<ProfileActivityContentProps> = ({ userData, isOpen,
         .catch(error => {
           if (error.code === "ERR_NETWORK") {
             console.error('Network error:', error);
-            navigate('/NetworkError');
+            router.push('/NetworkError');
           } else if (error.response) {
             console.error('Activity data fetching failed:', error.response.data);
           } else {
@@ -69,7 +69,7 @@ const PastActivity: React.FC<ProfileActivityContentProps> = ({ userData, isOpen,
           }
         });
     }
-  }, [isLoggedIn, isProfileInvitation, isLoading, navigate, data?.UserName,userAuthToken]);
+  }, [isLoggedIn, isProfileInvitation, isLoading, router, data?.UserName, userAuthToken]);
   
 
 

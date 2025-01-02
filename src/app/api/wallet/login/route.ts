@@ -19,6 +19,7 @@ export async function POST(req: Request) {
 
     try {
         const userExists = await checkUserExists(walletAddress);
+        console.log("User exists: ", userExists);
         if (userExists) {
             const token = await LoginUserWallet(walletAddress);
             return NextResponse.json({ message: 'Login successful!', token, status: 'Ok' }, { status: 200 });

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useData } from '../../../../MogartBase/Context/DataContext.tsx';
+import { useData } from '../../../../Base/Context/DataContext.tsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhoneSlash, faMicrophone, faMicrophoneSlash, faHeadphones, faHeadphonesAlt } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 const UserCallModal = () => {
     const { data, isLoading } = useData();
@@ -10,7 +10,7 @@ const UserCallModal = () => {
     const [isMuted, setIsMuted] = useState(false);
     const [isHeadphonesMuted, setIsHeadphonesMuted] = useState(false);
     const audioContextRef = useRef<AudioContext | null>(null);
-    const navigate = useNavigate();
+  const router = useRouter();
 
     useEffect(() => {
       if (isLoading) {

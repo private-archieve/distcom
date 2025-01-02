@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { UserData } from '../../../Profile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faShareNodes, faThumbsUp, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { useData } from '../../../../../MogartBase/Context/DataContext';
+import { useData } from '../../../../../Base/Context/DataContext';
 
 interface ProfileMainContentProps {
   userData: UserData | null;

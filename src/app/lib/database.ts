@@ -1,6 +1,35 @@
-export async function checkUserExists(walletAddress: string) {
+interface ApiResponse {
+    message: string;
+    status: string;
+    token?: string;
+    csrfToken?: string;
+    error?: string;
+}
+
+interface RegisterRequest {
+    walletAddress: string;
+}
+
+interface BlogPost {
+    title: string;
+    content: string;
+    url: string;
+    // Add other fields related to blog posts as needed
+}
+
+// Functions used in database operations
+interface DatabaseOperations {
+    checkUserExists(walletAddress: string, email?: string): Promise<boolean>;
+    getBlogPosts(filter: string): Promise<BlogPost[]>;
+    getBlogPostByURL(url: string): Promise<BlogPost>;
+    RegisterUserWallet(walletAddress: string): Promise<void>;
+    LoginUserWallet(walletAddress: string): Promise<string>;
+}
+
+
+export async function checkUserExists(walletAddress: string): Promise<boolean> {
     // Simulate checking user existence from a database
-    return false; // Simulate that the user does not exist
+    return true; // Simulate that the user does not exist
 }
 
 export async function getBlogPosts(filter: string) {

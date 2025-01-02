@@ -1,9 +1,10 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../../../../MogartBase/Api/Api';
-import { useData } from '../../../../MogartBase/Context/DataContext';
-import { useNavigate } from 'react-router-dom';
-import { isValidMyGroups } from '../../../../MogartBase/Api/Sec-2/Checkers/GroupsChecker';
+import { API_URL } from '../../../../Base/Api/Api';
+import { useData } from '../../../../Base/Context/DataContext';
+import { isValidMyGroups } from '../../../../Base/Api/Sec-2/Checkers/GroupsChecker';
+import { useRouter } from 'next/navigation';
 
 export interface MyGroupInterface {
   GrpID: number;
@@ -36,7 +37,7 @@ const GroupItem: React.FC<{ group: MyGroupInterface }> = ({ group }) => {
 const MyGroupsPage = () => {
   const [myGroups, setMyGroups] = useState<MyGroupInterface[]>([]);
   const { isLoggedIn, isLoading, data,siteData,userAuthToken } = useData();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchMyGroups = async () => {
@@ -57,7 +58,7 @@ const MyGroupsPage = () => {
         if (axios.isAxiosError(error)) {
           if (error.code === "ERR_NETWORK") {
             console.error('Network error:', error);
-            navigate('/NetworkError');
+            router.push('/NetworkError');
           } else if (error.response) {
             console.error('MyGroups data fetching failed:', error.response.data);
           } else {

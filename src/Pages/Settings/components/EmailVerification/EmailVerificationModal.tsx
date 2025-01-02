@@ -1,4 +1,5 @@
-import React, { useState,useRef,useEffect } from 'react';
+'use client'
+import React, { useState, useRef, useEffect } from 'react';
 
 interface StickyNotesModalProps {
     onClose: () => void;

@@ -1,7 +1,8 @@
 // ProfileLeftSidebar.tsx
 import React from 'react';
 import { UserData, Friend } from '../../Profile';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+
 
 interface ProfileLeftSidebarProps {
   userData: UserData | null;
@@ -28,7 +29,7 @@ const ProfileLeftSidebar: React.FC<ProfileLeftSidebarProps> = ({ userData }) => 
           <li className="text-sm text-gray-500">This person has no friends.</li>
         ) : (
           userFriends.map((friend, index) => (
-            <Link to={`/Profile/${friend.name}`} key={index} className="block hover:bg-gray-100 rounded-lg transition duration-300 ease-in-out">
+            <Link href={`/Profile/${friend.name}`} key={index} className="block hover:bg-gray-100 rounded-lg transition duration-300 ease-in-out">
               <li className="flex items-center space-x-4 p-3">
                 <img className="h-12 w-12 rounded-full object-cover shadow" src={friend.image} alt={friend.name} />
                 <div>

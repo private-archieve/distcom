@@ -1,13 +1,14 @@
-import React, { useEffect,useState } from 'react';
-import Header from '../../MogartBase/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../MogartBase/ThemeParts/MainPart/Navbar/Navbar';
+"use client"
+import React, { useEffect, useState } from 'react';
+import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
 import FriendRequests from './components/FriendRequests';
 import EventInvitations from './components/EventInvitation';
 import GroupInvitation from './components/GroupInvitation';
 import MessageRequests from './components/MessageRequests';
-import { useData } from '../../MogartBase/Context/DataContext';
-import { useNavigate } from 'react-router-dom';
+import { useData } from '../../Base/Context/DataContext';
 import FollowRequests from './components/FollowRequests';
+import { useRouter } from 'next/navigation';
 
 
 export interface RequestsNull{
@@ -19,13 +20,13 @@ export interface RequestsNull{
 const CommunicationPage = () => {
   const [activeModule, setActiveModule] = useState('friendRequests');
   const { isLoggedIn, isLoading,siteData} = useData();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {  
     if (isLoading) return;
-    if(siteData.SiteStatus != "1") navigate('/');
+    if (siteData.SiteStatus != "1") router.push('/');
     if (!isLoggedIn) {
-      navigate('/login');
+      router.push('/login');
     }
   });
 

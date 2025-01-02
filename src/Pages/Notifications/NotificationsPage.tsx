@@ -1,11 +1,13 @@
+"use client";
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useData } from '../../MogartBase/Context/DataContext';
+import { useData } from '../../Base/Context/DataContext';
 
-import Header from '../../MogartBase/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../MogartBase/ThemeParts/MainPart/Navbar/Navbar';
-import { API_URL } from '../../MogartBase/Api/Api';
+import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
+import { API_URL } from '../../Base/Api/Api';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 interface Notification {
     NotName: string;
@@ -32,16 +34,16 @@ const NotificationItem: React.FC<{ notification: Notification }> = ({ notificati
 };
 
 const NotificationsPage = () => {
-    const navigate = useNavigate();
+  const router = useRouter();
     const { isLoggedIn, isLoading,data,siteData,userAuthToken } = useData();
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const { username } = useParams();
     useEffect(() => {
       if (isLoading) return;
-      if(siteData.SiteStatus != "1") navigate('/');
+      if (siteData.SiteStatus != "1") router.push('/');
       
         if (!isLoggedIn) {
-          navigate('/login');
+          router.push('/login');
         } else {
           axios.get(`${API_URL}/${username}/GetNotifications`, {
             headers: {
@@ -59,7 +61,7 @@ const NotificationsPage = () => {
             .catch(error => {
               if (error.code === "ERR_NETWORK") {
                 console.error('Network error:', error);
-                navigate('/NetworkError');
+                router.push('/NetworkError');
               } else if (error.response) {
                 console.error('Notification data fetching failed:', error.response.data);
               } else {
@@ -67,7 +69,7 @@ const NotificationsPage = () => {
               }
             });
         }
-      }, [isLoggedIn, navigate, isLoading, username]);
+    }, [isLoggedIn, router, isLoading, username]);
       
     return (
         <>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ProfileNavigation from '../ProfileNavigation/ProfileNavigation';
 import { Followed, Follower, Friend, UserData } from '../../Profile';
-import { useData } from '../../../../MogartBase/Context/DataContext';
-import { PostSendFollowRequest, PostSendFriendRequest } from '../../../../MogartBase/Api/Api';
-import SendPopup from '../../../../MogartBase/ThemeParts/Popup/SendsPopup';
+import { useData } from '../../../../Base/Context/DataContext';
+import { PostSendFollowRequest, PostSendFriendRequest } from '../../../../Base/Api/Api';
+import SendPopup from '../../../../Base/ThemeParts/Popup/SendsPopup';
 
 
 interface ProfileHeaderProps {

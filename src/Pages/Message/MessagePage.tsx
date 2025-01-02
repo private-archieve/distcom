@@ -1,22 +1,23 @@
+"use client";
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useData } from '../../MogartBase/Context/DataContext';
+import { useData } from '../../Base/Context/DataContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentAlt, faPhone, faCheckCircle, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Header from '../../MogartBase/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../MogartBase/ThemeParts/MainPart/Navbar/Navbar';
-import { API_URL, PostSendMessage, PostUnclockChatData } from '../../MogartBase/Api/Api';
+import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
+import { API_URL, PostSendMessage, PostUnclockChatData } from '../../Base/Api/Api';
 import ChatUserList from './components/ChatUserList/ChatUserList';
 import VoiceChat from '../VoiceChat/VoiceChat';
-import { isValidChatData, isValidChatDetailData } from '../../MogartBase/Api/Sec-2/Checkers/ChatDataChecker';
+import { isValidChatData, isValidChatDetailData } from '../../Base/Api/Sec-2/Checkers/ChatDataChecker';
 import EmojiPicker ,{Emoji, Theme, EmojiStyle }from 'emoji-picker-react';
 import axios from 'axios';
 import NewChat from './components/NewChat/NewChat';
-import { AuthenticationToken, Constants } from '../../MogartBase/MogartZKBase/ZkMogart/Messager';
-import { checkMinaProvider, requestAccounts } from '../../MogartBase/WalletProc/Wallet';
+import { AuthenticationToken, Constants } from '../../Base/DistcomZKBase/ZkDistcom/Messager';
+import { checkMinaProvider, requestAccounts } from '../../Base/WalletProc/Wallet';
 import UnlockPopup from './components/AccessChat/AccessChat';
 import { CircuitString, Field, PublicKey } from 'o1js';
+import router, { useRouter } from 'next/router';
 
 export interface ChatMessageDetail {
   MessageID: string;
@@ -64,7 +65,7 @@ const MessagePage = () => {
   const [MessageGlobalID, setMessageChatID] = useState('');
   const [MessageSignaturedData, setSignedData] = useState(null as any);
 
-  const navigate = useNavigate();
+  const router = useRouter();
   useEffect(() => {
     if (longPress) {
       setShowContextMenu(true);
@@ -136,7 +137,7 @@ const MessagePage = () => {
 
   const handleClose = (): void => {
     setIsLock(false); 
-    navigate('/');
+    router.push('/');
   };
   const handleToggleModal = () => {
       setNewChatModalOpen(!isNewChatModal);
@@ -158,9 +159,9 @@ const MessagePage = () => {
   useEffect(() => {
     if (isLockPopupVisible) return;
     if (isLoading) return;
-    if(siteData.SiteStatus != "1") navigate('/');
+    if (siteData.SiteStatus != "1") router.push('/');
     if (!isLoggedIn) {
-      navigate('/login');
+      router.push('/login');
       return;
     }
   
@@ -182,7 +183,7 @@ const MessagePage = () => {
         if (axios.isAxiosError(error)) {
           if (error.code === "ERR_NETWORK") {
             console.error('Network error:', error);
-            navigate('/NetworkError');
+            router.push('/NetworkError');
           } else if (error.response) {
             console.error('Message data fetching failed:', error.response.data);
           } else {
@@ -194,7 +195,7 @@ const MessagePage = () => {
       }
     };
     fetchChatData();
-  }, [isLoggedIn, isLoading, navigate, data?.UserName,userAuthToken,isLockPopupVisible,isNewChatModal]);
+  }, [isLoggedIn, isLoading, router, data?.UserName, userAuthToken, isLockPopupVisible, isNewChatModal]);
 
   useEffect(() => {
     const fetchMessages = async () => {

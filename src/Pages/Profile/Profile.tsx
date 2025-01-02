@@ -1,9 +1,8 @@
-// Profile.tsx
+"use client";
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useData } from '../../MogartBase/Context/DataContext.tsx';
-import Header from '../../MogartBase/ThemeParts/MainPart/Header/HeaderPart.tsx';
-import Navbar from '../../MogartBase/ThemeParts/MainPart/Navbar/Navbar.tsx';
+import { useData } from '../../Base/Context/DataContext.tsx';
+import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart.tsx';
+import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar.tsx';
 import ProfileHeader from './components/ProfileHeader/ProfileHeader.tsx';
 import ProfileMainContent from './components/ProfileContent/MainContent/ProfileMainContent.tsx';
 import ProfileLeftSidebar from './components/ProfileLeftSidebar/ProfileLeftSidebar.tsx';
@@ -13,8 +12,10 @@ import ProfileInvitationsContent from './components/ProfileContent/InvitationsCo
 import ProfileGroupsContent from './components/ProfileContent/GroupsContent/ProfileGroupsContent.tsx';
 import ProfileActivityContent from './components/ProfileContent/ActivityContent/ProfileActivityContent.tsx';
 import ProfileFriendsContent from './components/ProfileContent/FriendsContent/ProfileFriendsContent.tsx';
-import { API_URL } from '../../MogartBase/Api/Api.tsx';
+import { API_URL } from '../../Base/Api/Api.tsx';
 import axios from 'axios'; 
+import { useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 export interface UserData {
   VisibleID: string;
@@ -73,7 +74,7 @@ export interface Followed {
 }
 
 const Profile = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { username: urlUsername } = useParams<{ username?: string }>();
   const { isLoggedIn, isLoading, data,siteData,userAuthToken } = useData();
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -110,7 +111,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (isLoading) return;
-    if(siteData.SiteStatus != "1") navigate('/');
+    if (siteData.SiteStatus != "1") router.push('/');
 
     const fetchUserData = async () => {
       try {
@@ -133,7 +134,7 @@ const Profile = () => {
         if (axios.isAxiosError(error)) {
           if (error.code === "ERR_NETWORK") {
             console.error('Network error:', error);
-            navigate('/NetworkError');
+            router.push('/NetworkError');
           } else if (error.response) {
             console.error('Profile data fetching failed:', error.response.data);
           } else {

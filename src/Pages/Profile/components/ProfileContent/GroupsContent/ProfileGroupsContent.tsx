@@ -1,12 +1,13 @@
-import React, { useState,useCallback, useEffect } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import React, { useState, useCallback, useEffect } from 'react';
 import { UserData } from '../../../Profile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { useData } from '../../../../../MogartBase/Context/DataContext';
+import { useData } from '../../../../../Base/Context/DataContext';
 import axios from 'axios';
-import { isValidMyGroups } from '../../../../../MogartBase/Api/Sec-2/Checkers/GroupsChecker';
-import { API_URL } from '../../../../../MogartBase/Api/Api';
+import { isValidMyGroups } from '../../../../../Base/Api/Sec-2/Checkers/GroupsChecker';
+import { API_URL } from '../../../../../Base/Api/Api';
+import { useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 export interface MyGroupInterface {
   GrpID: string;
@@ -24,7 +25,7 @@ interface ProfileGroupsContentProps {
 const ProfileGroupsContent: React.FC<ProfileGroupsContentProps> = ({ userData }) => {
   const [myGroups, setMyGroups] = useState<MyGroupInterface[]>([]);
   const { isLoggedIn, data, userAuthToken } = useData();
-  const navigate = useNavigate();
+  const router = useRouter();
   const location = useLocation();
   const { username } = useParams<{ username?: string }>();
 
@@ -55,7 +56,7 @@ const ProfileGroupsContent: React.FC<ProfileGroupsContentProps> = ({ userData })
         if (axios.isAxiosError(error)) {
           if (error.code === "ERR_NETWORK") {
             console.error('Network error:', error);
-            navigate('/NetworkError');
+            router.push('/NetworkError');
           } else if (error.response) {
             console.error('GroupsContent data fetching failed:', error.response.data);
           } else {
@@ -70,7 +71,7 @@ const ProfileGroupsContent: React.FC<ProfileGroupsContentProps> = ({ userData })
     if (isLoggedIn) {
       fetchMyGroups();
     }
-  }, [isLoggedIn, data.UserName, username, navigate, userAuthToken,setMyGroups]);
+  }, [isLoggedIn, data.UserName, username, router, userAuthToken, setMyGroups]);
 
   return (
     <main className="flex-1 p-6 overflow-auto">

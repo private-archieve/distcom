@@ -1,12 +1,13 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays, faEye, faFolderOpen, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { API_URL } from '../../MogartBase/Api/Api';
-import Header from '../../MogartBase/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../MogartBase/ThemeParts/MainPart/Navbar/Navbar';
-import { useNavigate } from 'react-router-dom';
-import { useData } from '../../MogartBase/Context/DataContext';
+import { API_URL } from '../../Base/Api/Api';
+import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
+import { useData } from '../../Base/Context/DataContext';
 
 interface GlobalContent {
   Bid: number;
@@ -29,11 +30,11 @@ const GlobalContentComponent: React.FunctionComponent = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     if (isLoading) return;
-    if(siteData.SiteStatus != "1") navigate('/');
+    if (siteData.SiteStatus != "1") router.push('/');
     const apiUrl = `${API_URL}/GetGlobals`;
     axios.get<GlobalContent[]>(apiUrl)
       .then((response) => {
@@ -46,7 +47,7 @@ const GlobalContentComponent: React.FunctionComponent = () => {
       .catch(error => {
         if (error.code === "ERR_NETWORK") {
           console.error('Network error:', error);
-          navigate('/NetworkError');
+          router.push('/NetworkError');
         } else if (error.response) {
           console.error('GetGlobals data fetching failed:', error.response.data);
         } else {

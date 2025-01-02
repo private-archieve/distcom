@@ -1,15 +1,15 @@
+"use client"
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'
 import axios from 'axios';
-import Header from '../../MogartBase/ThemeParts/MainPart/Header/HeaderPart.tsx';
-import Navbar from '../../MogartBase/ThemeParts/MainPart/Navbar/Navbar.tsx';
-import MainContent from '../../MogartBase/ThemeParts/PagePart/HomePart/Main/Main.tsx';
-import LeftSidebar from '../../MogartBase/ThemeParts/PagePart/HomePart/LeftSidebar/LeftSidebar.tsx'; 
-import RightSidebar from '../../MogartBase/ThemeParts/PagePart/HomePart/RightSidebar/RightSidebar.tsx';
-import { API_URL } from '../../MogartBase/Api/Api.tsx';
-import { useData } from '../../MogartBase/Context/DataContext.tsx';
-import { SiteData } from '../../MogartBase/Context/DataContext.tsx';
-import { useNavigate } from 'react-router-dom';
-
+import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart.tsx';
+import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar.tsx';
+import MainContent from '../../Base/ThemeParts/PagePart/HomePart/Main/Main.tsx';
+import LeftSidebar from '../../Base/ThemeParts/PagePart/HomePart/LeftSidebar/LeftSidebar.tsx';
+import RightSidebar from '../../Base/ThemeParts/PagePart/HomePart/RightSidebar/RightSidebar.tsx';
+import { API_URL } from '../../Base/Api/Api.tsx';
+import { useData } from '../../Base/Context/DataContext.tsx';
+import { SiteData } from '../../Base/Context/DataContext.tsx';
 
 
 function Countdown({ targetDate }: { targetDate: string }) {
@@ -55,8 +55,8 @@ function Countdown({ targetDate }: { targetDate: string }) {
 
 
 function HomePage() {
-  const {siteData, setSiteData, isLoading} = useData();
-  const navigate = useNavigate();
+  const { siteData, setSiteData, isLoading } = useData();
+  const router = useRouter()
 
   useEffect(() => {
     if (isLoading) return;
@@ -72,9 +72,9 @@ function HomePage() {
       .catch(error => {
         if (error.code === "ERR_NETWORK") {
           console.error('Network error:', error);
-          navigate('/NetworkError');
+          router.push('/NetworkError');
         } else if (error.response) {
-          console.error('MogartSiteData data fetching failed:', error.response.data);
+          console.error('DistcomSiteData data fetching failed:', error.response.data);
         } else {
           console.error('Error:', error.message);
         }
@@ -93,14 +93,14 @@ function HomePage() {
 
   return (
     <div className="flex flex-col">
-      <Header />
+      {/* <Header /> */}
       {siteData && siteData.SiteStatus === "1" ? (
         <div className="flex flex-1 pt-16"> 
-          <Navbar />
+          {/* <Navbar /> */}
           <div className="flex flex-1 pl-16">
-            <LeftSidebar />
+            {/* <LeftSidebar /> */}
             <MainContent />
-            <RightSidebar />
+            {/* <RightSidebar /> */}
           </div>
         </div>
        ) : (

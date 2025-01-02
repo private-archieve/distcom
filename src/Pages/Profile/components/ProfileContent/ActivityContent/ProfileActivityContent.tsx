@@ -5,8 +5,7 @@ import { UserData } from '../../../Profile';
 import PendingActivity from './Modals/PendingActivity';
 import PastActivity from './Modals/PastActivity';
 import CreateActivityModal from './Modals/CreateActivityModal';
-import { useParams, useLocation } from 'react-router-dom';
-import { useData } from '../../../../../MogartBase/Context/DataContext';
+import { useData } from '../../../../../Base/Context/DataContext';
 import CreatedActivityModal from './Modals/CreatedActivity';
 
 interface ProfileActivityContentProps {

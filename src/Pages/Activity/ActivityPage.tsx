@@ -1,10 +1,12 @@
+"use client"
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useData } from '../../MogartBase/Context/DataContext';
-import Header from '../../MogartBase/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../MogartBase/ThemeParts/MainPart/Navbar/Navbar';
-import { API_URL } from '../../MogartBase/Api/Api';
+import { useData } from '../../Base/Context/DataContext';
+import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar';
+import { API_URL } from '../../Base/Api/Api';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 interface Activity {
   Actid: string;
@@ -23,16 +25,16 @@ const ActivityItem: React.FC<{ activity: Activity }> = ({ activity }) => (
 );
 
 const ActivityPage = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { isLoggedIn, userAuthID,userAuthToken, isLoading,siteData } = useData();
   const [activities, setActivities] = useState<Activity[]>([]);
   const { username } = useParams();
 
   useEffect(() => {  
     if (isLoading) return;
-    if(siteData.SiteStatus != "1") navigate('/');
+    if (siteData.SiteStatus != "1") router.push('/');
     if (!isLoggedIn) {
-      navigate('/login');
+      router.push('/login');
     } else {
       axios.get(`${API_URL}/${username}/GetActivity/General`, {
         headers: {
@@ -51,7 +53,7 @@ const ActivityPage = () => {
       .catch(error => {
         if (error.code === "ERR_NETWORK") {
           console.error('Network error:', error);
-          navigate('/NetworkError');
+          router.push('/NetworkError');
         } else if (error.response) {
           console.error('Activity data fetching failed:', error.response.data);
         } else {
@@ -59,7 +61,7 @@ const ActivityPage = () => {
         }
       });
     }
-  }, [isLoggedIn, navigate, userAuthID, isLoading]);
+  }, [isLoggedIn, router, userAuthID, isLoading]);
 
   if (isLoading) return <div className="flex justify-center items-center h-screen">
   <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>

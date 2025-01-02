@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
-import { useData } from '../../../../MogartBase/Context/DataContext';
+import { useData } from '../../../../Base/Context/DataContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStickyNote, faSearch, faAdjust, faGear } from '@fortawesome/free-solid-svg-icons';
 import StickyNotesModal from './components/StickyNotes/StickyNotesModal';

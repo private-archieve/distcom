@@ -1,8 +1,9 @@
+"use client"
 import React, { useState, useEffect } from 'react';
-import { API_URL, ApiResponseError, PostAcceptEventRequest, PostRejectEventRequest } from '../../../MogartBase/Api/Api';
+import { API_URL, ApiResponseError, PostAcceptEventRequest, PostRejectEventRequest } from '../../../Base/Api/Api';
 import axios from 'axios';
-import { useData } from '../../../MogartBase/Context/DataContext';
-import { isValidEventInvitation } from '../../../MogartBase/Api/Sec-1/Checkers/EventInvitationChecker';
+import { useData } from '../../../Base/Context/DataContext';
+import { isValidEventInvitation } from '../../../Base/Api/Sec-1/Checkers/EventInvitationChecker';
 import { RequestsNull } from '../CommunicationPage';
 
 

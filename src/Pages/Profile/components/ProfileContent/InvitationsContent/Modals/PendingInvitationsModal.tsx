@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { API_URL } from '../../../../../../MogartBase/Api/Api';
-import { useData } from '../../../../../../MogartBase/Context/DataContext';
+import { API_URL } from '../../../../../../Base/Api/Api';
+import { useData } from '../../../../../../Base/Context/DataContext';
 import axios from 'axios';
 
 interface Invitation {

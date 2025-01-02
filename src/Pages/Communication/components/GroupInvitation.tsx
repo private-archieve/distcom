@@ -1,8 +1,9 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL, ApiResponseError, PostAcceptGroupsRequest, PostRejectGroupsRequest } from '../../../MogartBase/Api/Api';
-import { useData } from '../../../MogartBase/Context/DataContext';
-import { isValidGroupRequest } from '../../../MogartBase/Api/Sec-1/Checkers/GroupInvitationChecker';
+import { API_URL, ApiResponseError, PostAcceptGroupsRequest, PostRejectGroupsRequest } from '../../../Base/Api/Api';
+import { useData } from '../../../Base/Context/DataContext';
+import { isValidGroupRequest } from '../../../Base/Api/Sec-1/Checkers/GroupInvitationChecker';
 
 export interface GroupInvitation {
   ID: string;

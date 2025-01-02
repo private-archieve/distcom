@@ -1,12 +1,13 @@
+"use client"
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Header from '../../MogartBase/ThemeParts/MainPart/Header/HeaderPart.tsx';
-import Navbar from '../../MogartBase/ThemeParts/MainPart/Navbar/Navbar.tsx';
-import { API_URL } from '../../MogartBase/Api/Api.tsx';
+import Header from '../../Base/ThemeParts/MainPart/Header/HeaderPart.tsx';
+import Navbar from '../../Base/ThemeParts/MainPart/Navbar/Navbar.tsx';
+import { API_URL } from '../../Base/Api/Api.tsx';
 import CreateGroupPage from './SubPage/CreateGroups/CreateGroupsPage.tsx';
 import MyGroupsPage from './SubPage/MyGroups/MyGroups.tsx';
-import { useData } from '../../MogartBase/Context/DataContext.tsx';
-import { useNavigate } from 'react-router-dom';
+import { useData } from '../../Base/Context/DataContext.tsx';
+import { useRouter } from 'next/navigation';
 
 export type Group = {
   GrpID: number;
@@ -55,11 +56,11 @@ const GroupsPage = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [groups, setGroups] = useState<Group[]>([]);
   const { isLoggedIn, isLoading, data,siteData } = useData();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     if (isLoading) return;
-    if(siteData.SiteStatus != "1") navigate('/');
+    if (siteData.SiteStatus != "1") router.push('/');
     const fetchAndSetGroups = async () => {
       if (activeTab === 'all') {
         try {
@@ -69,7 +70,7 @@ const GroupsPage = () => {
           if (axios.isAxiosError(error)) {
             if (error.code === "ERR_NETWORK") {
               console.error('Network error:', error);
-              navigate('/NetworkError');
+              router.push('/NetworkError');
             } else if (error.response) {
               console.error('Groups data fetching failed:', error.response.data);
             } else {

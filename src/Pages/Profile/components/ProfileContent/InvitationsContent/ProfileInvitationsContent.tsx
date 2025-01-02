@@ -6,7 +6,7 @@ import PastInvitationsModal from './Modals/PastInvitationsModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faEnvelope, faPlus, faCalendarPlus } from '@fortawesome/free-solid-svg-icons';
 import CreatedInvitationModal from './Modals/CreatedInvitationModal';
-import { useData } from '../../../../../MogartBase/Context/DataContext';
+import { useData } from '../../../../../Base/Context/DataContext';
 
 
 interface ProfileInvitationsContentProps {

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { CreateEventInvation } from '../../../../../../MogartBase/Api/Api';
-import { useData } from '../../../../../../MogartBase/Context/DataContext';
+import { CreateEventInvation } from '../../../../../../Base/Api/Api';
+import { useData } from '../../../../../../Base/Context/DataContext';
 
 interface CreateInvitationModalProps {
     isOpen: boolean;

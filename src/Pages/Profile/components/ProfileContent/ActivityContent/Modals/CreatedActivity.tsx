@@ -1,12 +1,12 @@
 
 import React, { useState,useEffect } from 'react';
-import { API_URL } from '../../../../../../MogartBase/Api/Api';
-import { useData } from '../../../../../../MogartBase/Context/DataContext';
+import { API_URL } from '../../../../../../Base/Api/Api';
+import { useData } from '../../../../../../Base/Context/DataContext';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { UserData } from '../../../../Profile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faEye, faGlobe, faList } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'next/navigation';
 
 interface CreatedActivityModalProps {
     userData: UserData | null;
@@ -27,7 +27,7 @@ interface CreatedActivityModalProps {
   }
 
 const CreatedActivityModal: React.FC<CreatedActivityModalProps> = ({ userData, isOpen, onClose, onSubmit }) => {
-    const navigate = useNavigate();
+  const router = useRouter();
     const [activities, setActivities] = useState<Activity[]>([]);
     const { isLoggedIn,data, isLoading,userAuthToken } = useData();
   
@@ -41,7 +41,7 @@ const CreatedActivityModal: React.FC<CreatedActivityModalProps> = ({ userData, i
       if (isLoading) return;
     
       if (!isLoggedIn) {
-        navigate('/login');
+        router.push('/login');
         return; 
       }
       if (isLoggedIn && isProfileInvitation) {
@@ -62,7 +62,7 @@ const CreatedActivityModal: React.FC<CreatedActivityModalProps> = ({ userData, i
           .catch(error => {
             if (error.code === "ERR_NETWORK") {
               console.error('Network error:', error);
-              navigate('/NetworkError');
+              router.push('/NetworkError');
             } else if (error.response) {
               console.error('Activity data fetching failed:', error.response.data);
             } else {
@@ -70,7 +70,7 @@ const CreatedActivityModal: React.FC<CreatedActivityModalProps> = ({ userData, i
             }
           });
       }
-    }, [isLoggedIn, isProfileInvitation, isLoading, navigate, data?.UserName,userAuthToken]);
+    }, [isLoggedIn, isProfileInvitation, isLoading, router, data?.UserName, userAuthToken]);
     
   
   

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useData } from '../../../../MogartBase/Context/DataContext';
+import { useData } from '../../../../Base/Context/DataContext';
 
 interface ProfileNavigationProps {
   onSelect: (selectedContent: string) => void;

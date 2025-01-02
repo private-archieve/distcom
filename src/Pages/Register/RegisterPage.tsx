@@ -1,21 +1,22 @@
-import React, { useEffect, useRef,useState } from 'react';
-import { SiteData, useData } from '../../MogartBase/Context/DataContext';
-import { API_URL, PostRegister } from '../../MogartBase/Api/Api';
-import { useNavigate } from 'react-router-dom';
+"use client"
+import React, { useEffect, useRef, useState } from 'react';
+import { SiteData, useData } from '../../Base/Context/DataContext';
+import { API_URL, PostRegister } from '../../Base/Api/Api';
 import axios from 'axios';
-import { checkMinaProvider, requestAccounts } from '../../MogartBase/WalletProc/Wallet';
+import { checkMinaProvider, requestAccounts } from '../../Base/WalletProc/Wallet';
+import { useRouter } from 'next/navigation';
 
 function Register() {
   const { csrfToken } = useData();
   const formRef = useRef<HTMLFormElement>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const { siteData,setSiteData,data, updateData } = useData();
 
 
   useEffect(() => {
-    axios.get<SiteData[]>(`${API_URL}/MogartSiteData`)
+    axios.get<SiteData[]>(`${API_URL}/DistcomSiteData`)
       .then(response => {
         const siteData: SiteData = response.data[0];
         setSiteData(siteData);
@@ -23,9 +24,9 @@ function Register() {
       .catch(error => {
         if (error.code === "ERR_NETWORK") {
           console.error('Network error:', error);
-          navigate('/NetworkError');
+          router.push('/NetworkError');
         } else if (error.response) {
-          console.error('MogartSiteData data fetching failed:', error.response.data);
+          console.error('DistcomSiteData data fetching failed:', error.response.data);
         } else {
           console.error('Error:', error.message);
         }
@@ -69,7 +70,7 @@ function Register() {
       }else {
         setErrorMessage(message || "An error occurred during login.");
       }
-      setTimeout(() => navigate('/login'), 3000);
+      setTimeout(() => router.push('/login'), 3000);
     } catch (error) {
       console.error('Registration error:', error);
       setErrorMessage(error instanceof Error ? error.message : 'An error occurred during registration.');
@@ -118,7 +119,7 @@ function Register() {
         const response = await PostRegister({ email, username, password, walletAddress: "" });
         if (response.status === "Success") {
           setRegistrationSuccess(true);
-          setTimeout(() => navigate('/login'), 3000);
+          setTimeout(() => router.push('/login'), 3000);
         } else {
           setErrorMessage(response.message || 'Registration failed with an unspecified error.');
         }
@@ -126,7 +127,7 @@ function Register() {
         if (axios.isAxiosError(error)) {
           if (error.code === "ERR_NETWORK") {
             setErrorMessage('Network error:'+ error);
-            navigate('/NetworkError');
+            router.push('/NetworkError');
           } else if (error.response) {
             setErrorMessage('Register failed:'+ error.response.data);
           } else {

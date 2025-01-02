@@ -4,9 +4,9 @@ import { UserData, PostType } from '../../../Profile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSliders, faThumbsUp, faComment, faShareNodes, faUserSlash, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import ReactPlayer from 'react-player';
-import { useData } from '../../../../../MogartBase/Context/DataContext';
-import { PostSendComment, PostSendDislike, PostSendLike } from '../../../../../MogartBase/Api/Api';
-import SharePopup from '../../../../../MogartBase/ThemeParts/Popup/SharePopup';
+import { useData } from '../../../../../Base/Context/DataContext';
+import { PostSendComment, PostSendDislike, PostSendLike } from '../../../../../Base/Api/Api';
+import SharePopup from '../../../../../Base/ThemeParts/Popup/SharePopup';
 
 interface ProfileMainContentProps {
   userData: UserData | null;
@@ -168,7 +168,7 @@ const ProfileMainContent: React.FC<ProfileMainContentProps> = ({ userData }) => 
                 />
               </div>
             )}
-             {showSharePopup && <SharePopup url={`https://mogart-network.vercel.app/posts/${post.GlobalId}`} title={post.Author} onClose={handleClosePopup} />}
+            {showSharePopup && <SharePopup url={`http://localhost:3000/posts/${post.GlobalId}`} title={post.Author} onClose={handleClosePopup} />}
           </div>
           
         ))
