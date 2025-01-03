@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { API_URL, ApiResponseError, PostAcceptMessageRequest, PostRejectMessageRequest } from '../../../base/Api/Api';
 import { isValidMessageRequest } from '../../../base/Api/Sec-1/Checkers/MessageRequests';
-import { useData } from '../../../base/Context/DataContext';
 
 
 export interface MessageRequests {
@@ -21,7 +20,7 @@ export interface MessageRequests {
 
 const MessageRequests = () => {
   const [messages, setRequests] = useState<MessageRequests[]>([]);
-  const { isLoggedIn, isLoading, data, userAuthToken } = useData();
+  const { isLoggedIn, isLoading, data, userAuthToken } = useDataStore();
   const [acceptingId, setAcceptingId] = useState<number | null>(null);
   const [rejectingId, setRejectingId] = useState<number | null>(null);
 

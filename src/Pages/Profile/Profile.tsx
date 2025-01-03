@@ -1,21 +1,23 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { useData } from '../../base/Context/DataContext.tsx';
-import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart.tsx';
-import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar.tsx';
-import ProfileHeader from './components/ProfileHeader/ProfileHeader.tsx';
-import ProfileMainContent from './components/ProfileContent/MainContent/ProfileMainContent.tsx';
-import ProfileLeftSidebar from './components/ProfileLeftSidebar/ProfileLeftSidebar.tsx';
-import ProfileRightSidebar from './components/ProfileRightSidebar/ProfileRightSidebar.tsx';
-import ProfilePhotosContent from './components/ProfileContent/PhotosContent/ProfilePhotosContent.tsx';
-import ProfileInvitationsContent from './components/ProfileContent/InvitationsContent/ProfileInvitationsContent.tsx';
-import ProfileGroupsContent from './components/ProfileContent/GroupsContent/ProfileGroupsContent.tsx';
-import ProfileActivityContent from './components/ProfileContent/ActivityContent/ProfileActivityContent.tsx';
-import ProfileFriendsContent from './components/ProfileContent/FriendsContent/ProfileFriendsContent.tsx';
-import { API_URL } from '../../base/Api/Api.tsx';
-import axios from 'axios'; 
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
+
+
+import { API_URL } from '@/base/Api/Api';
+import Header from '@/base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
+import useDataStore from '@/store/dataStore';
+import axios from 'axios';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import ProfileActivityContent from './components/ProfileContent/ActivityContent/ProfileActivityContent';
+import ProfileFriendsContent from './components/ProfileContent/FriendsContent/ProfileFriendsContent';
+import ProfileGroupsContent from './components/ProfileContent/GroupsContent/ProfileGroupsContent';
+import ProfileInvitationsContent from './components/ProfileContent/InvitationsContent/ProfileInvitationsContent';
+import ProfileMainContent from './components/ProfileContent/MainContent/ProfileMainContent';
+import ProfilePhotosContent from './components/ProfileContent/PhotosContent/ProfilePhotosContent';
+import ProfileHeader from './components/ProfileHeader/ProfileHeader';
+import ProfileLeftSidebar from './components/ProfileLeftSidebar/ProfileLeftSidebar';
+import ProfileRightSidebar from './components/ProfileRightSidebar/ProfileRightSidebar';
+
 
 export interface UserData {
   VisibleID: string;
@@ -76,7 +78,7 @@ export interface Followed {
 const Profile = () => {
   const router = useRouter();
   const { username: urlUsername } = useParams<{ username?: string }>();
-  const { isLoggedIn, isLoading, data,siteData,userAuthToken } = useData();
+  const { isLoggedIn, isLoading, data, siteData, userAuthToken } = useDataStore();
   const [userData, setUserData] = useState<UserData | null>(null);
   const username = urlUsername || (isLoggedIn ? (data?.UserName || '') : '');
   const [selectedContent, setSelectedContent] = useState('Posts');

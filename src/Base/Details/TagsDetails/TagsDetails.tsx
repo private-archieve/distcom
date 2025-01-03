@@ -1,6 +1,5 @@
 "use client"
 import { API_URL } from "@/base/Api/Api";
-import { useData } from "@/base/Context/DataContext";
 import Header from "@/base/ThemeParts/MainPart/Header/HeaderPart";
 import Navbar from "@/base/ThemeParts/MainPart/Navbar/Navbar";
 import axios from 'axios';
@@ -58,7 +57,7 @@ const TaggedContentPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [allContent, setAllContent] = useState<ContentItem[]>([]);
   const [filteredContent, setFilteredContent] = useState<ContentItem[]>([]);
-  const { isLoading, siteData } = useData();
+  const { isLoading, siteData } = useDataStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -189,7 +188,7 @@ const ContentItemDisplay: React.FC<ContentItemDisplayProps> = ({ item }) => (
       {item.type === 'Blog' && (
         <div className="relative overflow-hidden">
           <a href={`/Blogs/${item.author.replace(' ', '')}/${item.url}`}>
-            <Image src={item.image} alt="Content" className="w-full h-48 object-fit transition-transform duration-500 ease-in-out hover:scale-110" width={0}
+            <Image src={item.image || "https://placehold.co/400"} alt="Content" className="w-full h-48 object-fit transition-transform duration-500 ease-in-out hover:scale-110" width={0}
               height={0}
               sizes="100vw"
               style={{ width: '100%', height: 'auto' }} />
@@ -209,7 +208,7 @@ const ContentItemDisplay: React.FC<ContentItemDisplayProps> = ({ item }) => (
       )}
 
       <div className="flex items-center mt-4">
-        <Image src={item.authorAvatar} alt={`${item.author}'s Avatar`} className="w-10 h-10 rounded-full mr-3" width={0}
+        <Image src={item.authorAvatar || "https://placehold.co/400"} alt={`${item.author}'s Avatar`} className="w-10 h-10 rounded-full mr-3" width={0}
           height={0}
           sizes="100vw"
           style={{ width: '100%', height: 'auto' }} />

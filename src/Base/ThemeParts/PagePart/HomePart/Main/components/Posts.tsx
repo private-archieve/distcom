@@ -1,9 +1,9 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { formatDistance } from 'date-fns';
-import { Heart, MessageCircle, Share2, MoreVertical } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+
+import { PostSendComment, PostSendDislike, PostSendLike } from '@/base/Api/Api';
+import { PostComments } from '@/base/Details/PostDetail/PostDetail';
+import SharePopup from '@/base/ThemeParts/Popup/SharePopup';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -11,12 +11,15 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import SharePopup from '@/base/ThemeParts/Popup/SharePopup';
-import ReactPlayer from 'react-player';
-import { PostSendComment, PostSendDislike, PostSendLike } from '@/base/Api/Api';
-import { useData } from '@/base/Context/DataContext';
+import { Input } from '@/components/ui/input';
+import { toast } from '@/hooks/use-toast';
+import useDataStore from '@/store/dataStore';
+import { Heart, MessageCircle, MoreVertical, Share2 } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { PostComments } from '@/base/Details/PostDetail/PostDetail';
+import React, { useEffect, useState } from 'react';
+import ReactPlayer from 'react-player';
+
 
 export interface PostProps {
     GlobalId: string;
@@ -56,16 +59,13 @@ const Post: React.FC<PostProps> = ({
     const [showSharePopup, setShowSharePopup] = useState<boolean>(false);
     const [showActionsPopup, setShowActionsPopup] = useState<boolean>(false);
     const [commentText, setCommentText] = useState<string>('');
-    const { siteData, data, isLoading, userAuthToken } = useData();
+    const { siteData, data, isLoading, userAuthToken, isLoggedIn } = useDataStore();
     const router = useRouter();
     const [play, setPlay] = useState<boolean>(false);
 
-    // setCommentsList([
-    //     { author: "1", content: "1", comment_id: 1, profile_image: "1", comment_date: "1", likes: "1", replies: "1" }
-    // ])
 
     useEffect(() => {
-        if (isLoading) return;
+        //if (isLoading) return;
 
         try {
             const userLiked = Likes.some((like: Like) => like.userName === data.UserName);
@@ -74,20 +74,20 @@ const Post: React.FC<PostProps> = ({
             console.error("Failed to update isLiked state:", error);
             setIsLiked(false);
         }
-    }, [Likes, data.UserName, isLoading]);
+    }, [Likes, data, isLoading]);
 
     const handleLike = async () => {
         try {
             if (isLiked) {
                 await PostSendDislike(
                     { UserID: data.UserName, ContentID: GlobalId, ContentType: "PostContent" },
-                    userAuthToken
+                    userAuthToken || ""
                 );
                 setLikeCount(likeCount - 1);
             } else {
                 await PostSendLike(
                     { UserID: data.UserName, ContentID: GlobalId, ContentType: "PostContent" },
-                    userAuthToken
+                    userAuthToken || ""
                 );
                 setLikeCount(likeCount + 1);
             }
@@ -98,13 +98,22 @@ const Post: React.FC<PostProps> = ({
     };
 
     const handleSendComment = async () => {
+        if (!isLoggedIn) {
+            toast({
+                title: "Login to send a comment",
+                description: "Authenticate with your Mina Wallet in order to send a comment.",
+                variant: "destructive",
+            });
+            return;
+        }
+
         if (!commentText.trim()) return;
         try {
             await PostSendComment(
-                { UserID: data.UserName, ContentID: GlobalId, Content: commentText, ContentType: "PostContent" },
-                userAuthToken
+                { UserID: data, ContentID: GlobalId, Content: commentText, ContentType: "PostContent" },
+                userAuthToken || ""
             );
-            setCommentsList([...commentsList, { author: data.UserName, content: commentText, comment_id: 1, profile_image: "1", comment_date: "1", likes: "1", replies: "1" }]);
+            setCommentsList([...commentsList, { author: data, content: commentText, comment_id: 1, profile_image: "1", comment_date: "1", likes: "1", replies: "1" }]);
             setCommentText('');
         } catch (error) {
             console.error("Error sending comment:", error);
@@ -132,7 +141,7 @@ const Post: React.FC<PostProps> = ({
     };
 
     return (
-        <div className="w-full max-w-2xl rounded-lg border bg-card text-card-foreground shadow-sm mb-8 p-4 hover:shadow-xl transition-shadow duration-300">
+        <div className="rounded-xl border bg-card text-card-foreground shadow p-4">
             {/* Author and Actions */}
             <div className="flex items-center justify-between mb-3">
                 <Link href={`/posts/${GlobalId}`}>
@@ -249,7 +258,7 @@ const Post: React.FC<PostProps> = ({
                 </ul>
                 {/* Comment Input */}
                 <div className="mt-4 flex items-center space-x-2">
-                    <input
+                    <Input
                         type="text"
                         value={commentText}
                         onChange={(e) => setCommentText(e.target.value)}
@@ -257,16 +266,19 @@ const Post: React.FC<PostProps> = ({
                         className="flex-grow px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
                         autoFocus
                     />
-                    <button
-                        className="inline-flex justify-center items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition duration-150 ease-in-out flex-shrink-0"
+
+                    <Button
+                        className="inline-flex justify-center items-center px-4 py-2  text-white rounded-md transition duration-150 ease-in-out flex-shrink-0"
                         onClick={handleSendComment}
                     >
                         Send
-                    </button>
+                    </Button>
                 </div>
+
+
             </div>
         </div>
     );
 };
 
-export default React.memo(Post);
+export default Post;

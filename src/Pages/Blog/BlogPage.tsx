@@ -1,6 +1,5 @@
 "use client"
 import { API_URL } from '@/api/Api';
-import { useData } from '@/base/Context/DataContext';
 import Header from '@/base/ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
 import { faCalendarDays, faEye, faFolderOpen, faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -24,7 +23,7 @@ interface Blog {
 }
 
 const Blog: React.FC = () => {
-  const { isLoading, siteData } = useData();
+  const { isLoading, siteData } = useDataStore();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [filteredBlogs, setFilteredBlogs] = useState<Blog[]>([]);
   const [categories, setCategories] = useState<string[]>([]);

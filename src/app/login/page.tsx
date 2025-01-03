@@ -1,18 +1,19 @@
-"use client"
-import React, { useState, useEffect, useRef } from 'react';
-import { SiteData, useData } from '../../base/Context/DataContext';
-import { API_URL, Postlogin } from '../../base/Api/Api';
+"use client";
+
+
+import useDataStore from '@/store/dataStore';
 import axios from 'axios';
-import { checkMinaProvider, requestAccounts } from '@/base/WalletProc/Wallet';
 import { useRouter } from 'next/navigation';
+import React, { useEffect, useRef, useState } from 'react';
+import { API_URL, Postlogin } from '../../base/Api/Api';
 
 
 function Login() {
     const router = useRouter();
-    const { userAuthID, setUserAuthID } = useData();
-    const { userAuthToken, setUserAuthToken } = useData();
-    const { isLoggedIn, setLoginStatus } = useData();
-    const { siteData, setSiteData, data, updateData } = useData();
+    const { userAuthID, setUserAuthID } = useDataStore();
+    const { userAuthToken, setUserAuthToken } = useDataStore();
+    const { isLoggedIn, setLoginStatus } = useDataStore();
+    const { siteData, setSiteData } = useDataStore();
     const formRef = useRef<HTMLFormElement>(null);
     const [LoginSuccess, setLoginSuccess] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');

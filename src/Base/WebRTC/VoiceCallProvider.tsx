@@ -1,11 +1,10 @@
 "use client"
-import React, { createContext, useContext, useState, useRef, useCallback, useEffect, ReactNode } from 'react';
 import axios from 'axios';
+import React, { createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { API_URL } from '../Api/Api';
 import config from './config';
-import useVoiceWebSocket from './VoiceWebSocketService';
 import { Handler } from './Handler/Handler';
-import { useData } from '../Context/DataContext';
+import useVoiceWebSocket from './VoiceWebSocketService';
 
 
 interface VoiceCallContextType {
@@ -32,7 +31,7 @@ export const VoiceCallProvider: React.FC<VoiceCallProviderProps> = ({ children }
     const [isCallModalOpen, setIsCallModalOpen] = useState(false);
     const [callStatus, setCallStatus] = useState('');
     const { webSocket, sendMessage } = useVoiceWebSocket();
-    const { data, userAuthID, userAuthToken } = useData();
+    const { data, userAuthID, userAuthToken } = useDataStore();
 
     useEffect(() => {
         if (!rtcPeerConnectionRef.current) {

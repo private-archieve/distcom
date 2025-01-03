@@ -1,7 +1,10 @@
-import React from 'react';
+"use client";
+
+import { faFacebookSquare, faLinkedin, faPinterestSquare, faTumblrSquare, faTwitter, faVk, faWhatsappSquare } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookSquare, faTwitter, faPinterestSquare,faTumblrSquare, faLinkedin, faVk, faWhatsappSquare } from '@fortawesome/free-brands-svg-icons';
-import { faChevronRight, faChevronLeft, faXmark ,faEnvelope} from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
+
 
 interface SharePopupProps {
   url: string;
@@ -10,37 +13,37 @@ interface SharePopupProps {
 }
 
 const SharePopup: React.FC<SharePopupProps> = ({ url, title, onClose }) => {
-    const shareOnFacebook = () => {
+  const shareOnFacebook = () => {
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
-    };
+  };
 
-    const shareOnTwitter = () => {
+  const shareOnTwitter = () => {
     window.open(`http://twitter.com/share?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`, '_blank');
-    };
+  };
 
-    const shareOnPinterest = () => {
+  const shareOnPinterest = () => {
     window.open(`http://pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&description=${encodeURIComponent(title)}`, '_blank');
-    };
+  };
 
-    const shareViaEmail = () => {
+  const shareViaEmail = () => {
     window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(url)}`;
-    };
+  };
 
-    const shareOnTumblr = () => {
+  const shareOnTumblr = () => {
     window.open(`http://www.tumblr.com/share/link?url=${encodeURIComponent(url)}&name=${encodeURIComponent(title)}`, '_blank');
-    };
+  };
 
-    const shareOnLinkedIn = () => {
+  const shareOnLinkedIn = () => {
     window.open(`http://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`, '_blank');
-    };
+  };
 
-    const shareOnVK = () => {
+  const shareOnVK = () => {
     window.open(`http://vkontakte.ru/share.php?url=${encodeURIComponent(url)}`, '_blank');
-    };
+  };
 
-    const shareOnWhatsapp = () => {
+  const shareOnWhatsapp = () => {
     window.location.href = `whatsapp://send?text=${encodeURIComponent(url)}`;
-    };
+  };
 
   const copyLinkToClipboard = () => {
     navigator.clipboard.writeText(url);
@@ -50,7 +53,7 @@ const SharePopup: React.FC<SharePopupProps> = ({ url, title, onClose }) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg p-6">
-      <button className="fixed text-gray-500 hover:text-gray-700" onClick={onClose}>
+        <button className="fixed text-gray-500 hover:text-gray-700" onClick={onClose}>
           <FontAwesomeIcon icon={faXmark} size="lg" />
         </button>
         <div className="text-center">

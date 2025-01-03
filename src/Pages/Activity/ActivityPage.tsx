@@ -1,12 +1,10 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import { useData } from '../../base/Context/DataContext';
+import axios from 'axios';
+import { useParams, useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { API_URL } from '../../base/Api/Api';
 import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar';
-import { API_URL } from '../../base/Api/Api';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
 
 interface Activity {
   Actid: string;
@@ -26,11 +24,11 @@ const ActivityItem: React.FC<{ activity: Activity }> = ({ activity }) => (
 
 const ActivityPage = () => {
   const router = useRouter();
-  const { isLoggedIn, userAuthID,userAuthToken, isLoading,siteData } = useData();
+  const { isLoggedIn, userAuthID, userAuthToken, isLoading, siteData } = useDataStore();
   const [activities, setActivities] = useState<Activity[]>([]);
   const { username } = useParams();
 
-  useEffect(() => {  
+  useEffect(() => {
     if (isLoading) return;
     if (siteData.SiteStatus != "1") router.push('/');
     if (!isLoggedIn) {
@@ -38,49 +36,49 @@ const ActivityPage = () => {
     } else {
       axios.get(`${API_URL}/${username}/GetActivity/General`, {
         headers: {
-            'Authorization': `Bearer ${userAuthToken}`
-        }
-    })
-      .then(response => {
-        const data = response.data;
-        if (Array.isArray(data)) {
-          setActivities(data);
-        } else {
-          console.error('Unexpected structure of data', data);
-          setActivities([]);
+          'Authorization': `Bearer ${userAuthToken}`
         }
       })
-      .catch(error => {
-        if (error.code === "ERR_NETWORK") {
-          console.error('Network error:', error);
-          router.push('/NetworkError');
-        } else if (error.response) {
-          console.error('Activity data fetching failed:', error.response.data);
-        } else {
-          console.error('Error:', error.message);
-        }
-      });
+        .then(response => {
+          const data = response.data;
+          if (Array.isArray(data)) {
+            setActivities(data);
+          } else {
+            console.error('Unexpected structure of data', data);
+            setActivities([]);
+          }
+        })
+        .catch(error => {
+          if (error.code === "ERR_NETWORK") {
+            console.error('Network error:', error);
+            router.push('/NetworkError');
+          } else if (error.response) {
+            console.error('Activity data fetching failed:', error.response.data);
+          } else {
+            console.error('Error:', error.message);
+          }
+        });
     }
   }, [isLoggedIn, router, userAuthID, isLoading]);
 
   if (isLoading) return <div className="flex justify-center items-center h-screen">
-  <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
-  <p className="text-lg text-purple-600 font-semibold ml-4">Loading...</p>
-</div>;
+    <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
+    <p className="text-lg text-purple-600 font-semibold ml-4">Loading...</p>
+  </div>;
 
   return (
     <>
       <Header />
       <Navbar />
       <div className="flex flex-col h-screen pt-16">
-        <main className="flex-1 overflow-y-auto bg-gray-50"> 
-          <div className="max-w-4xl mx-auto py-6 sm:py-8 lg:py-12"> 
+        <main className="flex-1 overflow-y-auto bg-gray-50">
+          <div className="max-w-4xl mx-auto py-6 sm:py-8 lg:py-12">
             <h1 className="text-3xl font-extrabold text-gray-800 mb-6">Activity</h1>
-            <div className="bg-white shadow-md rounded-lg overflow-hidden"> 
+            <div className="bg-white shadow-md rounded-lg overflow-hidden">
               {activities.length === 0 ? (
-                <p className="text-gray-700 text-center py-5 text-lg">No activity occurred</p> 
+                <p className="text-gray-700 text-center py-5 text-lg">No activity occurred</p>
               ) : (
-                <div className="divide-y divide-gray-200"> 
+                <div className="divide-y divide-gray-200">
                   {activities.map((activity) => (
                     <ActivityItem key={activity.Actid} activity={activity} />
                   ))}

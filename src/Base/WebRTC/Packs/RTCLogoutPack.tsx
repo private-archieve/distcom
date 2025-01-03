@@ -1,11 +1,10 @@
-import { useData } from "../../Context/DataContext";
 
-export async function RTCLogoutPack(connection:any) {
-  const {userAuthID,data} = useData();
+export async function RTCLogoutPack(connection: any) {
+  const { userAuthID, data } = useDataStore();
   const RTCLogoutPack = JSON.stringify({
     username: data.UserName,
     userauthid: userAuthID,
-    type:2
+    type: 2
   });
-return RTCLogoutPack;
+  return RTCLogoutPack;
 }

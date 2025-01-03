@@ -1,5 +1,4 @@
 "use client";
-import { useData } from '@/base/Context/DataContext';
 import { faHeadphones, faHeadphonesAlt, faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
@@ -8,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 
 
 const UserCallModal = () => {
-  const { data, isLoading } = useData();
+  const { data, isLoading } = useDataStore();
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isHeadphonesMuted, setIsHeadphonesMuted] = useState(false);

@@ -1,6 +1,5 @@
 import { API_URL } from '@/base/Api/Api';
 import { isValidMyGroups } from '@/base/Api/Sec-2/Checkers/GroupsChecker';
-import { useData } from '@/base/Context/DataContext';
 import { UserData } from '@/pages/Profile/Profile';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -25,7 +24,7 @@ interface ProfileGroupsContentProps {
 
 const ProfileGroupsContent: React.FC<ProfileGroupsContentProps> = ({ userData }) => {
   const [myGroups, setMyGroups] = useState<MyGroupInterface[]>([]);
-  const { isLoggedIn, data, userAuthToken } = useData();
+  const { isLoggedIn, data, userAuthToken } = useDataStore();
   const router = useRouter();
   const location = useLocation();
   const { username } = useParams<{ username?: string }>();

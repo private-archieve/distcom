@@ -1,23 +1,20 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { useData } from '../../base/Context/DataContext';
+import { faCheckCircle, faCommentAlt, faPaperPlane, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCommentAlt, faPhone, faCheckCircle, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import EmojiPicker, { EmojiStyle, Theme } from 'emoji-picker-react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { API_URL, PostSendMessage, PostUnclockChatData } from '../../base/Api/Api';
+import { isValidChatData, isValidChatDetailData } from '../../base/Api/Sec-2/Checkers/ChatDataChecker';
 import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar';
-import { API_URL, PostSendMessage, PostUnclockChatData } from '../../base/Api/Api';
-import ChatUserList from './components/ChatUserList/ChatUserList';
+import { requestAccounts } from '../../base/WalletProc/Wallet';
 import VoiceChat from '../VoiceChat/VoiceChat';
-import { isValidChatData, isValidChatDetailData } from '../../base/Api/Sec-2/Checkers/ChatDataChecker';
-import EmojiPicker ,{Emoji, Theme, EmojiStyle }from 'emoji-picker-react';
-import axios from 'axios';
-import NewChat from './components/NewChat/NewChat';
-import { AuthenticationToken, Constants } from '../../base/DistcomZKBase/ZkDistcom/Messager';
-import { checkMinaProvider, requestAccounts } from '../../base/WalletProc/Wallet';
 import UnlockPopup from './components/AccessChat/AccessChat';
-import { CircuitString, Field, PublicKey } from 'o1js';
-import router, { useRouter } from 'next/router';
+import ChatUserList from './components/ChatUserList/ChatUserList';
+import NewChat from './components/NewChat/NewChat';
 
 export interface ChatMessageDetail {
   MessageID: string;
@@ -40,7 +37,7 @@ export interface ChatMessage {
 }
 
 const MessagePage = () => {
-  const { isLoggedIn, isLoading, data,userAuthToken,userAuthID,siteData } = useData();
+  const { isLoggedIn, isLoading, data, userAuthToken, userAuthID, siteData } = useDataStore();
   const [chatData, setChatData] = useState<ChatMessage[]>([]);
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessageDetail[]>([]);
@@ -56,7 +53,7 @@ const MessagePage = () => {
   const [longPress, setLongPress] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [currentDisplayCount, setCurrentDisplayCount] = useState(10); 
+  const [currentDisplayCount, setCurrentDisplayCount] = useState(10);
   const [messageContent, setMessageContent] = useState('');
   const [showContextMenu, setShowContextMenu] = useState(false);
 
@@ -69,10 +66,10 @@ const MessagePage = () => {
   useEffect(() => {
     if (longPress) {
       setShowContextMenu(true);
-      setLongPress(false); 
+      setLongPress(false);
     }
   }, [longPress]);
-  
+
   useEffect(() => {
     if (longPress) {
       setShowContextMenu(true);
@@ -86,14 +83,14 @@ const MessagePage = () => {
       setSelectedMessageId(messageId);
     }, 500) as unknown as number);
   };
-  
+
   const handleMouseUp = () => {
     if (longPressTimeoutId !== null) {
       clearTimeout(longPressTimeoutId);
       setLongPressTimeoutId(null);
 
       if (longPress) {
-        setShowContextMenu(true); 
+        setShowContextMenu(true);
         setLongPress(false);
       }
     }
@@ -101,49 +98,49 @@ const MessagePage = () => {
 
   const handleUnlock = async (): Promise<void> => {
     try {
-        const walletAddresses = await requestAccounts();
-        if (walletAddresses && walletAddresses.length > 0) {
-            const publicKey = walletAddresses[0];
-            const AUTHTOKEN = userAuthToken;
-            const timestamp = new Date().getTime();
+      const walletAddresses = await requestAccounts();
+      if (walletAddresses && walletAddresses.length > 0) {
+        const publicKey = walletAddresses[0];
+        const AUTHTOKEN = userAuthToken;
+        const timestamp = new Date().getTime();
 
-            const content = `PublicKey: ${publicKey}\nAUTHTOKEN: ${AUTHTOKEN}\nTimestamp: ${timestamp}`;
+        const content = `PublicKey: ${publicKey}\nAUTHTOKEN: ${AUTHTOKEN}\nTimestamp: ${timestamp}`;
 
-            const signedData = await window.mina?.signMessage({ message: content }).catch((err: any) => {
-                throw err; 
-            });
+        const signedData = await window.mina?.signMessage({ message: content }).catch((err: any) => {
+          throw err;
+        });
 
-            if (signedData && 'signature' in signedData) {
-               const unlockresponse = await PostUnclockChatData({signedData},userAuthToken);
-                console.log("Signed Message Data:", unlockresponse);
-                setIsLock(false);
-            } else {
-                console.error("Failed to obtain signed data.");
-            }
+        if (signedData && 'signature' in signedData) {
+          const unlockresponse = await PostUnclockChatData({ signedData }, userAuthToken);
+          console.log("Signed Message Data:", unlockresponse);
+          setIsLock(false);
         } else {
-            console.error("Failed to retrieve wallet addresses");
+          console.error("Failed to obtain signed data.");
         }
+      } else {
+        console.error("Failed to retrieve wallet addresses");
+      }
     } catch (error: any) {
-        console.error("Error in handleUnlock: ", error);
-        if (error.code === 1001) {
-            console.error("User disconnected, please connect first.");
-        } else if (error.code === 1002) {
-            console.error("User rejected the request.");
-        } else if (error.code === 23001) {
-            console.error("Origin mismatch, check origin safety.");
-        }
+      console.error("Error in handleUnlock: ", error);
+      if (error.code === 1001) {
+        console.error("User disconnected, please connect first.");
+      } else if (error.code === 1002) {
+        console.error("User rejected the request.");
+      } else if (error.code === 23001) {
+        console.error("Origin mismatch, check origin safety.");
+      }
     }
-};
+  };
 
   const handleClose = (): void => {
-    setIsLock(false); 
+    setIsLock(false);
     router.push('/');
   };
   const handleToggleModal = () => {
-      setNewChatModalOpen(!isNewChatModal);
+    setNewChatModalOpen(!isNewChatModal);
   };
 
-  const onEmojiClick = (emojiData:any, event:any) => {
+  const onEmojiClick = (emojiData: any, event: any) => {
     setMessageContent(prevContent => prevContent + emojiData.emoji);
     setShowEmojiPicker(false);
   };
@@ -164,20 +161,20 @@ const MessagePage = () => {
       router.push('/login');
       return;
     }
-  
+
     const fetchChatData = async () => {
       try {
         const response = await axios.get(`${API_URL}/ChatData/${data?.UserName}`, {
           headers: {
-              'Authorization': `Bearer ${userAuthToken}`
+            'Authorization': `Bearer ${userAuthToken}`
           }
-      });
-      
-      if (!response.data || !Array.isArray(response.data) || response.data.some(chatdata => !isValidChatData(chatdata))) {
-        console.error('API response is not an array or contains invalid data');
-        return;
-      }
-      
+        });
+
+        if (!response.data || !Array.isArray(response.data) || response.data.some(chatdata => !isValidChatData(chatdata))) {
+          console.error('API response is not an array or contains invalid data');
+          return;
+        }
+
         setChatData(response.data);
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
@@ -200,7 +197,7 @@ const MessagePage = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       if (isLockPopupVisible) return;
-      if (!selectedChatId) return; 
+      if (!selectedChatId) return;
       try {
         const response = await axios.get(`${API_URL}/ChatData/${data?.UserName}/Messages/${selectedChatId}`, {
           headers: {
@@ -211,7 +208,7 @@ const MessagePage = () => {
           console.error('API response is invalid or not an array');
           return;
         }
-        
+
         const validMessages = response.data.filter(chatDetailData => !isValidChatDetailData(chatDetailData));
         if (!validMessages.length) {
           console.error('No valid messages received');
@@ -219,7 +216,7 @@ const MessagePage = () => {
         }
 
         const chatData = response.data[0].Messages;
-        
+
         try {
           const parsedContent = JSON.parse(chatData) as ChatMessageDetail[];
           if (!Array.isArray(parsedContent) || parsedContent.some(chatDetailData => !isValidChatDetailData(chatDetailData))) {
@@ -230,24 +227,24 @@ const MessagePage = () => {
         } catch (error) {
           console.error('Parsing chat data failed:', error);
         }
-        
+
       } catch (error) {
         console.error('Fetching messages failed:', error);
       }
     };
-    if(selectedChatId){
+    if (selectedChatId) {
       fetchMessages();
     }
-  }, [selectedChatId, data?.UserName, userAuthToken,isLockPopupVisible,isNewChatModal]);
-   
-  const SendMessage = async (selectedChatId:any, messageContent:any) => {
+  }, [selectedChatId, data?.UserName, userAuthToken, isLockPopupVisible, isNewChatModal]);
+
+  const SendMessage = async (selectedChatId: any, messageContent: any) => {
     const urlRegex = /https?:\/\/[^\s]+/gi;
     let urls = messageContent.match(urlRegex) || [];
-  
+
     let videoUrls: string[] = [];
     let imageUrls: string[] = [];
     let otherUrls: string[] = [];
-  
+
     urls.forEach((url: string) => {
       if (url.match(/\.(jpeg|jpg|gif|png)$/)) {
         imageUrls.push(url);
@@ -260,9 +257,9 @@ const MessagePage = () => {
         console.log("Found URL: ", url);
       }
     });
-  
+
     let textContent = messageContent.replace(urlRegex, '').trim();
-  
+
     const response = await PostSendMessage({
       selectedChatId,
       messageContent: {
@@ -276,51 +273,51 @@ const MessagePage = () => {
 
     // SendMessage'dan sonra mesajları yeniden yükle
     handleFetchMessages(selectedChatId);
-};
+  };
 
-useEffect(() => {
-  if (!selectedChatId) return;
-  handleFetchMessages(selectedChatId);
-}, [selectedChatId]);
+  useEffect(() => {
+    if (!selectedChatId) return;
+    handleFetchMessages(selectedChatId);
+  }, [selectedChatId]);
 
-const handleFetchMessages = async (chatId: any) => {
-  try {
-    const response = await axios.get(`${API_URL}/ChatData/${data?.UserName}/Messages/${chatId}`, {
-      headers: {
-        'Authorization': `Bearer ${userAuthToken}`
-      }
-    });
-    if (!response.data || !Array.isArray(response.data)) {
-      console.error('API response is invalid or not an array');
-      return;
-    }
-    
-    const validMessages = response.data.filter(chatDetailData => !isValidChatDetailData(chatDetailData));
-    if (!validMessages.length) {
-      console.error('No valid messages received');
-      return;
-    }
-
-    const chatData = response.data[0].Messages;
-    
+  const handleFetchMessages = async (chatId: any) => {
     try {
-      const parsedContent = JSON.parse(chatData) as ChatMessageDetail[];
-      if (!Array.isArray(parsedContent) || parsedContent.some(chatDetailData => !isValidChatDetailData(chatDetailData))) {
-        console.error('API response is not an array or contains invalid chat detail data');
+      const response = await axios.get(`${API_URL}/ChatData/${data?.UserName}/Messages/${chatId}`, {
+        headers: {
+          'Authorization': `Bearer ${userAuthToken}`
+        }
+      });
+      if (!response.data || !Array.isArray(response.data)) {
+        console.error('API response is invalid or not an array');
         return;
       }
-      setMessages(parsedContent);
+
+      const validMessages = response.data.filter(chatDetailData => !isValidChatDetailData(chatDetailData));
+      if (!validMessages.length) {
+        console.error('No valid messages received');
+        return;
+      }
+
+      const chatData = response.data[0].Messages;
+
+      try {
+        const parsedContent = JSON.parse(chatData) as ChatMessageDetail[];
+        if (!Array.isArray(parsedContent) || parsedContent.some(chatDetailData => !isValidChatDetailData(chatDetailData))) {
+          console.error('API response is not an array or contains invalid chat detail data');
+          return;
+        }
+        setMessages(parsedContent);
+      } catch (error) {
+        console.error('Parsing chat data failed:', error);
+      }
+
     } catch (error) {
-      console.error('Parsing chat data failed:', error);
+      console.error('Fetching messages failed:', error);
     }
-    
-  } catch (error) {
-    console.error('Fetching messages failed:', error);
-  }
-};
+  };
 
 
- 
+
   if (isLoading) return <div className="flex justify-center items-center h-screen">
     <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
     <p className="text-lg text-purple-600 font-semibold ml-4">Loading...</p>
@@ -340,7 +337,7 @@ const handleFetchMessages = async (chatId: any) => {
       x: number;
       y: number;
     }
-    
+
     const [isDragging, setIsDragging] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [rel, setRel] = useState<Position | null>(null);
@@ -348,36 +345,36 @@ const handleFetchMessages = async (chatId: any) => {
     useEffect(() => {
       const handleMouseMove = (e: MouseEvent) => {
         if (!isDragging || !rel) return;
-    
+
         let newX = e.pageX - rel.x;
         let newY = e.pageY - rel.y;
-    
+
         const menuWidth = document.getElementById('contextMenu')?.offsetWidth || 0;
         const menuHeight = document.getElementById('contextMenu')?.offsetHeight || 0;
-    
+
         newX = Math.min(window.innerWidth - menuWidth, Math.max(0, newX));
         newY = Math.min(window.innerHeight - menuHeight, Math.max(0, newY));
-    
+
         setPosition({ x: newX, y: newY });
-    };
-    
-    const handleMouseUp = () => {
-            setIsDragging(false);
-        };
+      };
 
-        if (isDragging) {
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', handleMouseUp);
-        }
+      const handleMouseUp = () => {
+        setIsDragging(false);
+      };
 
-        return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
-        };
+      if (isDragging) {
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+      }
+
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
     }, [isDragging, rel]);
 
     const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.button !== 0) return; 
+      if (e.button !== 0) return;
       const pos: Position = {
         x: e.pageX - position.x,
         y: e.pageY - position.y,
@@ -387,7 +384,7 @@ const handleFetchMessages = async (chatId: any) => {
       e.stopPropagation();
       e.preventDefault();
     };
-    
+
     useEffect(() => {
       if (messages.length <= currentDisplayCount) {
         setHasMore(false);
@@ -410,9 +407,9 @@ const handleFetchMessages = async (chatId: any) => {
     };
 
     return (
-      <div className="absolute z-20 bg-white rounded-md shadow-xl" id="contextMenu" style={{ left: `${position.x}px`, top: `${position.y}px`, cursor: isDragging ? 'grabbing' : 'grab' }} 
-      onMouseDown={onMouseDown}>
-        
+      <div className="absolute z-20 bg-white rounded-md shadow-xl" id="contextMenu" style={{ left: `${position.x}px`, top: `${position.y}px`, cursor: isDragging ? 'grabbing' : 'grab' }}
+        onMouseDown={onMouseDown}>
+
         <h1 className="text-xl font-semibold text-gray-900 bg-gray-100 px-6 py-3">Smart Bar</h1>
         <ul className="flex flex-col">
           <li>
@@ -462,7 +459,7 @@ const handleFetchMessages = async (chatId: any) => {
               <VoiceChat isCallModalOpen={isCallModalOpen} setIsCallModalOpen={setIsCallModalOpen} />
               <ChatUserList chatData={chatData} onChatSelect={handleChatSelect} />
             </div>
-  
+
             <div className="w-2/3 bg-white shadow-lg rounded-lg flex flex-col">
               <div className="flex h-20 px-4 py-2 bg-white border-t border-gray-300 shadow-lg">
               </div>
@@ -473,7 +470,7 @@ const handleFetchMessages = async (chatId: any) => {
                   hasMore={hasMore}
                   loader={messages.length > 0 && (<h4 className='text-center text-lg text-purple-600 font-semibold ml-4'>Loading...</h4>)}
                   endMessage={
-                    <p style={{textAlign: 'center', backgroundColor: 'ButtonFace', fontSize: '9px'}}>
+                    <p style={{ textAlign: 'center', backgroundColor: 'ButtonFace', fontSize: '9px' }}>
                       <b>Yay! Your conversation ended here.</b>
                     </p>
                   }
@@ -487,9 +484,8 @@ const handleFetchMessages = async (chatId: any) => {
                     {messages.map((message, index) => {
                       const isUserMessage = message.Sender === data?.UserName;
                       const isSelected = selectedMessages.includes(message.MessageID);
-                      const messageClasses = `relative max-w-2xl w-full p-4 rounded-lg shadow ${
-                        isUserMessage ? 'bg-blue-500 text-white' : 'bg-white text-gray-800 border border-gray-300'
-                      } ${isSelected ? (isUserMessage ? 'border-r-4 border-green-700' : 'border-l-4 border-green-500') : ''}`;
+                      const messageClasses = `relative max-w-2xl w-full p-4 rounded-lg shadow ${isUserMessage ? 'bg-blue-500 text-white' : 'bg-white text-gray-800 border border-gray-300'
+                        } ${isSelected ? (isUserMessage ? 'border-r-4 border-green-700' : 'border-l-4 border-green-500') : ''}`;
                       const iconPosition = isUserMessage ? '-top-3 -right-3' : '-top-3 -left-3';
                       return (
                         <div
@@ -517,43 +513,43 @@ const handleFetchMessages = async (chatId: any) => {
                   </div>
                 </InfiniteScroll>
               )}
-            {selectedChatId && (
-              <div className="flex px-4 py-2 bg-slate-100 border-t border-gray-300">
-                {showEmojiPicker && (
-                  <div className="absolute inset-y-auto bottom-64 px-4 mb-4 z-20">
-                    <EmojiPicker
-                      onEmojiClick={onEmojiClick}
-                      theme={Theme.LIGHT}
-                      emojiStyle={EmojiStyle.APPLE}
-                      searchPlaceholder="Search..."
-                      className="max-h-96 overflow-y-auto w-full"
+              {selectedChatId && (
+                <div className="flex px-4 py-2 bg-slate-100 border-t border-gray-300">
+                  {showEmojiPicker && (
+                    <div className="absolute inset-y-auto bottom-64 px-4 mb-4 z-20">
+                      <EmojiPicker
+                        onEmojiClick={onEmojiClick}
+                        theme={Theme.LIGHT}
+                        emojiStyle={EmojiStyle.APPLE}
+                        searchPlaceholder="Search..."
+                        className="max-h-96 overflow-y-auto w-full"
+                      />
+                    </div>
+                  )}
+                  <div className="flex items-center w-full">
+                    <textarea
+                      value={messageContent}
+                      onChange={(e) => setMessageContent(e.target.value)}
+                      className="flex-1 rounded-full border-gray-300 p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none overflow-hidden"
+                      placeholder="Type a message..."
+                      rows={1}
+                      style={{ minHeight: '40px' }}
                     />
-                  </div>
-                )}
-                <div className="flex items-center w-full">
-                 <textarea
-                    value={messageContent}
-                    onChange={(e) => setMessageContent(e.target.value)}
-                    className="flex-1 rounded-full border-gray-300 p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none overflow-hidden"
-                    placeholder="Type a message..."
-                    rows={1}
-                    style={{ minHeight: '40px' }} 
-                  />
 
-                  <button
-                    className="bg-white text-gray-500 rounded-full px-6 py-2 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-md hover:shadow-lg transition duration-150 ease-in-out ml-2"
-                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                  >
-                    😊
-                  </button>
-                  <button
-                    className="bg-white text-blue-500 rounded-full px-6 py-2 hover:bg-slate-100 hover:text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-md hover:shadow-lg transition duration-150 ease-in-out ml-2"
-                    onClick={() => SendMessage(selectedChatId, messageContent)}
-                  >
-                    <FontAwesomeIcon icon={faPaperPlane} className="h-5 w-5" /> Send
-                  </button>
+                    <button
+                      className="bg-white text-gray-500 rounded-full px-6 py-2 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-md hover:shadow-lg transition duration-150 ease-in-out ml-2"
+                      onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    >
+                      😊
+                    </button>
+                    <button
+                      className="bg-white text-blue-500 rounded-full px-6 py-2 hover:bg-slate-100 hover:text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-md hover:shadow-lg transition duration-150 ease-in-out ml-2"
+                      onClick={() => SendMessage(selectedChatId, messageContent)}
+                    >
+                      <FontAwesomeIcon icon={faPaperPlane} className="h-5 w-5" /> Send
+                    </button>
+                  </div>
                 </div>
-              </div>
               )}
             </div>
           </div>

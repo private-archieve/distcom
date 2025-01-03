@@ -1,14 +1,12 @@
 "use client"
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams, useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { API_URL } from '../../Api/Api';
 import Header from '../../ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '../../ThemeParts/MainPart/Navbar/Navbar';
-import { API_URL } from '../../Api/Api';
-import { useData } from '../../Context/DataContext';
-import { GroupMembers } from './components/GroupMembers/GroupMembers';
 import GroupDiscussions from './components/GroupDiscussions/GroupDiscussions';
-import { useParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { GroupMembers } from './components/GroupMembers/GroupMembers';
 
 interface GroupMemberRaw {
   MemberID: string;
@@ -61,7 +59,7 @@ interface GroupDetailItem {
 const GroupDetail: React.FC = () => {
   const { groupname } = useParams<{ groupname: string }>();
   const [groupDetail, setGroupDetail] = useState<GroupDetailItem | null>(null);
-  const { isLoading, siteData } = useData();
+  const { isLoading, siteData } = useDataStore();
   const router = useRouter();
 
   useEffect(() => {

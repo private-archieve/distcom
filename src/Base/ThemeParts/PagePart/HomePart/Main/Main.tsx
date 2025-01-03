@@ -1,126 +1,163 @@
-'use client'
+"use client";
 
-import { API_URL, createPost } from '@/base/Api/Api'
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import axios from 'axios'
-import { Fingerprint, Send } from 'lucide-react'
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
-import Post, { PostProps } from './components/Posts'
-
-import { useData } from '@/base/Context/DataContext'
-import { checkMinaProvider, requestAccounts } from '@/base/WalletProc/Wallet'
-
+import { API_URL } from '@/base/Api/Api';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ConnectWalletButton from '@/components/wallet/ConnectWalletButton';
+import useDataStore from '@/store/dataStore';
+import axios from 'axios';
+import { Send } from 'lucide-react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import Post, { PostProps } from './components/Posts';
 
 function MainContent() {
-  //const { isLoggedIn, data, isLoading, siteData, userAuthID, userAuthToken } = useData()
-  const [postContent, setPostContent] = useState('')
-  const [posts, setPosts] = useState<PostProps[]>([])
-  const [activeTab, setActiveTab] = useState('global')
+  // Access state and actions from Zustand store
+  const {
+    data,
+    isLoggedIn,
+    isLoading,
+    userAuthID,
+    userAuthToken,
+    setLoginStatus,
+    setUserAuthID,
+    setUserAuthToken,
+    setSiteData,
+    chatData,
+    setChatData,
+    notes,
+    setNotes,
+    setCsrfToken,
+    csrfToken,
+    siteData,
+  } = useDataStore();
 
-  const { isLoading, setIsLoading } = useData();
-
-  const { userAuthID, setUserAuthID } = useData();
-  const { userAuthToken, setUserAuthToken } = useData();
-  const { isLoggedIn, setLoginStatus } = useData();
-  const { siteData, setSiteData, data, updateData } = useData();
-  // const formRef = useRef<HTMLFormElement>(null);
-  // const [LoginSuccess, setLoginSuccess] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState('');
-  // const [rememberMe, setRememberMe] = useState(false);
+  const [postContent, setPostContent] = useState('');
+  const [posts, setPosts] = useState<PostProps[]>([]);
+  const [activeTab, setActiveTab] = useState('global');
+  const [isModalAuthOpen, setIsModalAuthOpen] = useState(false);
 
   const handleWalletLogin = async () => {
-    const providerResponse = await checkMinaProvider();
+    // const providerResponse = await checkMinaProvider();
 
-    if (providerResponse === true) {
+    // if (providerResponse === true) {
+    //   try {
+    //     const walletAddress = await requestAccounts();
 
-      try {
-        const walletAddress = await requestAccounts();
+    //     if (!walletAddress) {
+    //       setLoginStatus(false);
+    //       throw new Error('Failed to retrieve wallet address. Please check your wallet extension.');
+    //     } else {
+    //       setLoginStatus(true);
+    //       setUserAuthID(walletAddress[0]);
+    //       console.log("Wallet connected: ", walletAddress);
 
-        if (!walletAddress) {
-          setLoginStatus(false);
-          throw new Error('Failed to retrieve wallet address. Please check your wallet extension.');
-        } else {
-          setLoginStatus(true);
-          console.log("Wallet connected: ", walletAddress);
-        }
-      } catch (error) {
-        console.error("Error: ", error);
-      }
+    //       // Close the modal after successful login
+    //       setIsModalAuthOpen(false);
 
-    } else {
-      console.error("No provider found");
-    }
-  }
-
+    //       // Optionally, retrieve and set the userAuthToken here
+    //       // const token = await fetchUserToken(walletAddress);
+    //       // setUserAuthToken(token);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error: ", error);
+    //   }
+    // } else {
+    //   console.error("No provider found");
+    // }
+  };
 
   const handlePostButtonClick = async () => {
-    if (postContent.trim() !== '') {
-      try {
-        const response = await createPost({ UserID: userAuthID, UserToken: userAuthToken, Content: postContent }, userAuthToken)
-        if (response && response.status === "Ok") {
-          // Optionally add the new post to the posts array
-          // setPosts(prevPosts => [newPost, ...prevPosts])
-        } else {
-          console.error('Post creation failed, please try again later.')
-        }
-      } catch (error) {
-        console.error('Error while posting:', error)
-      }
+    // if (isLoggedIn) {
+    setIsModalAuthOpen(true);
+    //   return;
+    // }
 
-      setPostContent('')
+    // if (postContent.trim() !== '') {
+    //   try {
+    //     const response = await createPost(
+    //       { UserID: userAuthID, UserToken: userAuthToken, Content: postContent },
+    //       userAuthToken
+    //     );
+    //     if (response && response.status === "Ok") {
+    //       // Optionally add the new post to the posts array
+    //       // setPosts(prevPosts => [newPost, ...prevPosts]);
+    //       // For immediate UI feedback, you might want to fetch the posts again or append the new post
+    //       fetchPosts(); // Ensure fetchPosts is accessible here
+    //     } else {
+    //       console.error('Post creation failed, please try again later.');
+    //     }
+    //   } catch (error) {
+    //     console.error('Error while posting:', error);
+    //   }
+
+    //   setPostContent('');
+    // }
+  };
+
+  // Fetch posts when not loading
+  const fetchPosts = async () => {
+    try {
+      const { data } = await axios.get(`${API_URL}/GetMogartPosts`);
+      const mappedPosts: PostProps[] = data.map((post: any) => ({
+        GlobalId: post.Pstid,
+        Author: post.PstAuthor,
+        Avatar: post.PstAuthorAvatar,
+        Content: post.PstContent,
+        VideoUrl: post.PstVideos,
+        ImageUrl: post.PstImages,
+        CommentCount: post.PstCommentCount,
+        Date: post.PstDate,
+        DisLike: post.PstDisLike,
+        Mentions: post.PstMentions,
+        Name: post.PstName,
+        Points: post.PstPoints,
+        PostCode: post.PstPostCode,
+        Space: post.PstSpace,
+        Title: post.PstTitle,
+        VideoTitle: post.PstTitle,
+        VideoDesc: post.PstContent,
+        Views: post.PstViews,
+        Likes: typeof post.PstLike === 'string' ? JSON.parse(post.PstLike) : post.PstLike,
+        Comments: typeof post.PstComments === 'string' ? JSON.parse(post.PstComments) : post.PstComments,
+      }));
+      setPosts(mappedPosts);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
     }
-  }
+  };
 
   useEffect(() => {
-    if (isLoading) return
+    if (isLoading) return;
 
-    const fetchPosts = async () => {
-      try {
-        const { data } = await axios.get(`${API_URL}/GetMogartPosts`)
-        const mappedPosts: PostProps[] = data.map((post: any) => ({
-          GlobalId: post.Pstid,
-          Author: post.PstAuthor,
-          Avatar: post.PstAuthorAvatar,
-          Content: post.PstContent,
-          VideoUrl: post.PstVideos,
-          ImageUrl: post.PstImages,
-          CommentCount: post.PstCommentCount,
-          Date: post.PstDate,
-          DisLike: post.PstDisLike,
-          Mentions: post.PstMentions,
-          Name: post.PstName,
-          Points: post.PstPoints,
-          PostCode: post.PstPostCode,
-          Space: post.PstSpace,
-          Title: post.PstTitle,
-          VideoTitle: post.PstTitle,
-          VideoDesc: post.PstContent,
-          Views: post.PstViews,
-          Likes: typeof post.PstLike === 'string' ? JSON.parse(post.PstLike) : post.PstLike,
-          Comments: typeof post.PstComments === 'string' ? JSON.parse(post.PstComments) : post.PstComments,
-        }))
-        setPosts(mappedPosts)
-      } catch (error) {
-        console.error('Error fetching posts:', error)
-      }
-    }
+    fetchPosts();
+  }, [isLoading]);
 
-    fetchPosts()
-  }, [isLoading])
+  if (isLoading) {
+    // Optionally render a loading state while authentication is being verified
+    return (
+      <main className="w-full max-w-3xl mx-auto px-4 py-6">
+        <p>Loading...</p>
+      </main>
+    );
+  }
 
   return (
     <main className="w-full max-w-3xl mx-auto px-4 py-6 space-y-6">
-      {isLoggedIn && (
+      <Image src={"/logo-1200.png"} alt="Site Logo" width={300} height={300} className=" h-auto" />
+      {/* {isLoggedIn && (
         <Card className="p-4">
           <div className="flex items-center gap-4">
             <Image
               className="h-12 w-12 rounded-full object-cover ring-2 ring-primary/10"
-              src={data?.ProfileImage || siteData?.SiteDefaultProfileImageURL}
+              src={data?.ProfileImage || "https://placehold.co/400"}
               alt="User Avatar"
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto' }}
             />
             <div className="flex-1 flex gap-2">
               <Input
@@ -138,14 +175,10 @@ function MainContent() {
             </div>
           </div>
         </Card>
-      )}
+      )} */}
 
       <Card className="p-4">
         <div className="flex items-center justify-between mb-0">
-          {/* <Image src={"/logo-1200.png"} alt="Logo" width={100} height={100} width={0}
-                        height={0}
-                        sizes="100vw"
-                        style={{ width: '100%', height: 'auto' }}/> */}
           <Tabs defaultValue="global" className="w-full">
             <TabsList className="grid grid-cols-4 w-full">
               <TabsTrigger value="global">Members</TabsTrigger>
@@ -155,11 +188,26 @@ function MainContent() {
               <TabsTrigger value="mentions">Mentions</TabsTrigger>
             </TabsList>
           </Tabs>
-          <Button variant="outline" className="ml-4 hidden md:flex items-center gap-2" onClick={() => {
-            handleWalletLogin()
-          }}>
-            <Fingerprint className="h-4 w-4" />
-            Connect
+          <ConnectWalletButton />
+        </div>
+      </Card>
+
+      <Card className="sticky top-2 z-1 p-4">
+        <div className="flex items-center justify-between mb-0">
+          <Input
+            placeholder="What's on your mind?"
+            className="flex-1"
+            value={postContent}
+            onChange={(e) => setPostContent(e.target.value)}
+            maxLength={3301}
+          />
+          <Button
+            variant="outline"
+            className="ml-4 hidden md:flex items-center gap-2"
+            onClick={handlePostButtonClick}
+          >
+            <Send className="h-4 w-4" />
+            Post
           </Button>
         </div>
       </Card>
@@ -170,32 +218,37 @@ function MainContent() {
             <Post key={post.GlobalId} {...post} />
           ))
         ) : (
-          <>
-            <Post
-              GlobalId="123"
-              Author="John Doe"
-              Avatar="https://via.placeholder.com/150"
-              Content="This is a post."
-              Date="2023-08-25T12:34:56Z"
-              CommentCount={5}
-              Likes={[{ userName: 'Jane' }, { userName: 'Doe' }]}
-              Comments={[
-                {
-                  author: 'Jane',
-                  content: 'Great post!',
-                  comment_id: 1,
-                  profile_image: '/path/to/profile.jpg',
-                  comment_date: '2023-08-25T13:00:00Z',
-                  likes: '2',
-                  replies: '0',
-                }
-              ]}
-            />
-          </>
+          <Post
+            GlobalId="123"
+            Author="John Doe"
+            Avatar="https://via.placeholder.com/150"
+            Content="This is a post."
+            Date="2023-08-25T12:34:56Z"
+            CommentCount={5}
+            Likes={[{ userName: 'Jane' }, { userName: 'Doe' }]}
+            Comments={[
+              {
+                author: 'Jane',
+                content: 'Great post!',
+                comment_id: 1,
+                profile_image: '/path/to/profile.jpg',
+                comment_date: '2023-08-25T13:00:00Z',
+                likes: '2',
+                replies: '0',
+              }
+            ]}
+          />
         )}
       </div>
+
+
+      {/* <ModalAuth
+        isOpen={isModalAuthOpen}
+        onClose={() => setIsModalAuthOpen(false)}
+        onConnect={handleWalletLogin}
+      /> */}
     </main>
-  )
+  );
 }
 
-export default MainContent
+export default MainContent;

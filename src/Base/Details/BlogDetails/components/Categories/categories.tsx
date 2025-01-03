@@ -27,7 +27,7 @@ const BlogDetailsCategories: React.FC = () => {
         {categories.map((category) => (
           <li key={category.CatID} className="py-4 last:pb-0 first:pt-0 transform hover:translate-x-2 transition-transform duration-200 ease-out">
             <a href={`/Category/${category.CatName}`} className="flex items-center space-x-4">
-              <Image src={category.CatIcon} alt={`Category Icon ${category.CatName}`} className="flex-shrink-0 w-12 h-12 rounded-full object-cover shadow-sm" width={0}
+              <Image src={category.CatIcon || "https://placehold.co/400"} alt={`Category Icon ${category.CatName}`} className="flex-shrink-0 w-12 h-12 rounded-full object-cover shadow-sm" width={0}
                 height={0}
                 sizes="100vw"
                 style={{ width: '100%', height: 'auto' }} />

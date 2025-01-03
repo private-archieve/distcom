@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { API_URL } from '../../../../base/Api/Api';
 import { isValidMyGroups } from '../../../../base/Api/Sec-2/Checkers/GroupsChecker';
-import { useData } from '../../../../base/Context/DataContext';
 
 export interface MyGroupInterface {
   GrpID: number;
@@ -39,7 +38,7 @@ const GroupItem: React.FC<{ group: MyGroupInterface }> = ({ group }) => {
 
 const MyGroupsPage = () => {
   const [myGroups, setMyGroups] = useState<MyGroupInterface[]>([]);
-  const { isLoggedIn, isLoading, data, siteData, userAuthToken } = useData();
+  const { isLoggedIn, isLoading, data, siteData, userAuthToken } = useDataStore();
   const router = useRouter();
 
   useEffect(() => {

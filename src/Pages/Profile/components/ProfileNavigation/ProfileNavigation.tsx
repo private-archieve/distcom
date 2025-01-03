@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useData } from '../../../../base/Context/DataContext';
 
 interface ProfileNavigationProps {
   onSelect: (selectedContent: string) => void;
@@ -8,7 +7,7 @@ interface ProfileNavigationProps {
 const ProfileNavigation: React.FC<ProfileNavigationProps> = ({ onSelect }) => {
   const [activeItem, setActiveItem] = useState<string>('Posts');
   let navItems = ['Posts', 'Activity', 'Friends', 'Photos', 'Groups'];
-  const { data } = useData();
+  const { data } = useDataStore();
 
   const isProfilePage = window.location.pathname === '/Profile' || window.location.pathname.includes(data?.UserName);
 
@@ -28,9 +27,8 @@ const ProfileNavigation: React.FC<ProfileNavigationProps> = ({ onSelect }) => {
           <button
             key={item}
             onClick={() => handleSelect(item)}
-            className={`px-3 py-1 rounded-lg text-slate-100 hover:text-white transition duration-150 ease-in-out ${
-              activeItem === item ? 'bg-white bg-opacity-20' : 'bg-transparent'
-            }`}
+            className={`px-3 py-1 rounded-lg text-slate-100 hover:text-white transition duration-150 ease-in-out ${activeItem === item ? 'bg-white bg-opacity-20' : 'bg-transparent'
+              }`}
           >
             {item}
           </button>

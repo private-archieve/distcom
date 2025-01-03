@@ -1,6 +1,5 @@
 "use client"
 import { API_URL } from '@/base/Api/Api';
-import { useData } from '@/base/Context/DataContext';
 import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
 import Header from '@/base/ThemeParts/PagePart/HomePart/RightSidebar/Components/Groups/Groups';
 import CreateGroupPage from '@/pages/Groups/SubPage/CreateGroups/CreateGroupsPage';
@@ -60,7 +59,7 @@ const GroupItem: React.FC<{ group: Group }> = ({ group }) => {
 const GroupsPage = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [groups, setGroups] = useState<Group[]>([]);
-  const { isLoggedIn, isLoading, data, siteData } = useData();
+  const { isLoggedIn, isLoading, data, siteData } = useDataStore();
   const router = useRouter();
 
   useEffect(() => {

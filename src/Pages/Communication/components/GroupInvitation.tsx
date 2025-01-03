@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { API_URL, ApiResponseError, PostAcceptGroupsRequest, PostRejectGroupsRequest } from '../../../base/Api/Api';
 import { isValidGroupRequest } from '../../../base/Api/Sec-1/Checkers/GroupInvitationChecker';
-import { useData } from '../../../base/Context/DataContext';
 
 export interface GroupInvitation {
   ID: string;
@@ -19,7 +18,7 @@ export interface GroupInvitation {
 
 const GroupInvitations = () => {
   const [requests, setRequests] = useState<GroupInvitation[]>([]);
-  const { isLoggedIn, isLoading, data, userAuthToken } = useData();
+  const { isLoggedIn, isLoading, data, userAuthToken } = useDataStore();
   const [acceptingId, setAcceptingId] = useState<string | null>(null);
   const [rejectingId, setRejectingId] = useState<string | null>(null);
 

@@ -1,18 +1,17 @@
 "use client";
-import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import { API_URL } from '../../base/Api/Api';
-import { useData } from '../../base/Context/DataContext';
 import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
+import { API_URL } from '../../base/Api/Api';
 
 function LostPasswordPage() {
   const router = useRouter();
-  const { setSiteData } = useData();
+  const { setSiteData } = useDataStore();
   const formRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [emailSent, setEmailSent] = useState(false);
 
-  const handleRecoverPassword = async (event:any) => {
+  const handleRecoverPassword = async (event: any) => {
     event.preventDefault();
     if (formRef.current) {
       const formData = new FormData(formRef.current);
@@ -26,7 +25,7 @@ function LostPasswordPage() {
       try {
         const response = await axios.post(`${API_URL}/recoverPassword`, { email });
         const { status, message } = response.data;
-        
+
         if (status === "Ok") {
           setEmailSent(true);
           setTimeout(() => router.push('/login'), 5000);

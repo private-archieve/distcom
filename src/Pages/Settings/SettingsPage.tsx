@@ -1,6 +1,5 @@
 "use client"
 import { PostEmailVerify } from '@/base/Api/Api';
-import { useData } from '@/base/Context/DataContext';
 import Header from '@/base/ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
 import Image from 'next/image';
@@ -23,7 +22,7 @@ const themeOptions = [
 
 const ProfileSettingsPage = () => {
   const router = useRouter();
-  const { isLoggedIn, data, siteData, isLoading, userAuthToken } = useData();
+  const { isLoggedIn, data, siteData, isLoading, userAuthToken } = useDataStore();
   const [profileImage, setProfileImage] = useState('');
   const [visibleUsername, setVisibleUsername] = useState('');
   const [WalletAddress, setWalletAddress] = useState('');

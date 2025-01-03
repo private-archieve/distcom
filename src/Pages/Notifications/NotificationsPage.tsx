@@ -1,6 +1,5 @@
 "use client";
 import { API_URL } from '@/base/Api/Api';
-import { useData } from '@/base/Context/DataContext';
 import Header from '@/base/ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
 import axios from 'axios';
@@ -37,7 +36,7 @@ const NotificationItem: React.FC<{ notification: Notification }> = ({ notificati
 
 const NotificationsPage = () => {
   const router = useRouter();
-  const { isLoggedIn, isLoading, data, siteData, userAuthToken } = useData();
+  const { isLoggedIn, isLoading, data, siteData, userAuthToken } = useDataStore();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const { username } = useParams();
   useEffect(() => {

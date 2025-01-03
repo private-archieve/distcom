@@ -1,4 +1,3 @@
-import { useData } from '@/base/Context/DataContext';
 import { UserData } from '@/pages/Profile/Profile';
 import { faComment, faShareNodes, faThumbsUp, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,7 +12,7 @@ interface ProfileMainContentProps {
 const ProfilePhotosContent: React.FC<ProfileMainContentProps> = ({ userData }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedPhoto, setSelectedPhoto] = useState<any>(null);
-    const { isLoggedIn, isLoading, data, siteData } = useData();
+    const { isLoggedIn, isLoading, data, siteData } = useDataStore();
 
     const photos = React.useMemo(() => {
         const photoData = userData?.Photos;

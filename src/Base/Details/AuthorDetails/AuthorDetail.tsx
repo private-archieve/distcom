@@ -7,7 +7,6 @@ import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { API_URL, PostSendDislike, PostSendLike } from '../../Api/Api';
-import { useData } from '../../Context/DataContext';
 import Header from '../../ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '../../ThemeParts/MainPart/Navbar/Navbar';
 import SharePopup from '../../ThemeParts/Popup/SharePopup';
@@ -37,7 +36,7 @@ const AuthorDetail = () => {
   const { author } = useParams();
   const [blogs, setBlogPost] = useState<BlogPost[]>([]);
   const [showSharePopup, setShowSharePopup] = useState(false);
-  const { siteData, data, isLoading, isLoggedIn, userAuthToken } = useData();
+  const { siteData, data, isLoading, isLoggedIn, userAuthToken } = useDataStore();
   const router = useRouter();
 
   const SendLike = async (globalId: string) => { if (!isLoading && !isLoggedIn) { return; } await PostSendLike({ UserID: data.UserName, ContentID: globalId, ContentType: "BlogContent" }, userAuthToken); };
@@ -86,7 +85,7 @@ const AuthorDetail = () => {
           <header className="text-center py-6 mb-6 bg-white rounded-lg shadow-lg">
             <h1 className="text-4xl font-sans mb-2 mt-2">{blogs[0].Bname}</h1>
             <div className="flex justify-center items-center text-gray-600 mt-6">
-              <Image src={blogs[0].BauthorImage} alt="Author" className="w-20 h-20 rounded-full mr-2"
+              <Image src={blogs[0].BauthorImage || "https://placehold.co/400"} alt="Author" className="w-20 h-20 rounded-full mr-2"
                 width={0}
                 height={0}
                 sizes="100vw"
@@ -116,7 +115,7 @@ const AuthorDetail = () => {
             {blogs.map((blog) => (
               <div key={blog.Bid} className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
                 <a href={`/Blogs/${blog.Bauthor.replace(' ', '')}/${blog.Burl}`} >
-                  <Image className="w-full h-48 object-fit rounded-t-lg" src={blog.Bimage} alt={blog.Bdesc}
+                  <Image className="w-full h-48 object-fit rounded-t-lg" src={blog.Bimage || "https://placehold.co/400"} alt={blog.Bdesc}
                     width={0}
                     height={0}
                     sizes="100vw"
@@ -137,7 +136,7 @@ const AuthorDetail = () => {
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <Image className="h-8 w-8 rounded-full object-cover" src={blog.BauthorImage} alt={blog.Bdesc} width={0}
+                      <Image className="h-8 w-8 rounded-full object-cover" src={blog.BauthorImage || "https://placehold.co/400"} alt={blog.Bdesc} width={0}
                         height={0}
                         sizes="100vw"
                         style={{ width: '100%', height: 'auto' }}

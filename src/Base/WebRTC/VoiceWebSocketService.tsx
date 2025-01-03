@@ -1,10 +1,9 @@
 "use client"
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import config from './config';
-import { useData } from '../Context/DataContext';
 
 const useVoiceWebSocket = () => {
-    const { userAuthID, data: userData } = useData();
+    const { userAuthID, data: userData } = useDataStore();
     const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
     const [status, setStatus] = useState('CONNECTING');
     const webSocketRef = useRef<WebSocket | null>(null);
@@ -19,9 +18,9 @@ const useVoiceWebSocket = () => {
         }
     }, [webSocket, userAuthID, userData]);
 
-    const  connectWebSocket = async () => {
+    const connectWebSocket = async () => {
         if (!webSocketRef.current || webSocketRef.current.readyState === WebSocket.CLOSED || webSocketRef.current.readyState === WebSocket.CLOSING) {
-            
+
             if (!userData.VoiceChatStatus) return;
 
             const ws = new WebSocket(config.voiceChatServer);
@@ -35,7 +34,7 @@ const useVoiceWebSocket = () => {
                 console.log('WebSocket connection closed', event.wasClean ? 'cleanly' : `with error: Code ${event.code}, Reason: ${event.reason}`);
                 setStatus("CLOSED");
             };
-    
+
 
             ws.onerror = (error) => {
                 console.error("WebSocket error:", error);
@@ -53,7 +52,7 @@ const useVoiceWebSocket = () => {
             if (isFirstRender.current) {
                 const response = await connectWebSocket();
                 console.error("WebSocket response:", response);
-                   
+
                 isFirstRender.current = false;
             }
         }

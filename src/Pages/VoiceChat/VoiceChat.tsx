@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import VoiceCallModal from './components/VoiceCall/VoiceCall';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { RTCStartCallPack } from '../../base/WebRTC/Packs/RTCStartCallPack';
+import { useVoiceCall } from '../../base/WebRTC/VoiceCallProvider';
 import CallFriendsModal from './components/CallFriendsModal/CallFriendsModal';
 import IncomingCallModal from './components/IncomingCallModal/IncomingCallModal';
-import { useData } from '../../base/Context/DataContext';
-import { useVoiceCall } from '../../base/WebRTC/VoiceCallProvider';
-import { RTCStartCallPack } from '../../base/WebRTC/Packs/RTCStartCallPack';
-import { useRouter } from 'next/navigation';
+import VoiceCallModal from './components/VoiceCall/VoiceCall';
 
 
 interface VoiceChatProps {
@@ -16,7 +15,7 @@ interface VoiceChatProps {
 
 const VoiceChat: React.FC<VoiceChatProps> = ({ isCallModalOpen, setIsCallModalOpen }) => {
     const router = useRouter();
-    const { isLoggedIn, isLoading, data,siteData } = useData();
+    const { isLoggedIn, isLoading, data, siteData } = useDataStore();
     const { startCall, isCallModalOpen: isVoiceCallModalOpen, setCallStatus: setVoiceCallStatus } = useVoiceCall();
     const [isCalling, setIsCalling] = useState(false);
     const [callStatus, setCallStatus] = useState('');
@@ -33,17 +32,17 @@ const VoiceChat: React.FC<VoiceChatProps> = ({ isCallModalOpen, setIsCallModalOp
     }, [isLoggedIn, isLoading, router, data?.UserName]);
 
     const handleStartCall = async (friendName: string, friendImage: string, friendId: string) => {
-  
+
         const callPacket = await RTCStartCallPack(friendName, friendId);
         startCall(callPacket);
-    
+
         setCallingFriendName(friendName);
         setCallingFriendImage(friendImage);
         setIsCallModalOpen(false);
         setIsCalling(true);
         setCallStatus('Calling...');
     };
-    
+
 
     return (
         <>

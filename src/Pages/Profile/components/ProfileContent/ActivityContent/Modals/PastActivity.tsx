@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UserData } from '../../../../Profile';
 import { faCalendarAlt, faStar, faUser } from '@fortawesome/free-solid-svg-icons';
-import { useData } from '../../../../../../base/Context/DataContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import { API_URL } from '../../../../../../base/Api/Api';
 import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { API_URL } from '../../../../../../base/Api/Api';
+import { UserData } from '../../../../Profile';
 
 interface ProfileActivityContentProps {
-    userData: UserData | null;
-    isOpen: boolean;
-    onClose: () => void;
-    onSubmit: (values: Activity) => void;
+  userData: UserData | null;
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (values: Activity) => void;
 }
 
 interface Activity {
@@ -21,13 +20,13 @@ interface Activity {
   ActType: string;
   ActStatus: string;
   ActDate: string;
-  ActPoints:string;
+  ActPoints: string;
 }
 
 const PastActivity: React.FC<ProfileActivityContentProps> = ({ userData, isOpen, onClose, onSubmit }) => {
   const router = useRouter();
   const [activities, setActivities] = useState<Activity[]>([]);
-  const { isLoggedIn,data, isLoading,userAuthToken } = useData();
+  const { isLoggedIn, data, isLoading, userAuthToken } = useDataStore();
 
   const isProfileInvitation = useIsProfileInvitation(data?.UserName);
 
@@ -37,18 +36,18 @@ const PastActivity: React.FC<ProfileActivityContentProps> = ({ userData, isOpen,
 
   useEffect(() => {
     if (isLoading) return;
-  
+
     if (!isLoggedIn) {
       router.push('/login');
-      return; 
+      return;
     }
-  
+
     if (isLoggedIn && isProfileInvitation) {
       axios.get(`${API_URL}/${data?.UserName}/GetActivity/Past`, {
         headers: {
-            'Authorization': `Bearer ${userAuthToken}`
+          'Authorization': `Bearer ${userAuthToken}`
         }
-        })
+      })
         .then(response => {
           const data = response.data;
           if (Array.isArray(data)) {
@@ -70,44 +69,44 @@ const PastActivity: React.FC<ProfileActivityContentProps> = ({ userData, isOpen,
         });
     }
   }, [isLoggedIn, isProfileInvitation, isLoading, router, data?.UserName, userAuthToken]);
-  
 
 
 
 
-    return (
-      <main className="flex-1 p-6 overflow-auto">
+
+  return (
+    <main className="flex-1 p-6 overflow-auto">
       {activities.length === 0 ? (
-      <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center h-full">
           <p className="text-gray-500 text-lg">No past activities available.</p>
-      </div>
+        </div>
       ) : (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {activities.map((activity, index) => (
-          <div key={index} className="bg-white rounded-lg overflow-hidden border border-green-300 shadow hover:shadow-lg transition-shadow duration-300 ease-in-out p-4">
+            <div key={index} className="bg-white rounded-lg overflow-hidden border border-green-300 shadow hover:shadow-lg transition-shadow duration-300 ease-in-out p-4">
               <div className="p-4">
-                  <h3 className="text-lg font-semibold">{activity.ActName}</h3>
-                  <p className="text-sm text-gray-500 my-2">
-                      <FontAwesomeIcon icon={faUser} className="mr-2" />
-                      {activity.ActName}
-                  </p>
-                  <p className="text-sm text-gray-500 my-2">
-                      <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
-                      {activity.ActDate}
-                  </p>
-                  <p className="text-sm text-gray-500 my-2">
-                      <FontAwesomeIcon icon={faStar} className="mr-2" />
-                      {activity.ActPoints} Points
-                  </p>
+                <h3 className="text-lg font-semibold">{activity.ActName}</h3>
+                <p className="text-sm text-gray-500 my-2">
+                  <FontAwesomeIcon icon={faUser} className="mr-2" />
+                  {activity.ActName}
+                </p>
+                <p className="text-sm text-gray-500 my-2">
+                  <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
+                  {activity.ActDate}
+                </p>
+                <p className="text-sm text-gray-500 my-2">
+                  <FontAwesomeIcon icon={faStar} className="mr-2" />
+                  {activity.ActPoints} Points
+                </p>
               </div>
               <div className="bg-gray-100 p-3">
-                  <p className="text-xs text-gray-500">{activity.ActContent}</p>
+                <p className="text-xs text-gray-500">{activity.ActContent}</p>
               </div>
-          </div>
+            </div>
           ))}
-      </div>
+        </div>
       )}
-  </main>
+    </main>
   );
 };
 

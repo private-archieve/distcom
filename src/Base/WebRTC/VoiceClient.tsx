@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
 import { API_URL } from '../Api/Api';
-import { useData } from '../Context/DataContext';
 import useVoiceWebSocket from './VoiceWebSocketService';
 import config from './config';
 
@@ -10,7 +9,7 @@ const VoiceClient: React.FC<{ shouldRender: boolean }> = ({ shouldRender }) => {
     const [isWebSocketConnected, setWebSocketConnected] = useState(false);
     const rtcPeerConnectionRef = useRef<RTCPeerConnection | null>(null);
     const localStreamRef = useRef<MediaStream | null>(null);
-    const { isLoggedIn } = useData();
+    const { isLoggedIn } = useDataStore();
 
     const onMessage = (event: MessageEvent) => {
         const jsonData = JSON.parse(event.data);
@@ -58,10 +57,10 @@ const VoiceClient: React.FC<{ shouldRender: boolean }> = ({ shouldRender }) => {
 
         rtcPeerConnectionRef.current.onicecandidate = (event) => {
             if (event.candidate) {
-              //  sendMessage({
-                 //   type: 'candidate',
-                 //   candidate: event.candidate,
-               // });
+                //  sendMessage({
+                //   type: 'candidate',
+                //   candidate: event.candidate,
+                // });
             }
         };
 
@@ -75,12 +74,12 @@ const VoiceClient: React.FC<{ shouldRender: boolean }> = ({ shouldRender }) => {
     const startCall = () => {
         createPeerConnection();
         rtcPeerConnectionRef.current?.createOffer().then((offer) => {
-           // requestAnimationFrametcPeerConnectionRef.current?.setLocalDescription(offer).then(() => {
-              //  sendMessage({
-               //     type: 'offer',
-              //      sdp: offer.sdp,
-               // });
-           // });
+            // requestAnimationFrametcPeerConnectionRef.current?.setLocalDescription(offer).then(() => {
+            //  sendMessage({
+            //     type: 'offer',
+            //      sdp: offer.sdp,
+            // });
+            // });
         });
     };
 
@@ -89,10 +88,10 @@ const VoiceClient: React.FC<{ shouldRender: boolean }> = ({ shouldRender }) => {
         rtcPeerConnectionRef.current?.setRemoteDescription(new RTCSessionDescription({ type: 'offer', sdp })).then(() => {
             rtcPeerConnectionRef.current?.createAnswer().then((answer) => {
                 rtcPeerConnectionRef.current?.setLocalDescription(answer).then(() => {
-                  //  sendMessage({
-                 //       type: 'answer',
-                  ////      sdp: answer.sdp,
-                  //  });
+                    //  sendMessage({
+                    //       type: 'answer',
+                    ////      sdp: answer.sdp,
+                    //  });
                 });
             });
         });

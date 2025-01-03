@@ -1,18 +1,20 @@
-"use client"
-import React, { useEffect, useRef, useState } from 'react';
-import { SiteData, useData } from '../../base/Context/DataContext';
-import { API_URL, PostRegister } from '../../base/Api/Api';
+"use client";
+
+import useDataStore from '@/store/dataStore';
 import axios from 'axios';
-import { checkMinaProvider, requestAccounts } from '../../base/WalletProc/Wallet';
 import { useRouter } from 'next/navigation';
+import React, { useEffect, useRef, useState } from 'react';
+import { API_URL, PostRegister } from '../../base/Api/Api';
+import { checkMinaProvider, requestAccounts } from '../../base/WalletProc/Wallet';
+
 
 function Register() {
-    const { csrfToken } = useData();
+    const { csrfToken } = useDataStore();
     const formRef = useRef<HTMLFormElement>(null);
     const router = useRouter();
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const { siteData, setSiteData, data, updateData } = useData();
+    const { siteData, setSiteData } = useDataStore();
 
 
     useEffect(() => {

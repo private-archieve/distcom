@@ -1,5 +1,7 @@
+import { GroupDiscussion } from '@/base/Details/GroupsDetails/GroupDetail';
+import Image from 'next/image';
 import React from 'react';
-import { GroupDiscussion } from '../../GroupDetail';
+
 
 interface GroupDiscussionsProps {
     discussions: GroupDiscussion[];
@@ -19,7 +21,7 @@ const GroupDiscussions: React.FC<GroupDiscussionsProps> = ({ discussions }) => {
                         <article key={discussion.id} className="bg-white rounded-lg shadow-lg p-6 flex">
                             <div className="flex-shrink-0">
                                 {discussion.DiscussionsAuthorImage && (
-                                    <Image src={discussion.DiscussionsAuthorImage} alt={discussion.DiscussionsAuthor} className="h-20 w-20 rounded-full object-cover mr-4" width={0}
+                                    <Image src={discussion.DiscussionsAuthorImage || "https://placehold.co/400"} alt={discussion.DiscussionsAuthor} className="h-20 w-20 rounded-full object-cover mr-4" width={0}
                                         height={0}
                                         sizes="100vw"
                                         style={{ width: '100%', height: 'auto' }} />

@@ -1,8 +1,7 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import { API_URL, ApiResponseError, PostAcceptEventRequest, PostRejectEventRequest } from '../../../base/Api/Api';
 import axios from 'axios';
-import { useData } from '../../../base/Context/DataContext';
+import { useEffect, useState } from 'react';
+import { API_URL, ApiResponseError, PostAcceptEventRequest, PostRejectEventRequest } from '../../../base/Api/Api';
 import { isValidEventInvitation } from '../../../base/Api/Sec-1/Checkers/EventInvitationChecker';
 import { RequestsNull } from '../CommunicationPage';
 
@@ -14,79 +13,79 @@ export interface EventInvitation {
   ReqContent: string;
   ReqDate: string;
   ReqResponse: string;
-  ReqStatus: string; 
+  ReqStatus: string;
   ReqTitle: string;
   ReqType: string;
 }
 
 
 const EventInvitations = () => {
- const [invitations, setInvitations] = useState<EventInvitation[]>([]);
- const { isLoggedIn, isLoading, data, userAuthToken } = useData();
- const [acceptingId, setAcceptingId] = useState<string | null>(null);
- const [rejectingId, setRejectingId] = useState<string | null>(null);
+  const [invitations, setInvitations] = useState<EventInvitation[]>([]);
+  const { isLoggedIn, isLoading, data, userAuthToken } = useDataStore();
+  const [acceptingId, setAcceptingId] = useState<string | null>(null);
+  const [rejectingId, setRejectingId] = useState<string | null>(null);
 
 
- useEffect(() => {
-  if (isLoading || !isLoggedIn)  return;
+  useEffect(() => {
+    if (isLoading || !isLoggedIn) return;
 
-  const fetchEventRequests = async () => {
-    try {
-      setInvitations([]);
-      const response = await axios.get<EventInvitation[] | ApiResponseError | RequestsNull>(`${API_URL}/GetRequest/${data.UserName}/Event`, {
-        headers: {
-            'Authorization': `Bearer ${userAuthToken}`
-        }
-      });  
-
-    if (Array.isArray(response.data)) {
-      response.data.forEach(item => {
-        if ('IsNull' in item && item.IsNull) {
-          setInvitations([]);
-          return;
-        } else if ('ErrorMessage' in item && 'ErrorCode' in item) {
-          console.error(`Server error: ${item.ErrorMessage} (Code: ${item.ErrorCode})`);
-          setInvitations([]);
-          return;
-        } else if (isValidEventInvitation(item)) {
-          setInvitations(prev => {
-            const exists = prev.some(invation => invation.ID === item.ID);
-            return exists ? prev : [...prev, item];
-          });
-        }
-      });
-      } else {
-        console.error('API response is not an array or contains invalid data');
+    const fetchEventRequests = async () => {
+      try {
         setInvitations([]);
+        const response = await axios.get<EventInvitation[] | ApiResponseError | RequestsNull>(`${API_URL}/GetRequest/${data.UserName}/Event`, {
+          headers: {
+            'Authorization': `Bearer ${userAuthToken}`
+          }
+        });
+
+        if (Array.isArray(response.data)) {
+          response.data.forEach(item => {
+            if ('IsNull' in item && item.IsNull) {
+              setInvitations([]);
+              return;
+            } else if ('ErrorMessage' in item && 'ErrorCode' in item) {
+              console.error(`Server error: ${item.ErrorMessage} (Code: ${item.ErrorCode})`);
+              setInvitations([]);
+              return;
+            } else if (isValidEventInvitation(item)) {
+              setInvitations(prev => {
+                const exists = prev.some(invation => invation.ID === item.ID);
+                return exists ? prev : [...prev, item];
+              });
+            }
+          });
+        } else {
+          console.error('API response is not an array or contains invalid data');
+          setInvitations([]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch friend requests:', error);
       }
-    } catch (error) {
-      console.error('Failed to fetch friend requests:', error);
-    }
-  };
+    };
 
-  if (!isLoading || isLoggedIn) fetchEventRequests();
-}, [isLoading,isLoggedIn]);
+    if (!isLoading || isLoggedIn) fetchEventRequests();
+  }, [isLoading, isLoggedIn]);
 
-  const handleAccept =  async (invitationId:any) => {
+  const handleAccept = async (invitationId: any) => {
     if (!data?.UserName) return;
     try {
-      const acceptresponse = await PostAcceptEventRequest({ UserName: data.UserName, RequestId:invitationId, type:"Event", codex:"0x17" },userAuthToken);
-       if (acceptresponse[0].status && acceptresponse[0].send) {
+      const acceptresponse = await PostAcceptEventRequest({ UserName: data.UserName, RequestId: invitationId, type: "Event", codex: "0x17" }, userAuthToken);
+      if (acceptresponse[0].status && acceptresponse[0].send) {
         setAcceptingId(invitationId);
         setTimeout(() => {
           setInvitations(prev => prev.filter(request => request.ID !== invitationId));
           setAcceptingId(null);
-        }, 1000); 
+        }, 1000);
       }
     } catch (error) {
       console.error('Failed to accept AcceptEventRequest:', error);
     }
   };
 
-  const handleDecline =  async (invitationId:any) => {
+  const handleDecline = async (invitationId: any) => {
     if (!data?.UserName) return;
     try {
-      const rejectresponse = await PostRejectEventRequest({ UserName: data.UserName, RequestId:invitationId, type:"Event", codex:"0x19" },userAuthToken);
+      const rejectresponse = await PostRejectEventRequest({ UserName: data.UserName, RequestId: invitationId, type: "Event", codex: "0x19" }, userAuthToken);
       if (rejectresponse[0].status && rejectresponse[0].send) {
         setRejectingId(invitationId);
         setTimeout(() => {
@@ -124,7 +123,7 @@ const EventInvitations = () => {
       )}
     </div>
   );
-  
+
 }
 
 export default EventInvitations;

@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import { API_URL } from '@/base/Api/Api';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
 
 interface LatestBlog {
   Bid: number;
@@ -41,13 +42,13 @@ const BlogDetailsLatest = () => {
       <ul className="divide-y divide-gray-200">
         {blogs.map(blog => (
           <li key={blog.Bid} className="py-4 flex items-center space-x-4 last:pb-0 first:pt-0 transform hover:translate-x-2 transition-transform duration-200 ease-out">
-            <Image src={blog.Bimage || "placeholder-image-url.jpg"} alt="Post Thumbnail" className="w-16 h-16 rounded-lg object-cover shadow-sm" width={0}
+            <Image src={blog.Bimage || "https://placehold.co/400"} alt="Post Thumbnail" className="w-16 h-16 rounded-lg object-cover shadow-sm" width={0}
               height={0}
               sizes="100vw"
               style={{ width: '100%', height: 'auto' }} />
             <div className="flex-1 min-w-0">
               <div className="flex items-center mb-1">
-                <Image src={blog.BauthorImage} alt="Author" className="w-10 h-10 rounded-full mr-2 object-cover shadow-sm" width={0}
+                <Image src={blog.BauthorImage || "https://placehold.co/400"} alt="Author" className="w-10 h-10 rounded-full mr-2 object-cover shadow-sm" width={0}
                   height={0}
                   sizes="100vw"
                   style={{ width: '100%', height: 'auto' }} />

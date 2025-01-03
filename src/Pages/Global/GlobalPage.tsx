@@ -1,6 +1,5 @@
 "use client"
 import { API_URL } from '@/base/Api/Api';
-import { useData } from '@/base/Context/DataContext';
 import Header from '@/base/ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
 import axios from 'axios';
@@ -23,7 +22,7 @@ interface GlobalContent {
 }
 
 const GlobalContentComponent: React.FunctionComponent = () => {
-  const { isLoggedIn, isLoading, siteData } = useData();
+  const { isLoggedIn, isLoading, siteData } = useDataStore();
   const [globalContents, setGlobalContents] = useState<GlobalContent[]>([]);
   const [filteredGlobalContents, setFilteredGlobalContents] = useState<GlobalContent[]>([]);
   const [categories, setCategories] = useState<string[]>([]);

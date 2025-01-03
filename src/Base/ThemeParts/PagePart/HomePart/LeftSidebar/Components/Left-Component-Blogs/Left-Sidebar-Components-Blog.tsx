@@ -58,7 +58,7 @@ export default function LeftSidebarComponentsBlogs() {
             {blogs.map((blog) => (
               <li key={blog.Bid} className="hover:bg-gray-100 rounded-md transition duration-200 p-2">
                 <a href={`/Blogs/${blog.Bauthor.replace(' ', '')}/${blog.Burl}`} className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-                  <Image className="h-14 w-14 rounded-lg object-cover" src={blog.Bimage} alt="Blog Thumbnail" width={0}
+                  <Image className="h-14 w-14 rounded-lg object-cover" src={blog.Bimage || "https://placehold.co/400"} alt="Blog Thumbnail" width={0}
                     height={0}
                     sizes="100vw"
                     style={{ width: '100%', height: 'auto' }} />
@@ -66,7 +66,7 @@ export default function LeftSidebarComponentsBlogs() {
                     <span className="text-ms font-medium">{blog.Bname}</span>
                     <div className="text-xs text-gray-500 mt-1">
                       <div className="flex items-center">
-                        <Image className="h-8 w-8 rounded-full object-cover" src={blog.BauthorImage} alt="Author" width={0}
+                        <Image className="h-8 w-8 rounded-full object-cover" src={blog.BauthorImage || "https://placehold.co/400"} alt="Author" width={0}
                           height={0}
                           sizes="100vw"
                           style={{ width: '100%', height: 'auto' }} />

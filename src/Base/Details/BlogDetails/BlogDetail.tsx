@@ -1,4 +1,12 @@
-"use client"
+"use client";
+
+
+import { API_URL, PostSendDislike, PostSendFollowRequest, PostSendLike, PostSendMessageRequest } from '@/base/Api/Api';
+import Header from '@/base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
+import SendPopup from '@/base/ThemeParts/Popup/SendsPopup';
+import SharePopup from '@/base/ThemeParts/Popup/SharePopup';
+import { useDataStore } from '@/store/dataStore';
 import { faEye, faFolderOpen, faMessage, faShare, faTags, faThumbsDown, faThumbsUp, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
@@ -6,14 +14,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { API_URL, PostSendDislike, PostSendFollowRequest, PostSendLike, PostSendMessageRequest } from '../../Api/Api';
-import { useData } from '../../Context/DataContext';
-import Header from '../../ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../ThemeParts/MainPart/Navbar/Navbar';
-import SendPopup from '../../ThemeParts/Popup/SendsPopup';
-import SharePopup from '../../ThemeParts/Popup/SharePopup';
 import BlogDetailsCategories from './components/Categories/categories';
 import BlogDetailsLatest from './components/Latest/Latest';
+
 
 interface BlogPost {
   Bid: string;
@@ -42,7 +45,7 @@ const BlogDetail = () => {
   const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
   const [tags, setTags] = useState<[]>([]);
   const [showSharePopup, setShowSharePopup] = useState(false);
-  const { siteData, data, isLoading, isLoggedIn, userAuthToken } = useData();
+  const { siteData, data, isLoading, isLoggedIn, userAuthToken } = useDataStore();
   const [popup, setPopup] = useState({ visible: false, message: '' });
   const router = useRouter();
 
@@ -108,7 +111,7 @@ const BlogDetail = () => {
             <h1 className="text-2xl lg:text-4xl font-sans mb-2">{blogPost.Bname}</h1>
             <div className="flex justify-center items-center text-gray-600 mt-6">
 
-              <Image src={blogPost.BauthorImage} alt="Author" className="w-20 h-20 rounded-full mr-2" width={0}
+              <Image src={blogPost.BauthorImage || "https://placehold.co/400"} alt="Author" className="w-20 h-20 rounded-full mr-2" width={0}
                 height={0}
                 sizes="100vw"
                 style={{ width: '100%', height: 'auto' }} />
@@ -143,7 +146,7 @@ const BlogDetail = () => {
 
           {/* Blog Image */}
           <div className="bg-white shadow-lg rounded-lg overflow-hidden mb-6">
-            <Image src={blogPost.Bimage} alt={blogPost.Bname} className="w-5/6 max-h-[400px] h-auto mx-auto" width={0}
+            <Image src={blogPost.Bimage || "https://placehold.co/400"} alt={blogPost.Bname} className="w-5/6 max-h-[400px] h-auto mx-auto" width={0}
               height={0}
               sizes="100vw"
               style={{ width: '100%', height: 'auto' }} />

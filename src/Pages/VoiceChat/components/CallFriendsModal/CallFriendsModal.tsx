@@ -1,6 +1,5 @@
 "use client";
 import { API_URL } from '@/base/Api/Api';
-import { useData } from '@/base/Context/DataContext';
 import { faPhone } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
@@ -29,7 +28,7 @@ interface CallFriendsModalProps {
 
 
 const CallFriendsModal: React.FC<CallFriendsModalProps> = ({ isOpen, onStartCall, setIsOpen }) => {
-    const { isLoggedIn, isLoading, data, userAuthToken } = useData();
+    const { isLoggedIn, isLoading, data, userAuthToken } = useDataStore();
     const [friendsList, setFriendsList] = useState<Friend[]>([]);
     const [hasFriends, setHasFriends] = useState(true);
 

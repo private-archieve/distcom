@@ -1,17 +1,18 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
-import { SiteData, useData } from '../../base/Context/DataContext';
-import { API_URL, Postlogin } from '../../base/Api/Api';
+
+import { API_URL, Postlogin } from '@/base/Api/Api';
+import useDataStore from '@/store/dataStore';
 import axios from 'axios';
-import { checkMinaProvider, requestAccounts } from '../../base/WalletProc/Wallet';
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useRef, useState } from 'react';
+
 
 function Login() {
   const router = useRouter();
-  const { userAuthID, setUserAuthID } = useData();
-  const { userAuthToken, setUserAuthToken } = useData();
-  const { isLoggedIn, setLoginStatus } = useData();
-  const { siteData, setSiteData, data, updateData } = useData();
+  const { userAuthID, setUserAuthID } = useDataStore();
+  const { userAuthToken, setUserAuthToken } = useDataStore();
+  const { isLoggedIn, setLoginStatus } = useDataStore();
+  const { siteData, setSiteData, data, updateData } = useDataStore();
   const formRef = useRef<HTMLFormElement>(null);
   const [LoginSuccess, setLoginSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -35,14 +36,14 @@ function Login() {
         }
       });
 
-      const savedEmail = localStorage.getItem('rememberuserEmail');
-      if (savedEmail) {
-        const emailInput = formRef.current?.elements.namedItem('email') as HTMLInputElement;
-        if (emailInput) {
-          emailInput.value = savedEmail;
-          setRememberMe(true);
-        }
+    const savedEmail = localStorage.getItem('rememberuserEmail');
+    if (savedEmail) {
+      const emailInput = formRef.current?.elements.namedItem('email') as HTMLInputElement;
+      if (emailInput) {
+        emailInput.value = savedEmail;
+        setRememberMe(true);
       }
+    }
   }, [setSiteData]);
 
   const handleRememberMe = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,17 +63,16 @@ function Login() {
 
   const handleWalletLogin = async (event: React.FormEvent) => {
     event.preventDefault();
-    const providerResponse = await checkMinaProvider(); 
-    
+    const providerResponse = await checkMinaProvider();
+
     if (providerResponse === true) {
-      try{ 
+      try {
         const walletAddress = await requestAccounts();
-        if(!walletAddress)
-        {  throw new Error('Failed to retrieve wallet address. Please check your wallet extension.');}     
-        
-        const response = await Postlogin({walletAddress});
+        if (!walletAddress) { throw new Error('Failed to retrieve wallet address. Please check your wallet extension.'); }
+
+        const response = await Postlogin({ walletAddress });
         const { message, status, token, userId, userdata } = response;
-        
+
         if (status === "Ok") {
           setUserAuthToken(token);
           setLoginSuccess(true);
@@ -80,15 +80,15 @@ function Login() {
           setUserAuthID(userId);
           updateData(userdata);
           setTimeout(() => router.push('/'), 2500);
-        }else if (status === "alreadylogged"){
+        } else if (status === "alreadylogged") {
           router.push('/');
-        }else if (status === "Bad Request") {
+        } else if (status === "Bad Request") {
           setErrorMessage(message);
           setTimeout(() => setErrorMessage(""), 2500)
         } else if (status === "Not Found") {
           setErrorMessage(message);
           setTimeout(() => setErrorMessage(""), 2500)
-        }else {
+        } else {
           setErrorMessage(message || "An error occurred during login.");
           setTimeout(() => setErrorMessage(""), 2500)
         }
@@ -115,13 +115,13 @@ function Login() {
     if (formRef.current) {
       const formData = new FormData(formRef.current);
       const formProps = Object.fromEntries(formData.entries());
-  
+
       if (!formData.has('email') || !formData.has('password')) {
         setErrorMessage("Please fill in all fields.");
         setTimeout(() => setErrorMessage(""), 2500)
         return;
       }
-      const email = formData.get('email') as string; 
+      const email = formData.get('email') as string;
       const password = formData.get('password') as string;
       if (rememberMe && email) {
         localStorage.setItem('rememberuserEmail', email);
@@ -134,7 +134,7 @@ function Login() {
         return;
       }
       try {
-        const response = await Postlogin({email, password});
+        const response = await Postlogin({ email, password });
         const { message, status, token, userId, userdata } = response;
 
         if (status === "Ok") {
@@ -144,17 +144,17 @@ function Login() {
           setUserAuthID(userId);
           updateData(userdata);
           setTimeout(() => router.push('/'), 2500);
-        }else if (status === "alreadylogged"){
+        } else if (status === "alreadylogged") {
           setErrorMessage(message);
           setTimeout(() => setErrorMessage(""), 2500)
           setTimeout(() => router.push('/'), 2500)
-        }else if (status === "Bad Request") {
+        } else if (status === "Bad Request") {
           setErrorMessage(message);
           setTimeout(() => setErrorMessage(""), 2500)
         } else if (status === "Not Found") {
           setErrorMessage(message);
           setTimeout(() => setErrorMessage(""), 2500)
-        }else {
+        } else {
           setErrorMessage(message || "An error occurred during login.");
           setTimeout(() => setErrorMessage(""), 2500)
         }
@@ -171,7 +171,7 @@ function Login() {
       }
     }
   };
-  
+
   return (
     <div className="flex h-screen bg-gray-200">
       <div className="flex flex-1 items-center justify-center p-10">
@@ -204,7 +204,7 @@ function Login() {
               <button onClick={handleLogin} className="w-full bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-50 shadow-lg transform hover:scale-105 transition duration-150 ease-in-out" type="button">
                 Login
               </button>
-            </div> 
+            </div>
             <p className='mb-2 text-center text-gray-600'>OR</p>
             <div className="mb-2">
               <button onClick={handleWalletLogin} className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-opacity-50 shadow-lg transform hover:scale-105 transition duration-150 ease-in-out" type="button">
@@ -231,11 +231,11 @@ function Login() {
       </div>
 
       {errorMessage && (
-           <div className="fixed bottom-0 inset-x-0 mb-6 flex justify-center">
-           <div className="bg-red-500 text-white font-bold py-2 px-4 rounded-full shadow-lg">
-             <p>Login Error! {errorMessage} </p>
-           </div>
-         </div>  
+        <div className="fixed bottom-0 inset-x-0 mb-6 flex justify-center">
+          <div className="bg-red-500 text-white font-bold py-2 px-4 rounded-full shadow-lg">
+            <p>Login Error! {errorMessage} </p>
+          </div>
+        </div>
       )}
 
       {LoginSuccess && (

@@ -1,15 +1,14 @@
 "use client"
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { faHome, faSearch, faBell, faEnvelope, faCog, faPowerOff, faPeopleGroup, faMugHot, faMessage, faBlog } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faBlog, faCog, faEnvelope, faHome, faMessage, faMugHot, faPeopleGroup, faPowerOff, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useData } from '../../../Context/DataContext';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { Postlogout } from '../../../Api/Api';
 import Notification, { MessageType } from '../../Notification/Notification';
-import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
-  const { isLoggedIn, isLoading, data, userAuthID, userAuthToken } = useData();
+  const { isLoggedIn, isLoading, data, userAuthID, userAuthToken } = useDataStore();
   const [notification, setNotification] = useState({ show: false, type: MessageType.Info, message: '' });
   const router = useRouter();
 

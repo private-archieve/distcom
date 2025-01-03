@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { API_URL } from '../../Api/Api.tsx';
-import { useData } from '../../Context/DataContext.tsx';
 import Header from '../../ThemeParts/MainPart/Header/HeaderPart.tsx';
 import Navbar from '../../ThemeParts/MainPart/Navbar/Navbar.tsx';
 
@@ -44,7 +43,7 @@ const CategoryDetails: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [allContent, setAllContent] = useState<ContentItem[]>([]);
   const [filteredContent, setFilteredContent] = useState<ContentItem[]>([]);
-  const { isLoading, siteData } = useData();
+  const { isLoading, siteData } = useDataStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -155,7 +154,7 @@ interface ContentItemDisplayProps {
 const ContentItemDisplay: React.FC<ContentItemDisplayProps> = ({ item }) => (
   <a href={`/Blogs/${item.author.replace(' ', '')}/${item.url}`}>
     <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out flex flex-row">
-      <Image src={item.image} alt="Content" className="w-1/2 h-auto object-cover transition-transform duration-500 ease-in-out hover:scale-110" width={0}
+      <Image src={item.image || "https://placehold.co/400"} alt="Content" className="w-1/2 h-auto object-cover transition-transform duration-500 ease-in-out hover:scale-110" width={0}
         height={0}
         sizes="100vw"
         style={{ width: '100%', height: 'auto' }} />
@@ -165,7 +164,7 @@ const ContentItemDisplay: React.FC<ContentItemDisplayProps> = ({ item }) => (
           <p className="text-sm text-gray-500">{item.desc}</p>
         </div>
         <div className="text-xs text-gray-500 mt-2 flex items-center">
-          <Image src={item.authorAvatar} alt="Author Avatar" className="w-8 h-8 rounded-full object-cover mr-2" width={0}
+          <Image src={item.authorAvatar || "https://placehold.co/400"} alt="Author Avatar" className="w-8 h-8 rounded-full object-cover mr-2" width={0}
             height={0}
             sizes="100vw"
             style={{ width: '100%', height: 'auto' }} />

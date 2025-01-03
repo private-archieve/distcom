@@ -1,6 +1,5 @@
 "use client";
 import { API_URL } from '@/base/Api/Api';
-import { useData } from '@/base/Context/DataContext';
 import Header from '@/base/ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
 import axios from 'axios';
@@ -18,7 +17,7 @@ interface SearchResultItem {
 
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { isLoggedIn, isLoading, siteData } = useData();
+  const { isLoggedIn, isLoading, siteData } = useDataStore();
   const [searchResults, setSearchResults] = useState<SearchResultItem[]>([]);
   const router = useRouter();
 

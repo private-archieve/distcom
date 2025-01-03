@@ -1,5 +1,4 @@
 import { PostSendFollowRequest, PostSendFriendRequest } from '@/base/Api/Api';
-import { useData } from '@/base/Context/DataContext';
 import SendPopup from '@/base/ThemeParts/Popup/SendsPopup';
 import { Followed, Follower, Friend, UserData } from '@/pages/Profile/Profile';
 import Image from 'next/image';
@@ -13,7 +12,7 @@ interface ProfileHeaderProps {
 }
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userData, onSelect }) => {
-  const { data, userAuthToken } = useData();
+  const { data, userAuthToken } = useDataStore();
   const [popup, setPopup] = useState({ visible: false, message: '' });
 
   const userFriends: Friend[] = typeof userData?.UsrFriends === 'string'

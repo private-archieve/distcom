@@ -1,7 +1,6 @@
 "use client"
 import { API_URL, ApiResponseError, PostAcceptFollowRequest, PostRejectFollowRequest } from '@/base/Api/Api';
 import { isValidFriendRequest } from "@/base/Api/Sec-1/Checkers/FriendRequestChecker";
-import { useData } from '@/base/Context/DataContext';
 import axios from 'axios';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -20,7 +19,7 @@ export interface FollowRequest {
 
 const FollowRequests = () => {
   const [requests, setRequests] = useState<FollowRequest[]>([]);
-  const { isLoggedIn, isLoading, data, userAuthToken } = useData();
+  const { isLoggedIn, isLoading, data, userAuthToken } = useDataStore();
   const [acceptingId, setAcceptingId] = useState<number | null>(null);
   const [rejectingId, setRejectingId] = useState<number | null>(null);
 

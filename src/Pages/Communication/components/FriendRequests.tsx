@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { API_URL, ApiResponseError, PostAcceptFriendRequest, PostRejectFriendRequest } from '../../../base/Api/Api';
 import { isValidFriendRequest } from '../../../base/Api/Sec-1/Checkers/FriendRequestChecker';
-import { useData } from '../../../base/Context/DataContext';
 
 export interface FriendRequest {
   ID: string;
@@ -21,7 +20,7 @@ const FriendRequests = () => {
   const [requests, setRequests] = useState<FriendRequest[]>([]);
   const [acceptingId, setAcceptingId] = useState<string | null>(null);
   const [rejectingId, setRejectingId] = useState<string | null>(null);
-  const { isLoggedIn, isLoading, data, userAuthToken } = useData();
+  const { isLoggedIn, isLoading, data, userAuthToken } = useDataStore();
 
   useEffect(() => {
     if (isLoading || !isLoggedIn) return;

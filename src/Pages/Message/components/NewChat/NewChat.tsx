@@ -1,7 +1,6 @@
 "use client";
 
 import { API_URL, PostStartChat } from '@/base/Api/Api';
-import { useData } from '@/base/Context/DataContext';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
@@ -21,7 +20,7 @@ interface NewChatModalProps {
 }
 
 const NewChat: React.FC<NewChatModalProps> = ({ isOpen, setIsOpen }) => {
-    const { isLoggedIn, isLoading, data, userAuthToken } = useData();
+    const { isLoggedIn, isLoading, data, userAuthToken } = useDataStore();
     const [friendsList, setFriendsList] = useState<Friend[]>([]);
     const [hasFriends, setHasFriends] = useState(true);
 

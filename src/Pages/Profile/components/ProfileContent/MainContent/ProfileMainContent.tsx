@@ -1,6 +1,5 @@
 "use client";
 import { PostSendComment, PostSendDislike, PostSendLike } from '@/base/Api/Api';
-import { useData } from '@/base/Context/DataContext';
 import SharePopup from '@/base/ThemeParts/Popup/SharePopup';
 import { PostType, UserData } from '@/pages/Profile/Profile';
 import { faComment, faFolderOpen, faShareNodes, faSliders, faThumbsUp, faUserSlash } from '@fortawesome/free-solid-svg-icons';
@@ -18,7 +17,7 @@ const ProfileMainContent: React.FC<ProfileMainContentProps> = ({ userData }) => 
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [showSharePopup, setShowSharePopup] = useState(false);
   const [play, setPlay] = useState(false);
-  const { siteData, data } = useData();
+  const { siteData, data } = useDataStore();
   const [commentText, setCommentText] = useState("");
 
 

@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { API_URL, PostSendComment, PostSendLike } from '../../Api/Api';
-import { useData } from '../../Context/DataContext';
 import Header from '../../ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '../../ThemeParts/MainPart/Navbar/Navbar';
 import LeftSidebar from '../../ThemeParts/PagePart/HomePart/LeftSidebar/LeftSidebar';
@@ -50,7 +49,7 @@ const PostDetail = () => {
   const [commentText, setCommentText] = useState('');
   const [showSharePopup, setShowSharePopup] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const { isLoading, siteData, data, userAuthToken } = useData();
+  const { isLoading, siteData, data, userAuthToken } = useDataStore();
   const router = useRouter();
 
 
@@ -135,7 +134,7 @@ const PostDetail = () => {
                   <div className="p-5 border-b border-gray-200">
                     <div className="flex items-center space-x-3">
 
-                      <Image className="h-12 w-12 rounded-full object-cover" src={post.PstAuthorAvatar || 'default-avatar-url.jpg'} alt={`${post.PstAuthor}'s avatar` width={0}
+                      <Image className="h-12 w-12 rounded-full object-cover" src={post.PstAuthorAvatar || "https://placehold.co/400"} alt={`${post.PstAuthor}'s avatar` width={0}
                         height={0}
                         sizes="100vw"
                         style={{ width: '100%', height: 'auto' }} />
@@ -185,7 +184,8 @@ const PostDetail = () => {
                       <div key={comment.comment_id} className="bg-gray-50 rounded-xl p-4 shadow transition-shadow duration-300 ease-in-out hover:shadow-lg">
                         <div className="flex items-start space-x-3">
                           <a href={`/Profile/${comment.author}`}>
-                            <Image src={comment.profile_image} alt="User Avatar" className="w-10 h-10 rounded-full object-cover shadow-sm" width={0}
+                            <Image src={comment.profile_image || "https://placehold.co/400"} alt="User Avatar" className="w-10 h-10 rounded-full object-cover shadow-sm"
+                              width={0}
                               height={0}
                               sizes="100vw"
                               style={{ width: '100%', height: 'auto' }} />

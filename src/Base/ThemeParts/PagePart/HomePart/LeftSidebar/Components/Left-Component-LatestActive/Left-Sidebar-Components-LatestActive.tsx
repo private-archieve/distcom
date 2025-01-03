@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { API_URL } from '../../../../../../Api/Api';
 import { isValidComponentLatestActive } from '../../../../../../Api/Sec-3/Checkers/ComponentsChecker';
-import { useData } from '../../../../../../Context/DataContext';
 
 export interface ComponentActivityinterface {
     Actid: string;
@@ -18,7 +17,7 @@ export interface ComponentActivityinterface {
 
 export default function LeftSidebarComponentsLatestActive() {
     const [activities, setActivities] = useState<ComponentActivityinterface[]>([]);
-    const { data, isLoggedIn, userAuthToken } = useData();
+    const { data, isLoggedIn, userAuthToken } = useDataStore();
     const router = useRouter();
 
     useEffect(() => {
@@ -66,7 +65,7 @@ export default function LeftSidebarComponentsLatestActive() {
                         {activities.map((activity, index) => (
                             <li key={index} className="hover:bg-gray-100 rounded-md transition duration-200 p-2">
                                 <a href="#" className="flex items-center space-x-2">
-                                    <Image className="h-6 w-6 rounded-full" src={activity.ActAvatar} alt="Avatar" width={0}
+                                    <Image className="h-6 w-6 rounded-full" src={activity.ActAvatar || "https://placehold.co/400"} alt="Avatar" width={0}
                                         height={0}
                                         sizes="100vw"
                                         style={{ width: '100%', height: 'auto' }} />

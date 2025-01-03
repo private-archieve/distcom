@@ -1,28 +1,27 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar';
-import FriendRequests from './components/FriendRequests';
 import EventInvitations from './components/EventInvitation';
+import FollowRequests from './components/FollowRequests';
+import FriendRequests from './components/FriendRequests';
 import GroupInvitation from './components/GroupInvitation';
 import MessageRequests from './components/MessageRequests';
-import { useData } from '../../base/Context/DataContext';
-import FollowRequests from './components/FollowRequests';
-import { useRouter } from 'next/navigation';
 
 
-export interface RequestsNull{
+export interface RequestsNull {
   RequestsAuthor: string;
-  Requests:string;
+  Requests: string;
   IsNull: boolean;
 }
 
 const CommunicationPage = () => {
   const [activeModule, setActiveModule] = useState('friendRequests');
-  const { isLoggedIn, isLoading,siteData} = useData();
+  const { isLoggedIn, isLoading, siteData } = useDataStore();
   const router = useRouter();
 
-  useEffect(() => {  
+  useEffect(() => {
     if (isLoading) return;
     if (siteData.SiteStatus != "1") router.push('/');
     if (!isLoggedIn) {
@@ -57,12 +56,12 @@ const CommunicationPage = () => {
             </div>
           </div>
         </div>
-  
+
         <div className="flex-1 flex flex-col">
           <div className="bg-white p-5 shadow-md rounded-lg">
             <h3 className="text-xl font-semibold text-gray-900">Requests List</h3>
           </div>
-  
+
           <div className="flex-1 overflow-y-auto p-5 bg-gray-50">
             {activeModule === 'friendRequests' && <FriendRequests />}
             {activeModule === 'eventRequests' && <EventInvitations />}

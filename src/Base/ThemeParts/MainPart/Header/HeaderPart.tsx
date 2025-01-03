@@ -4,12 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { useData } from '../../../Context/DataContext';
 
 export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { isLoggedIn, data, siteData, isLoading } = useData();
+  const { isLoggedIn, data, siteData, isLoading } = useDataStore();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -39,7 +38,7 @@ export default function Header() {
         <div className="container mx-auto px-6 py-3 flex justify-between items-center">
           <Link href="/" className="">
             <div className="flex items-center w-auto">
-              <Image src={siteLogoURL} alt="Distcom Network Logo" className="h-8 w-8 mr-2" width={0}
+              <Image src={siteLogoURL || "https://placehold.co/400"} alt="Distcom Network Logo" className="h-8 w-8 mr-2" width={0}
                 height={0}
                 sizes="100vw"
                 style={{ width: '100%', height: 'auto' }} />
@@ -50,7 +49,7 @@ export default function Header() {
             <div className="flex items-center relative" ref={dropdownRef}>
               <Link href="/Profile" className="">
                 <Image
-                  src={profileImageURL}
+                  src={profileImageURL || "https://placehold.co/400"}
                   alt="User Profile"
                   className="h-12 w-12 rounded-full cursor-pointer object-cover mr-2" width={0}
                   height={0}

@@ -1,19 +1,18 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
-import { useData } from '../../../../base/Context/DataContext';
+import { faAdjust, faGear, faSearch, faStickyNote } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStickyNote, faSearch, faAdjust, faGear } from '@fortawesome/free-solid-svg-icons';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import StickyNotesModal from './components/StickyNotes/StickyNotesModal';
 
 const VoiceCallSidebar: React.FC = () => {
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
-    const { isLoading,voiceDetectionLevel, setVoiceDetectionLevel, notes, setNotes } = useData();
+    const { isLoading, voiceDetectionLevel, setVoiceDetectionLevel, notes, setNotes } = useDataStore();
     const [volumeLevel, setVolumeLevel] = useState(50);
     const [isNoteModalVisible, setIsNoteModalVisible] = useState(false);
     const [notes2, setNotes2] = useState<string[]>([]);
 
 
     useEffect(() => {
-      if (isLoading) return;
+        if (isLoading) return;
         if (typeof notes === 'string') {
             try {
                 const parsedNotes = JSON.parse(notes);
@@ -56,18 +55,18 @@ const VoiceCallSidebar: React.FC = () => {
     return (
         <>
             <div className="fixed left-0 top-1/2 transform -translate-y-1/2 z-50 p-4 bg-white bg-opacity-90 shadow-xl rounded-r-3xl flex flex-col items-center justify-start space-y-4">
-              <button onClick={toggleNoteModal} className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-150 ease-in-out">
-                <FontAwesomeIcon icon={faStickyNote} size="lg" />
-              </button>
-              <button className="p-3 bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-150 ease-in-out">
-                <FontAwesomeIcon icon={faSearch} size="lg" />
-              </button>
-              <button className="p-3 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition duration-150 ease-in-out">
-                <FontAwesomeIcon icon={faAdjust} size="lg" />
-              </button>
-              <button onClick={toggleSettings} className="p-3 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition duration-150 ease-in-out">
-                <FontAwesomeIcon icon={faGear} size="lg" />
-              </button>
+                <button onClick={toggleNoteModal} className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-150 ease-in-out">
+                    <FontAwesomeIcon icon={faStickyNote} size="lg" />
+                </button>
+                <button className="p-3 bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-150 ease-in-out">
+                    <FontAwesomeIcon icon={faSearch} size="lg" />
+                </button>
+                <button className="p-3 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition duration-150 ease-in-out">
+                    <FontAwesomeIcon icon={faAdjust} size="lg" />
+                </button>
+                <button onClick={toggleSettings} className="p-3 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition duration-150 ease-in-out">
+                    <FontAwesomeIcon icon={faGear} size="lg" />
+                </button>
             </div>
             {isSettingsVisible && (
                 <div className="fixed left-20 top-1/2 transform -translate-y-1/2 z-50 p-4 bg-white bg-opacity-90 shadow-xl rounded-r-3xl flex flex-col items-center justify-start space-y-4">
