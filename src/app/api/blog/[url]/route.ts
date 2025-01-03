@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getBlogPostByURL } from '../../../../lib/database';
+import { getBlogPostByURL } from '@lib/database';
 import { cookies } from 'next/headers';
 
 export async function GET(req: Request, { params }: { params: { url: string } }) {

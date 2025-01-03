@@ -1,12 +1,12 @@
-import { EventInvitation } from "../../../../pages/Communication/components/EventInvitation";
+import { EventInvitation } from "@/pages/Communication/components/EventInvitation";
 
 export const isValidEventInvitation = (data: any): data is EventInvitation => {
     return typeof data.ID === 'string' &&
-           typeof data.ReqAuthor === 'string' &&
-           typeof data.ReqAuthorImage === 'string' &&
-           typeof data.ReqContent === 'string' &&
-           typeof data.ReqDate === 'string' &&
-           typeof data.ReqResponse === 'string' &&
-           typeof data.ReqTitle === 'string' &&
-           typeof data.ReqType === 'string';
-  }
+        typeof data.ReqAuthor === 'string' &&
+        typeof data.ReqAuthorImage === 'string' &&
+        typeof data.ReqContent === 'string' &&
+        typeof data.ReqDate === 'string' &&
+        typeof data.ReqResponse === 'string' &&
+        typeof data.ReqTitle === 'string' &&
+        typeof data.ReqType === 'string';
+}

@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays, faEye, faFolderOpen, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { API_URL } from '../../base/Api/Api';
-import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar';
-import { useData } from '../../base/Context/DataContext';
+import { API_URL } from '@/api/Api';
+import Header from '@/base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
+import { useData } from '@/base/Context/DataContext';
 import { useRouter } from 'next/navigation';
 
 interface Blog {
@@ -23,7 +23,7 @@ interface Blog {
 }
 
 const Blog: React.FC = () => {
-  const { isLoading,siteData } = useData();
+  const { isLoading, siteData } = useData();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [filteredBlogs, setFilteredBlogs] = useState<Blog[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
@@ -38,7 +38,7 @@ const Blog: React.FC = () => {
     if (isLoading) return;
     if (siteData && siteData.SiteStatus !== "1") {
       router.push('/');
-      return; 
+      return;
     }
 
     const fetchBlogs = async () => {
@@ -52,10 +52,10 @@ const Blog: React.FC = () => {
         handleErrors(error);
       }
     };
-  
+
     fetchBlogs();
-  }, [isLoading, siteData, router]); 
-  
+  }, [isLoading, siteData, router]);
+
 
   useEffect(() => {
     filterBlogs();
@@ -66,7 +66,7 @@ const Blog: React.FC = () => {
     setCategories([...new Set(data.map(blog => blog.Bcategory as string))]);
     setAuthors([...new Set(data.map(blog => blog.Bauthor as string))]);
   };
-  
+
   const filterBlogs = () => {
     let tempBlogs = blogs;
     if (selectedCategory) {
@@ -81,11 +81,11 @@ const Blog: React.FC = () => {
     setFilteredBlogs(tempBlogs);
   };
 
-  const handleCategoryChange = (category:any) => {
+  const handleCategoryChange = (category: any) => {
     setSelectedCategory(category === selectedCategory ? null : category);
   };
 
-  const handleErrors = (error:any) => {
+  const handleErrors = (error: any) => {
     if (error.code === "ERR_NETWORK") {
       console.error('Network error:', error);
       router.push('/NetworkError');
@@ -116,27 +116,27 @@ const Blog: React.FC = () => {
           </div>
           <div className="flex bg-gray-50 px-4 py-2 rounded-full ">
             {categories.map(category => (
-             <button
-             key={category}
-             className={`mr-4 px-4 py-2 rounded-full text-sm font-medium focus:outline-none transition duration-150 ease-in-out transform hover:scale-105 ${category === selectedCategory ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg' : 'bg-gray-200 text-gray-800 hover:bg-gray-300 shadow-sm'}`}
-             onClick={() => handleCategoryChange(category)}
-           >
-             {category}
-           </button>
+              <button
+                key={category}
+                className={`mr-4 px-4 py-2 rounded-full text-sm font-medium focus:outline-none transition duration-150 ease-in-out transform hover:scale-105 ${category === selectedCategory ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg' : 'bg-gray-200 text-gray-800 hover:bg-gray-300 shadow-sm'}`}
+                onClick={() => handleCategoryChange(category)}
+              >
+                {category}
+              </button>
             ))}
           </div>
           <div className="flex">
-              <button
-                className="bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-lg inline-flex items-center justify-center w-full"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              >
-                {selectedAuthor || "Select Author"}
-                <svg className="fill-current h-4 w-4 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path d="M5.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.575 0 0.436 0.445 0.408 1.197 0 1.615l-4.695 4.502c-0.533 0.481-1.408 0.481-1.942 0l-4.695-4.502c-0.408-0.418-0.436-1.17 0-1.615z"/>
-                </svg>
-              </button>
-              {isDropdownOpen && (
-                <div className="absolute bg-white border rounded w-full z-10">
+            <button
+              className="bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-lg inline-flex items-center justify-center w-full"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              {selectedAuthor || "Select Author"}
+              <svg className="fill-current h-4 w-4 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M5.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.575 0 0.436 0.445 0.408 1.197 0 1.615l-4.695 4.502c-0.533 0.481-1.408 0.481-1.942 0l-4.695-4.502c-0.408-0.418-0.436-1.17 0-1.615z" />
+              </svg>
+            </button>
+            {isDropdownOpen && (
+              <div className="absolute bg-white border rounded w-full z-10">
                 <div
                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                   onClick={() => {
@@ -159,13 +159,13 @@ const Blog: React.FC = () => {
                   </div>
                 ))}
               </div>
-              )}
-            </div>
+            )}
+          </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {filteredBlogs.map((blog) => (
             <div key={blog.Bid} className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
-              <a href={`/Blogs/${blog.Bauthor.replace(' ','')}/${blog.Burl}`}>
+              <a href={`/Blogs/${blog.Bauthor.replace(' ', '')}/${blog.Burl}`}>
                 <img className="w-full h-48 object-fit rounded-t-lg" src={blog.Bimage} alt={blog.Bdesc || blog.Bname + " - Distcom Network"} />
               </a>
               <div className="p-4">
@@ -183,12 +183,12 @@ const Blog: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <img className="h-8 w-8 rounded-full object-cover" src={blog.BauthorImage} alt="Author" />
-                    <span className="ml-2 text-sm font-medium text-gray-900"><a href={`/Author/${blog.Bauthor.replace(' ','')}`} >{blog.Bauthor} </a></span>
+                    <span className="ml-2 text-sm font-medium text-gray-900"><a href={`/Author/${blog.Bauthor.replace(' ', '')}`} >{blog.Bauthor} </a></span>
                     <span className="ml-2 text-sm font-medium text-gray-900"><FontAwesomeIcon icon={faEye} className="mr-1" />{blog.Bviews}</span>
                   </div>
-                  <a href={`/Blogs/${blog.Bauthor.replace(' ','')}/${blog.Burl}`} 
+                  <a href={`/Blogs/${blog.Bauthor.replace(' ', '')}/${blog.Burl}`}
                     className="inline-block py-2 px-3 rounded-full text-sm font-medium text-white transition transform hover:scale-105 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-md hover:shadow-lg">
-                      Read More
+                    Read More
                   </a>
                 </div>
               </div>

@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { checkUserExists, RegisterUserWallet } from '../../../../lib/database';
+import { checkUserExists, RegisterUserWallet } from '@lib/database';
 import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {
     const body = await req.json();
     const walletAddress = body.RegisterRequest?.walletAddress;
 
-    const csrfToken = cookies().get('csrf-token')?.value;
+    const csrfToken = (await cookies()).get('csrf-token')?.value;
     const csrfTokenFromHeader = req.headers.get('csrf-token');
 
     // CSRF protection

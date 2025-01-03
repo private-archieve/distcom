@@ -3,8 +3,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { SiteData, useData } from '../../base/Context/DataContext';
 import { API_URL, Postlogin } from '../../base/Api/Api';
 import axios from 'axios';
-import { checkMinaProvider, requestAccounts } from '../../base/WalletProc/Wallet';
+import { checkMinaProvider, requestAccounts } from '@/base/WalletProc/Wallet';
 import { useRouter } from 'next/navigation';
+
 
 function Login() {
     const router = useRouter();
