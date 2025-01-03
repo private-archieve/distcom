@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { checkUserExists, RegisterUserWallet } from '@lib/database';
 import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
     const body = await req.json();

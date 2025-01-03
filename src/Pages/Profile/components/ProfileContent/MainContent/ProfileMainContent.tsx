@@ -1,12 +1,14 @@
-// ProfileMainContent.tsx
-import React, { useState } from 'react';
-import { UserData, PostType } from '../../../Profile';
+"use client";
+import { PostSendComment, PostSendDislike, PostSendLike } from '@/base/Api/Api';
+import { useData } from '@/base/Context/DataContext';
+import SharePopup from '@/base/ThemeParts/Popup/SharePopup';
+import { PostType, UserData } from '@/pages/Profile/Profile';
+import { faComment, faFolderOpen, faShareNodes, faSliders, faThumbsUp, faUserSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSliders, faThumbsUp, faComment, faShareNodes, faUserSlash, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
+import React, { useState } from 'react';
 import ReactPlayer from 'react-player';
-import { useData } from '../../../../../base/Context/DataContext';
-import { PostSendComment, PostSendDislike, PostSendLike } from '../../../../../base/Api/Api';
-import SharePopup from '../../../../../base/ThemeParts/Popup/SharePopup';
+
 
 interface ProfileMainContentProps {
   userData: UserData | null;
@@ -17,12 +19,12 @@ const ProfileMainContent: React.FC<ProfileMainContentProps> = ({ userData }) => 
   const [showSharePopup, setShowSharePopup] = useState(false);
   const [play, setPlay] = useState(false);
   const { siteData, data } = useData();
-  const [commentText, setCommentText] = useState(""); 
+  const [commentText, setCommentText] = useState("");
 
 
-  const SendLike = async (globalId: string) => { await PostSendLike({UserID:data.UserName, ContentID:globalId, ContentType:"PostContent"}); };
-  const SendDisLike = async (globalId: string) => {  await PostSendDislike({UserID:data.UserName, ContentID:globalId, ContentType:"PostContent"}); };
-  const SendComment = async (globalId: string, commentcontent: string) => {await PostSendComment({UserID:data.UserName, ContentID:globalId, Content:commentcontent, ContentType:"PostContent"}); };
+  const SendLike = async (globalId: string) => { await PostSendLike({ UserID: data.UserName, ContentID: globalId, ContentType: "PostContent" }); };
+  const SendDisLike = async (globalId: string) => { await PostSendDislike({ UserID: data.UserName, ContentID: globalId, ContentType: "PostContent" }); };
+  const SendComment = async (globalId: string, commentcontent: string) => { await PostSendComment({ UserID: data.UserName, ContentID: globalId, Content: commentcontent, ContentType: "PostContent" }); };
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCommentText(event.target.value);
@@ -45,12 +47,12 @@ const ProfileMainContent: React.FC<ProfileMainContentProps> = ({ userData }) => 
   if (!userData) {
     return (
       <main className="flex-1 p-6 overflow-hidden flex items-center justify-center bg-gray-50">
-      <div className="text-center p-4 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-lg">
-        <FontAwesomeIcon icon={faUserSlash} className="text-gray-400 h-16 w-16 mx-auto mt-2" />
-        <p className="mt-4 text-lg font-semibold text-gray-800">No user data available.</p>
-        <p className="text-gray-500">Please check back later or try refreshing the page.</p>
-      </div>
-    </main>
+        <div className="text-center p-4 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-lg">
+          <FontAwesomeIcon icon={faUserSlash} className="text-gray-400 h-16 w-16 mx-auto mt-2" />
+          <p className="mt-4 text-lg font-semibold text-gray-800">No user data available.</p>
+          <p className="text-gray-500">Please check back later or try refreshing the page.</p>
+        </div>
+      </main>
     );
   }
 
@@ -98,15 +100,18 @@ const ProfileMainContent: React.FC<ProfileMainContentProps> = ({ userData }) => 
   return (
     <main className="flex-1 p-6 overflow-auto">
       {userPosts.length === 0 ? (
-      <div className="flex items-center justify-center h-full">
-      <p className="text-gray-500 text-lg">No posts available.</p>
-    </div>
+        <div className="flex items-center justify-center h-full">
+          <p className="text-gray-500 text-lg">No posts available.</p>
+        </div>
       ) : (
         userPosts.map((post) => (
           <div key={post.GlobalId} className="bg-white rounded-lg shadow-lg mb-8 p-4 text-gray-700">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center">
-                <img className="h-8 w-8 rounded-full mr-2" src={post.Avatar || 'default-avatar-url'} alt={`${post.Author}'s avatar`} />
+                <Image className="h-8 w-8 rounded-full mr-2" src={post.Avatar || 'default-avatar-url'} alt={`${post.Author}'s avatar`} width={0}
+                  height={0}
+                  sizes="100vw"
+                  style={{ width: '100%', height: 'auto' }} />
                 <div>
                   <div className="font-medium">{post.Author}</div>
                   <div className="text-xs text-gray-500">{post.Date}</div>
@@ -119,11 +124,14 @@ const ProfileMainContent: React.FC<ProfileMainContentProps> = ({ userData }) => 
             <p className="mb-3">{post.Content}</p>
 
             {post.ImageUrl && !post.VideoUrl && (
-              <img src={post.ImageUrl} alt="Post" className="mb-3 max-w-full h-auto rounded-lg shadow" />
+              <Image src={post.ImageUrl} alt="Post" className="mb-3 max-w-full h-auto rounded-lg shadow" width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: '100%', height: 'auto' }} />
             )}
 
             {post.VideoUrl && (
-                <div className="flex justify-center items-center bg-black">
+              <div className="flex justify-center items-center bg-black">
                 <div className="video-player-container bg-gray-800 rounded-lg overflow-hidden shadow-lg max-w-xl w-full">
                   <ReactPlayer
                     url={post.VideoUrl}
@@ -145,7 +153,7 @@ const ProfileMainContent: React.FC<ProfileMainContentProps> = ({ userData }) => 
             <div className="border-t pt-3 mt-3 text-sm flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <button type="button" onClick={() => SendLike(post.GlobalId)} className="flex items-center text-gray-600 hover:text-blue-700 transition-colors duration-200 ease-in-out">
-                  <FontAwesomeIcon icon={faThumbsUp} className="text-xl mr-2" /> 
+                  <FontAwesomeIcon icon={faThumbsUp} className="text-xl mr-2" />
                   <span className="font-medium">{post.LikeCount} Like</span>
                 </button>
                 <button type="button" onClick={() => setShowCommentInput(!showCommentInput)} className="flex items-center text-gray-600 hover:text-green-700 transition-colors duration-200 ease-in-out">
@@ -154,7 +162,7 @@ const ProfileMainContent: React.FC<ProfileMainContentProps> = ({ userData }) => 
                 </button>
               </div>
               <button type="button" onClick={handleShareClick} className="flex items-center text-gray-600 hover:text-red-700 transition-colors duration-200 ease-in-out">
-                <FontAwesomeIcon icon={faShareNodes} className="text-xl mr-2" /> 
+                <FontAwesomeIcon icon={faShareNodes} className="text-xl mr-2" />
                 <span className="font-medium">Share</span>
               </button>
             </div>
@@ -170,7 +178,7 @@ const ProfileMainContent: React.FC<ProfileMainContentProps> = ({ userData }) => 
             )}
             {showSharePopup && <SharePopup url={`http://localhost:3000/posts/${post.GlobalId}`} title={post.Author} onClose={handleClosePopup} />}
           </div>
-          
+
         ))
       )}
     </main>

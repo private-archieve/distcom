@@ -1,13 +1,13 @@
 import {
     RuntimeModule,
+    runtimeMethod,
     runtimeModule,
     state,
-    runtimeMethod,
 } from "@proto-kit/module";
 
 import {
-    StateMap,
     State,
+    StateMap,
     assert
 } from "@proto-kit/protocol";
 
@@ -23,12 +23,12 @@ import {
 export class GroupEntity extends Struct({
     leader: PublicKey,
     memberCount: UInt64,
-}) {}
+}) { }
 
 export class GroupChatEntity extends Struct({
     groupId: UInt64,
     messages: Array<string>()
-}) {}
+}) { }
 
 
 @runtimeModule()
@@ -70,7 +70,7 @@ export class Groups extends RuntimeModule<{}> {
         const newGroupMemberCount = UInt64.from(groupMemberCount).add(UInt64.from(1));
         this.groups.set(
             groupId,
-            new GroupEntity({ 
+            new GroupEntity({
                 leader: group.leader,
                 memberCount: newGroupMemberCount
             })
@@ -90,7 +90,7 @@ export class Groups extends RuntimeModule<{}> {
         const newGroupMemberCount = UInt64.from(groupMemberCount).sub(UInt64.from(1));
         this.groups.set(
             groupId,
-            new GroupEntity({ 
+            new GroupEntity({
                 leader: group.leader,
                 memberCount: newGroupMemberCount
             })
@@ -112,13 +112,13 @@ export class Groups extends RuntimeModule<{}> {
             })
         );
     }
-    
+
     @runtimeMethod()
-    public addMessageToChat(chatId: UInt64, message: string) { 
+    public addMessageToChat(chatId: UInt64, message: string) {
         assert(this.groupChats.get(chatId).isSome, "Chat does not exist");
         let chat = this.groupChats.get(chatId).value;
-        (chat.messages as string[]).push(message); 
+        (chat.messages as string[]).push(message);
         this.groupChats.set(chatId, chat);
     }
-    
+
 }

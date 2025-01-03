@@ -1,10 +1,11 @@
 "use client"
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../../../../../../Api/Api';
-import { useData } from '../../../../../../Context/DataContext';
-import { isValidComponentLatestActive } from '../../../../../../Api/Sec-3/Checkers/ComponentsChecker';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { API_URL } from '../../../../../../Api/Api';
+import { isValidComponentLatestActive } from '../../../../../../Api/Sec-3/Checkers/ComponentsChecker';
+import { useData } from '../../../../../../Context/DataContext';
 
 export interface ComponentActivityinterface {
     Actid: string;
@@ -17,7 +18,7 @@ export interface ComponentActivityinterface {
 
 export default function LeftSidebarComponentsLatestActive() {
     const [activities, setActivities] = useState<ComponentActivityinterface[]>([]);
-    const { data, isLoggedIn,userAuthToken } = useData();
+    const { data, isLoggedIn, userAuthToken } = useData();
     const router = useRouter();
 
     useEffect(() => {
@@ -36,24 +37,24 @@ export default function LeftSidebarComponentsLatestActive() {
                 if (!response.data || !Array.isArray(response.data) || response.data.some(activite => !isValidComponentLatestActive(activite))) {
                     console.error('API response is not an array or contains invalid data');
                     return;
-                  }
-                  
+                }
+
                 setActivities(response.data);
             })
             .catch(error => {
                 if (error.code === "ERR_NETWORK") {
-                  console.error('Network error:', error);
+                    console.error('Network error:', error);
                     router.push('/NetworkError');
                 } else if (error.response) {
-                  console.error('LeftSidebarComponentsLatestActive data fetching failed:', error.response.data);
+                    console.error('LeftSidebarComponentsLatestActive data fetching failed:', error.response.data);
                 } else {
-                  console.error('Error:', error.message);
+                    console.error('Error:', error.message);
                 }
-              });
+            });
     }, [data?.UserName, isLoggedIn]);
 
     if (!isLoggedIn) {
-        return null; 
+        return null;
     }
 
     return (
@@ -65,7 +66,10 @@ export default function LeftSidebarComponentsLatestActive() {
                         {activities.map((activity, index) => (
                             <li key={index} className="hover:bg-gray-100 rounded-md transition duration-200 p-2">
                                 <a href="#" className="flex items-center space-x-2">
-                                    <img className="h-6 w-6 rounded-full" src={activity.ActAvatar} alt="Avatar" />
+                                    <Image className="h-6 w-6 rounded-full" src={activity.ActAvatar} alt="Avatar" width={0}
+                                        height={0}
+                                        sizes="100vw"
+                                        style={{ width: '100%', height: 'auto' }} />
                                     <span className="text-sm font-medium">{activity.ActContent}</span>
                                 </a>
                             </li>

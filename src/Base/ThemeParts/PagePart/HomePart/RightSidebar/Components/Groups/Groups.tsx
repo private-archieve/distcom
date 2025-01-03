@@ -1,7 +1,8 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import { API_URL } from '../../../../../../Api/Api';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { API_URL } from '../../../../../../Api/Api';
 
 export type TypeGroups = {
   GrpID: number;
@@ -25,7 +26,7 @@ export default function Groups() {
       .then(response => response.json())
       .then(data => {
         setGroups(data);
-        setFilteredGroups(data); 
+        setFilteredGroups(data);
       })
       .catch(error => {
         if (error.code === "ERR_NETWORK") {
@@ -84,7 +85,10 @@ export default function Groups() {
           return (
             <div key={group.GrpID} className="flex flex-col sm:flex-row items-center justify-between py-2 border-b last:border-b-0 hover:bg-gray-100 transition-colors">
               <a href={"/Groups/" + group.GrpName.replace(/\s/g, "")} className="flex items-center space-x-3 mb-2 sm:mb-0">
-                <img className="h-8 w-8 rounded-full" src={group.GrpImage} alt={group.GrpName} />
+                <Image className="h-8 w-8 rounded-full" src={group.GrpImage} alt={group.GrpName} width={0}
+                  height={0}
+                  sizes="100vw"
+                  style={{ width: '100%', height: 'auto' }} />
                 <div>
                   <span className="text-sm font-medium block">{group.GrpName}</span>
                   <span className="text-xs text-gray-500 block">{membersCount} Members</span>

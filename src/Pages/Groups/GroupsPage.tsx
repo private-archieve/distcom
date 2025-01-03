@@ -1,13 +1,15 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import { API_URL } from '@/base/Api/Api';
+import { useData } from '@/base/Context/DataContext';
+import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
+import Header from '@/base/ThemeParts/PagePart/HomePart/RightSidebar/Components/Groups/Groups';
+import CreateGroupPage from '@/pages/Groups/SubPage/CreateGroups/CreateGroupsPage';
+import MyGroupsPage from '@/pages/Groups/SubPage/MyGroups/MyGroups';
 import axios from 'axios';
-import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart.tsx';
-import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar.tsx';
-import { API_URL } from '../../base/Api/Api.tsx';
-import CreateGroupPage from './SubPage/CreateGroups/CreateGroupsPage.tsx';
-import MyGroupsPage from './SubPage/MyGroups/MyGroups.tsx';
-import { useData } from '../../base/Context/DataContext.tsx';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+
 
 export type Group = {
   GrpID: number;
@@ -33,7 +35,10 @@ const GroupItem: React.FC<{ group: Group }> = ({ group }) => {
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg transform transition-all hover:scale-105 duration-300">
       <a href={"/Groups/" + group.GrpName.replace(/\s/g, "")}>
-        <img src={group.GrpImage} alt={group.GrpName} className="w-full h-32 sm:h-48 object-cover" />
+        <Image src={group.GrpImage} alt={group.GrpName} className="w-full h-32 sm:h-48 object-cover" width={0}
+          height={0}
+          sizes="100vw"
+          style={{ width: '100%', height: 'auto' }} />
         <div className="px-6 py-4">
           <div className="font-bold text-xl mb-2">{group.GrpName}</div>
           <p className="text-gray-700 text-base">{group.GrpDesc}</p>
@@ -55,7 +60,7 @@ const GroupItem: React.FC<{ group: Group }> = ({ group }) => {
 const GroupsPage = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [groups, setGroups] = useState<Group[]>([]);
-  const { isLoggedIn, isLoading, data,siteData } = useData();
+  const { isLoggedIn, isLoading, data, siteData } = useData();
   const router = useRouter();
 
   useEffect(() => {
@@ -100,7 +105,7 @@ const GroupsPage = () => {
   };
 
   return (
-    <> 
+    <>
       <Header />
       <Navbar />
       <div className="flex">
@@ -109,46 +114,46 @@ const GroupsPage = () => {
             <div className="bg-white shadow-md border border-l-slate-800 ">
               <div className="max-w-7xl mx-auto px-4 sm:px-2 lg:px-12 mt-24">
                 <div className="flex justify-between items-center py-6 md:space-x-10">
-                      {isLoggedIn ? (
-                        <button
-                        onClick={() => setActiveTab('all')}
-                        className={`bg-slate-400 bg-opacity-10 px-2 py-2 rounded-md text-sm font-medium ${activeTab === 'all' ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-900 transition duration-300 ease-in-out hover:shadow-2xl`}
-                        >
-                        All Groups
-                        </button>
-                      ) : (
-                        <button
-                        onClick={() => setActiveTab('all')}
-                        className={`bg-slate-400 bg-opacity-10 px-2 py-2 rounded-md text-sm font-medium ${activeTab === 'all' ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-900 transition duration-300 ease-in-out hover:shadow-2xl`}
-                        >
-                        Discover Groups
-                        </button>
-                      )}
-                      {isLoggedIn && (
-                        <button
-                        onClick={() => setActiveTab('my')}
-                        className={`bg-slate-400 bg-opacity-10 px-2 py-2 rounded-md text-sm font-medium ${activeTab === 'my' ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-900 transition duration-300 ease-in-out hover:shadow-2xl`}
-                        >
-                        My Groups
-                        </button>
-                      )}
-                      {isLoggedIn && (
-                        <button
-                        onClick={() => setActiveTab('create')}
-                        className={`bg-slate-400 bg-opacity-10 px-2 py-2 rounded-md text-sm font-medium ${activeTab === 'create' ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-900 transition duration-300 ease-in-out hover:shadow-2xl`}
-                        >
-                        Create a Group
-                        </button>
-                      )}
-                      <div className="relative w-full max-w-xs">
-                        <input
-                          type="search"
-                          name="search"
-                          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
-                          placeholder="Search Groups..."
-                        />
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  {isLoggedIn ? (
+                    <button
+                      onClick={() => setActiveTab('all')}
+                      className={`bg-slate-400 bg-opacity-10 px-2 py-2 rounded-md text-sm font-medium ${activeTab === 'all' ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-900 transition duration-300 ease-in-out hover:shadow-2xl`}
+                    >
+                      All Groups
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setActiveTab('all')}
+                      className={`bg-slate-400 bg-opacity-10 px-2 py-2 rounded-md text-sm font-medium ${activeTab === 'all' ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-900 transition duration-300 ease-in-out hover:shadow-2xl`}
+                    >
+                      Discover Groups
+                    </button>
+                  )}
+                  {isLoggedIn && (
+                    <button
+                      onClick={() => setActiveTab('my')}
+                      className={`bg-slate-400 bg-opacity-10 px-2 py-2 rounded-md text-sm font-medium ${activeTab === 'my' ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-900 transition duration-300 ease-in-out hover:shadow-2xl`}
+                    >
+                      My Groups
+                    </button>
+                  )}
+                  {isLoggedIn && (
+                    <button
+                      onClick={() => setActiveTab('create')}
+                      className={`bg-slate-400 bg-opacity-10 px-2 py-2 rounded-md text-sm font-medium ${activeTab === 'create' ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-900 transition duration-300 ease-in-out hover:shadow-2xl`}
+                    >
+                      Create a Group
+                    </button>
+                  )}
+                  <div className="relative w-full max-w-xs">
+                    <input
+                      type="search"
+                      name="search"
+                      className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
+                      placeholder="Search Groups..."
+                    />
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path>
                       </svg>
                     </div>
@@ -159,7 +164,7 @@ const GroupsPage = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
               <div className={`grid ${activeTab === 'all' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4' : 'grid-cols-1'} gap-4`}>
                 {renderGroupContent()}
-            </div>
+              </div>
             </div>
           </div>
         </div>

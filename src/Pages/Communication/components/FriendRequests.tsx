@@ -1,9 +1,9 @@
 "use client"
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { API_URL, ApiResponseError, PostAcceptFriendRequest, PostRejectFriendRequest } from '../../../base/Api/Api';
-import { useData } from '../../../base/Context/DataContext';
 import { isValidFriendRequest } from '../../../base/Api/Sec-1/Checkers/FriendRequestChecker';
+import { useData } from '../../../base/Context/DataContext';
 
 export interface FriendRequest {
   ID: string;
@@ -24,7 +24,7 @@ const FriendRequests = () => {
   const { isLoggedIn, isLoading, data, userAuthToken } = useData();
 
   useEffect(() => {
-    if (isLoading || !isLoggedIn)  return;
+    if (isLoading || !isLoggedIn) return;
 
     const fetchFriendRequests = async () => {
       try {
@@ -51,11 +51,11 @@ const FriendRequests = () => {
               });
             }
           });
-          } else {
-            console.error('API response is not an array or contains invalid data');
-            setRequests([]);
-          }
-          
+        } else {
+          console.error('API response is not an array or contains invalid data');
+          setRequests([]);
+        }
+
       } catch (error) {
         console.error('Failed to fetch friend requests:', error);
       }
@@ -73,13 +73,13 @@ const FriendRequests = () => {
         setTimeout(() => {
           setRequests(prev => prev.filter(request => request.ID !== requestId));
           setAcceptingId(null);
-        }, 1000); 
+        }, 1000);
       }
     } catch (error) {
       console.error('Failed to accept friend request:', error);
     }
   };
-  
+
   const handleReject = async (requestId: string) => {
     if (!data?.UserName) return;
     try {
@@ -105,7 +105,10 @@ const FriendRequests = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
           {requests.map((request) => (
             <div key={request.ID} className={`bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-sm hover:shadow-xl transition duration-300 ease-in-out ${acceptingId === request.ID ? 'fade-out-bounce' : rejectingId === request.ID ? 'fade-out-reject' : ''}`}>
-              <img src={request.ReqAuthorImage} alt="Profile" className="w-full h-56 object-cover" />
+              <Image src={request.ReqAuthorImage} alt="Profile" className="w-full h-56 object-cover" width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: '100%', height: 'auto' }} />
               <div className="p-5">
                 <h3 className="text-xl font-bold text-gray-900">{request.ReqAuthor}</h3>
                 <p className="text-sm text-gray-500 mb-4">{request.ReqDate}</p>
@@ -128,7 +131,7 @@ const FriendRequests = () => {
       )}
     </div>
   );
-  
+
 };
 
 export default FriendRequests;

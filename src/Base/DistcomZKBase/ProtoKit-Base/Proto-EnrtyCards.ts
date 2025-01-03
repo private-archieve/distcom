@@ -1,14 +1,13 @@
 import {
     RuntimeModule,
+    runtimeMethod,
     runtimeModule,
     state,
-    runtimeMethod,
 } from "@proto-kit/module";
 
 import {
-    Option,
-    StateMap,
     State,
+    StateMap,
     assert
 } from "@proto-kit/protocol";
 
@@ -23,7 +22,7 @@ import {
 export class ItemKey extends Struct({
     owner: PublicKey,
     id: UInt64,
-}) {}
+}) { }
 
 // Entry card structure
 export class EntryCardEntity extends Struct({
@@ -31,7 +30,7 @@ export class EntryCardEntity extends Struct({
     validFrom: UInt64,
     validTo: UInt64,
     consumed: Bool,
-}) {}
+}) { }
 
 // Runtime module for item and entry card management
 @runtimeModule()
@@ -69,13 +68,13 @@ export class ItemModule extends RuntimeModule<{}> {
         });
         const cardOption = this.entryCards.get(itemKey);
 
-        if (cardOption.isSome.toBoolean()) { 
+        if (cardOption.isSome.toBoolean()) {
             const card = cardOption.value;
 
-            assert(card.consumed.not(), "Entry card already used"); 
+            assert(card.consumed.not(), "Entry card already used");
 
             const valid = this.isCardValid(card.validFrom, card.validTo);
-            assert(valid, "Entry card is not valid at this time"); 
+            assert(valid, "Entry card is not valid at this time");
 
             this.entryCards.set(itemKey, new EntryCardEntity({
                 eventId: card.eventId,
@@ -87,14 +86,14 @@ export class ItemModule extends RuntimeModule<{}> {
             throw new Error("Entry card does not exist");
         }
     }
-    
+
     // Helper method to check card validity against the current system time
     private isCardValid(validFrom: UInt64, validTo: UInt64): Bool {
         let currentTime = this.getCurrentTime();
         let isValid = currentTime.greaterThanOrEqual(validFrom) && currentTime.lessThanOrEqual(validTo);
         return new Bool(isValid);
     }
-    
+
     private getCurrentTime(): UInt64 {
         return UInt64.from(Date.now());
     }

@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { checkUserExists, LoginUserWallet } from '@lib/database';
 import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
     const { walletAddress } = await req.json();

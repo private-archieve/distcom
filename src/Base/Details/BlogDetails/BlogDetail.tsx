@@ -2,7 +2,9 @@
 import { faEye, faFolderOpen, faMessage, faShare, faTags, faThumbsDown, faThumbsUp, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
+import Image from 'next/image';
 import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { API_URL, PostSendDislike, PostSendFollowRequest, PostSendLike, PostSendMessageRequest } from '../../Api/Api';
 import { useData } from '../../Context/DataContext';
@@ -12,8 +14,6 @@ import SendPopup from '../../ThemeParts/Popup/SendsPopup';
 import SharePopup from '../../ThemeParts/Popup/SharePopup';
 import BlogDetailsCategories from './components/Categories/categories';
 import BlogDetailsLatest from './components/Latest/Latest';
-
-import { useParams, useRouter } from 'next/navigation';
 
 interface BlogPost {
   Bid: string;
@@ -108,7 +108,10 @@ const BlogDetail = () => {
             <h1 className="text-2xl lg:text-4xl font-sans mb-2">{blogPost.Bname}</h1>
             <div className="flex justify-center items-center text-gray-600 mt-6">
 
-              <img src={blogPost.BauthorImage} alt="Author" className="w-20 h-20 rounded-full mr-2" />
+              <Image src={blogPost.BauthorImage} alt="Author" className="w-20 h-20 rounded-full mr-2" width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: '100%', height: 'auto' }} />
               <div className="inline-flex flex-col">
                 <a href={`/Author/${blogPost.Bauthor.replace(' ', '')}`} ><span className="font-semibold text-lg">{blogPost.Bauthor}</span></a>
                 <time className="text-sm" dateTime={blogPost.Bdate}>{blogPost.Bdate}</time>
@@ -140,7 +143,10 @@ const BlogDetail = () => {
 
           {/* Blog Image */}
           <div className="bg-white shadow-lg rounded-lg overflow-hidden mb-6">
-            <img src={blogPost.Bimage} alt={blogPost.Bname} className="w-5/6 max-h-[400px] h-auto mx-auto" />
+            <Image src={blogPost.Bimage} alt={blogPost.Bname} className="w-5/6 max-h-[400px] h-auto mx-auto" width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto' }} />
           </div>
 
           {/* Blog Content */}

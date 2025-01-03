@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { getBlogPostByURL } from '@lib/database';
 import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
 export async function GET(req: Request, { params }: { params: { url: string } }) {
     const csrfToken = (await cookies()).get('csrf-token')?.value;

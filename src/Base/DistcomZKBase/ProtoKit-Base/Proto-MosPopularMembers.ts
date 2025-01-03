@@ -1,8 +1,8 @@
 import {
     RuntimeModule,
+    runtimeMethod,
     runtimeModule,
-    state,
-    runtimeMethod
+    state
 } from "@proto-kit/module";
 
 import {
@@ -22,13 +22,13 @@ import {
 export class MemberKey extends Struct({
     owner: PublicKey,
     id: UInt64,
-}) {}
+}) { }
 
 export class MemberEntity extends Struct({
     popularity: UInt64,
     activitiesCount: UInt64,
     memberType: UInt64,
-}) {}
+}) { }
 
 @runtimeModule()
 export class PopularMembers extends RuntimeModule<{}> {
@@ -47,12 +47,12 @@ export class PopularMembers extends RuntimeModule<{}> {
         this.memberCounts.set(this.transaction.sender.value, newMemberCount);
         // Create new member
         this.members.set(
-            new MemberKey({ 
-                owner: this.transaction.sender.value, 
-                id: newMemberCount 
-            }), 
-            new MemberEntity({ 
-                popularity: UInt64.from(0), 
+            new MemberKey({
+                owner: this.transaction.sender.value,
+                id: newMemberCount
+            }),
+            new MemberEntity({
+                popularity: UInt64.from(0),
                 activitiesCount: UInt64.from(0),
                 memberType: memberType,
             })
@@ -62,9 +62,9 @@ export class PopularMembers extends RuntimeModule<{}> {
     @runtimeMethod()
     public increasePopularity(id: UInt64) {
         // Check if there is a member with specified id on the user or not
-        const memberKey = new MemberKey({ 
-            owner: this.transaction.sender.value, 
-            id: id 
+        const memberKey = new MemberKey({
+            owner: this.transaction.sender.value,
+            id: id
         });
         assert(this.members.get(memberKey).isSome, "No member found with the specified ID");
 
@@ -83,9 +83,9 @@ export class PopularMembers extends RuntimeModule<{}> {
     @runtimeMethod()
     public recordActivity(id: UInt64) {
         // Check if there is a member with specified id on the user or not
-        const memberKey = new MemberKey({ 
-            owner: this.transaction.sender.value, 
-            id: id 
+        const memberKey = new MemberKey({
+            owner: this.transaction.sender.value,
+            id: id
         });
         assert(this.members.get(memberKey).isSome, "No member found with the specified ID");
 

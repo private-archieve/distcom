@@ -1,13 +1,14 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { UserData } from '../../../Profile';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { API_URL } from '@/base/Api/Api';
+import { isValidMyGroups } from '@/base/Api/Sec-2/Checkers/GroupsChecker';
+import { useData } from '@/base/Context/DataContext';
+import { UserData } from '@/pages/Profile/Profile';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { useData } from '../../../../../base/Context/DataContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import { isValidMyGroups } from '../../../../../base/Api/Sec-2/Checkers/GroupsChecker';
-import { API_URL } from '../../../../../base/Api/Api';
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
+import Image from 'next/image';
+import { useParams, useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+
 
 export interface MyGroupInterface {
   GrpID: string;
@@ -38,13 +39,13 @@ const ProfileGroupsContent: React.FC<ProfileGroupsContentProps> = ({ userData })
 
       if (isLoggedIn && username && location.pathname.includes(username) && username !== data.UserName) {
         targetUsername = username;
-      } 
+      }
       try {
         const response = await axios.get<MyGroupInterface[]>(`${API_URL}/GetGroups/${targetUsername}`, {
           headers: {
-              'Authorization': `Bearer ${userAuthToken}`
+            'Authorization': `Bearer ${userAuthToken}`
           }
-        });  
+        });
 
         if (!response.data || !isValidMyGroups(response.data)) {
           console.error('API response is not an array or contains invalid data');
@@ -75,38 +76,41 @@ const ProfileGroupsContent: React.FC<ProfileGroupsContentProps> = ({ userData })
 
   return (
     <main className="flex-1 p-6 overflow-auto">
-     {myGroups.length === 0 ? (
-     <div className="flex items-center justify-center h-full">
-         <p className="text-gray-500 text-lg">No groups available.</p>
-     </div>
-     ) : (
-     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-         {myGroups.map((group, index) => (
-         <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-500">
-             <img src={group.GrpLogo} alt="Group logo" className="w-full h-40 object-cover" />
-             <div className="p-6">
-                 <h3 className="text-xl font-semibold text-gray-800 mb-2">{group.GrpName}</h3>
-                 <p className="text-sm text-gray-600 mb-4">{group.GrpDesc}</p>
-                 <div className="mb-4">
-                     {group.GrpTags.map((tag, tagIndex) => (
-                     <span key={tagIndex} className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 mb-2">{tag}</span>
-                     ))}
-                 </div>
-                 <div className="flex items-center justify-between">
-                     <span className="flex items-center text-sm text-gray-600">
-                         <FontAwesomeIcon icon={faUsers} className="mr-2 text-gray-500" />
-                         {group.GrpMemberCount} Members
-                     </span>
-                     <button className="text-white bg-blue-600 hover:bg-blue-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-300 ease-in-out">
-                         Join
-                     </button>
-                 </div>
-             </div>
-         </div>
-         ))}
-     </div>
-     )}
- </main>
+      {myGroups.length === 0 ? (
+        <div className="flex items-center justify-center h-full">
+          <p className="text-gray-500 text-lg">No groups available.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {myGroups.map((group, index) => (
+            <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-500">
+              <Image src={group.GrpLogo} alt="Group logo" className="w-full h-40 object-cover" width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: '100%', height: 'auto' }} />
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">{group.GrpName}</h3>
+                <p className="text-sm text-gray-600 mb-4">{group.GrpDesc}</p>
+                <div className="mb-4">
+                  {group.GrpTags.map((tag, tagIndex) => (
+                    <span key={tagIndex} className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 mb-2">{tag}</span>
+                  ))}
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center text-sm text-gray-600">
+                    <FontAwesomeIcon icon={faUsers} className="mr-2 text-gray-500" />
+                    {group.GrpMemberCount} Members
+                  </span>
+                  <button className="text-white bg-blue-600 hover:bg-blue-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-300 ease-in-out">
+                    Join
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </main>
   );
 };
 

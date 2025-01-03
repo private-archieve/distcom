@@ -1,5 +1,5 @@
 "use client";
-
+import Image from 'next/image';
 import React, { useState } from 'react';
 
 type ChatItem = {
@@ -30,12 +30,14 @@ const ChatUserList: React.FC<ChatListProps> = ({ chatData, onChatSelect }) => {
       {chatData.map((user) => (
         <div
           key={user.MessageID}
-          className={`p-4 hover:bg-gray-100 cursor-pointer flex items-center gap-4 transition duration-150 ease-in-out rounded-lg ${
-            selectedUserId === user.MessageID ? 'bg-blue-50 border-l-4 border-blue-500 shadow-md' : 'bg-white'
-          }`}
+          className={`p-4 hover:bg-gray-100 cursor-pointer flex items-center gap-4 transition duration-150 ease-in-out rounded-lg ${selectedUserId === user.MessageID ? 'bg-blue-50 border-l-4 border-blue-500 shadow-md' : 'bg-white'
+            }`}
           onClick={() => handleChatSelect(user.MessageID)}
         >
-          <img src={user.MessageAuthorImage} alt="Profile" className="w-16 h-16 rounded-full object-cover shadow-sm" />
+          <Image src={user.MessageAuthorImage} alt="Profile" className="w-16 h-16 rounded-full object-cover shadow-sm" width={0}
+            height={0}
+            sizes="100vw"
+            style={{ width: '100%', height: 'auto' }} />
           <div>
             <div className="text-lg font-semibold text-gray-800">{user.MessageAuthor}</div>
             <div className="text-sm text-gray-500">{user.MessageLastAction ? `${user.MessageLastAction.substring(0, 25)}...` : ''}</div>

@@ -1,5 +1,5 @@
+import { AccountUpdate, Field, Mina, PrivateKey, UInt64 } from 'o1js';
 import { DonationContract } from '../../Contracts/DonationContract/DonationContract';
-import { Field, Mina, PrivateKey, PublicKey, AccountUpdate, UInt64 } from 'o1js';
 
 let proofsEnabled = false;
 

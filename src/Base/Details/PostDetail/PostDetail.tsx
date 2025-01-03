@@ -1,18 +1,18 @@
 "use client"
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import { faComment, faShareNodes, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { API_URL, PostSendComment, PostSendLike } from '../../Api/Api';
+import { useData } from '../../Context/DataContext';
 import Header from '../../ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '../../ThemeParts/MainPart/Navbar/Navbar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSliders, faThumbsUp, faComment, faShareNodes, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import { API_URL, PostSendComment, PostSendLike } from '../../Api/Api';
-import RightSidebar from '../../ThemeParts/PagePart/HomePart/RightSidebar/RightSidebar';
 import LeftSidebar from '../../ThemeParts/PagePart/HomePart/LeftSidebar/LeftSidebar';
-import { useData } from '../../Context/DataContext';
+import RightSidebar from '../../ThemeParts/PagePart/HomePart/RightSidebar/RightSidebar';
 import SharePopup from '../../ThemeParts/Popup/SharePopup';
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
 
 interface Post {
   Pstid: string
@@ -135,7 +135,10 @@ const PostDetail = () => {
                   <div className="p-5 border-b border-gray-200">
                     <div className="flex items-center space-x-3">
 
-                      <img className="h-12 w-12 rounded-full object-cover" src={post.PstAuthorAvatar || 'default-avatar-url.jpg'} alt={`${post.PstAuthor}'s avatar`} />
+                      <Image className="h-12 w-12 rounded-full object-cover" src={post.PstAuthorAvatar || 'default-avatar-url.jpg'} alt={`${post.PstAuthor}'s avatar` width={0}
+                        height={0}
+                        sizes="100vw"
+                        style={{ width: '100%', height: 'auto' }} />
                       <Link href={`/Profile/${post.PstAuthor}`}>
                         <div>
                           <h4 className="font-bold text-lg">{post.PstAuthor}</h4>
@@ -182,7 +185,10 @@ const PostDetail = () => {
                       <div key={comment.comment_id} className="bg-gray-50 rounded-xl p-4 shadow transition-shadow duration-300 ease-in-out hover:shadow-lg">
                         <div className="flex items-start space-x-3">
                           <a href={`/Profile/${comment.author}`}>
-                            <img src={comment.profile_image} alt="User Avatar" className="w-10 h-10 rounded-full object-cover shadow-sm" />
+                            <Image src={comment.profile_image} alt="User Avatar" className="w-10 h-10 rounded-full object-cover shadow-sm" width={0}
+                              height={0}
+                              sizes="100vw"
+                              style={{ width: '100%', height: 'auto' }} />
                           </a>
                           <div className="flex-1">
                             <h5 className="font-semibold text-gray-900">{comment.author}</h5>

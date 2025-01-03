@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const CreateGroupPage = () => {
   const [groupLogo, setGroupLogo] = useState('');
@@ -8,7 +8,7 @@ const CreateGroupPage = () => {
   const [groupTags, setGroupTags] = useState('');
   const [uploadOption, setUploadOption] = useState('device');
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     setGroupLogo('');
     setGroupName('');
@@ -16,7 +16,7 @@ const CreateGroupPage = () => {
     setGroupTags('');
   };
 
-  const handleFileUpload = (e:any) => {
+  const handleFileUpload = (e: any) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -36,10 +36,14 @@ const CreateGroupPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative group mb-4">
             {groupLogo && (
-              <img
+              <Image
                 src={groupLogo}
                 alt="Group Logo Preview"
                 className="w-full h-40 object-cover rounded-lg mb-2"
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: '100%', height: 'auto' }}
               />
             )}
             <input

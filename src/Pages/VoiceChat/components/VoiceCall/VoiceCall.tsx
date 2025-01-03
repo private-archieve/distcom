@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import VoiceCallSidebar from '../VoiceCallSidebar/VoiceCallSidebar';
+"use client";
+import UserCallModal from '@/pages/VoiceChat/components/VoiceCallModal/VoiceCallModal';
+import VoiceCallSidebar from '@/pages/VoiceChat/components/VoiceCallSidebar/VoiceCallSidebar';
 import { faPhoneSlash } from '@fortawesome/free-solid-svg-icons';
-import UserCallModal from '../VoiceCallModal/VoiceCallModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+
 
 interface VoiceCallModalProps {
   isCalling: boolean;
@@ -70,7 +73,10 @@ const VoiceCallModal: React.FC<VoiceCallModalProps> = ({
         <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex justify-center items-center">
           <VoiceCallSidebar />
           <div className="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center space-y-4" style={{ maxWidth: '700px', maxHeight: '800px' }}>
-            <img src={profileImage} alt="Profile" className="w-32 h-32 rounded-full border-4 border-blue-500 object-cover" />
+            <Image src={profileImage} alt="Profile" className="w-32 h-32 rounded-full border-4 border-blue-500 object-cover" width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto' }} />
             <h2 className="text-2xl font-bold text-gray-800">{name}</h2>
             <p className="text-lg text-gray-500">{callStatus} - {formatDuration(callDuration)}</p>
             <div className="flex space-x-4 justify-center">

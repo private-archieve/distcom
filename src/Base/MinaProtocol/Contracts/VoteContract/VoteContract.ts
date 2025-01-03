@@ -1,4 +1,4 @@
-import { SmartContract, method, PublicKey, UInt64, State, state, Struct, prop, Bool } from 'o1js';
+import { Bool, method, prop, PublicKey, SmartContract, State, state, Struct, UInt64 } from 'o1js';
 
 class Vote extends Struct {
   @prop voterPublicKey: PublicKey;

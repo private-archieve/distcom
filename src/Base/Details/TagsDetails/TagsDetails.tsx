@@ -1,11 +1,12 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import { API_URL } from "@/base/Api/Api";
+import { useData } from "@/base/Context/DataContext";
+import Header from "@/base/ThemeParts/MainPart/Header/HeaderPart";
+import Navbar from "@/base/ThemeParts/MainPart/Navbar/Navbar";
 import axios from 'axios';
-import Header from '../../ThemeParts/MainPart/Header/HeaderPart.tsx';
-import Navbar from '../../ThemeParts/MainPart/Navbar/Navbar.tsx';
-import { API_URL } from '../../Api/Api.tsx';
-import { useData } from '../../Context/DataContext.tsx';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 interface ContentItem {
   id: string;
@@ -188,7 +189,10 @@ const ContentItemDisplay: React.FC<ContentItemDisplayProps> = ({ item }) => (
       {item.type === 'Blog' && (
         <div className="relative overflow-hidden">
           <a href={`/Blogs/${item.author.replace(' ', '')}/${item.url}`}>
-            <img src={item.image} alt="Content" className="w-full h-48 object-fit transition-transform duration-500 ease-in-out hover:scale-110" />
+            <Image src={item.image} alt="Content" className="w-full h-48 object-fit transition-transform duration-500 ease-in-out hover:scale-110" width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto' }} />
           </a>
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
             <p className="text-lg font-semibold text-white">{item.title}</p>
@@ -205,7 +209,10 @@ const ContentItemDisplay: React.FC<ContentItemDisplayProps> = ({ item }) => (
       )}
 
       <div className="flex items-center mt-4">
-        <img src={item.authorAvatar} alt={`${item.author}'s Avatar`} className="w-10 h-10 rounded-full mr-3" />
+        <Image src={item.authorAvatar} alt={`${item.author}'s Avatar`} className="w-10 h-10 rounded-full mr-3" width={0}
+          height={0}
+          sizes="100vw"
+          style={{ width: '100%', height: 'auto' }} />
         <div>
           <p className="font-semibold text-gray-800">{item.author}</p>
           <p className="text-xs text-gray-500">{item.date}</p>

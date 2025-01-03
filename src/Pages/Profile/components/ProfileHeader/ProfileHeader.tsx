@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { PostSendFollowRequest, PostSendFriendRequest } from '@/base/Api/Api';
+import { useData } from '@/base/Context/DataContext';
+import SendPopup from '@/base/ThemeParts/Popup/SendsPopup';
+import { Followed, Follower, Friend, UserData } from '@/pages/Profile/Profile';
+import Image from 'next/image';
+import React, { useState } from 'react';
 import ProfileNavigation from '../ProfileNavigation/ProfileNavigation';
-import { Followed, Follower, Friend, UserData } from '../../Profile';
-import { useData } from '../../../../base/Context/DataContext';
-import { PostSendFollowRequest, PostSendFriendRequest } from '../../../../base/Api/Api';
-import SendPopup from '../../../../base/ThemeParts/Popup/SendsPopup';
 
 
 interface ProfileHeaderProps {
@@ -11,18 +12,18 @@ interface ProfileHeaderProps {
   onSelect: (selectedContent: string) => void;
 }
 
-const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userData , onSelect}) => {
-  const { data,userAuthToken } = useData();
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userData, onSelect }) => {
+  const { data, userAuthToken } = useData();
   const [popup, setPopup] = useState({ visible: false, message: '' });
 
   const userFriends: Friend[] = typeof userData?.UsrFriends === 'string'
     ? JSON.parse(userData?.UsrFriends || '[]')
     : userData?.UsrFriends || [];
-  
+
   const userFollowers: Follower[] = typeof userData?.UsrFollowers === 'string'
     ? JSON.parse(userData?.UsrFollowers || '[]')
     : userData?.UsrFollowers || [];
-  
+
   const userFollowed: Followed[] = typeof userData?.UsrFollowing === 'string'
     ? JSON.parse(userData?.UsrFollowing || '[]')
     : userData?.UsrFollowing || [];
@@ -37,37 +38,37 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userData , onSelect}) => 
       </div>
     );
   }
-  
+
   const isFriend = userFriends.some(friend => friend.name === data?.UserName);
-  
+
 
   const SendFriendRequest = async (UserName: string) => {
-    const response = await PostSendFriendRequest({ UserID: data.UserName, UserName: UserName, Type: "Friend" },userAuthToken);
+    const response = await PostSendFriendRequest({ UserID: data.UserName, UserName: UserName, Type: "Friend" }, userAuthToken);
     setPopup({ visible: true, message: 'Friend request sent' });
     setTimeout(() => setPopup({ visible: false, message: '' }), 3000);
   };
 
   const SendFollowRequest = async (UserName: string) => {
-    const response = await PostSendFollowRequest({ UserID: data.UserName, UserName: UserName, Type: "Follow" },userAuthToken);
+    const response = await PostSendFollowRequest({ UserID: data.UserName, UserName: UserName, Type: "Follow" }, userAuthToken);
     setPopup({ visible: true, message: 'Follow request sent' });
     setTimeout(() => setPopup({ visible: false, message: '' }), 3000);
   };
 
-  
+
   const handleSendFriendRequestClick = async () => {
-    if(userData && data) {
+    if (userData && data) {
       await SendFriendRequest(userData.UsrName);
     }
   };
   const handleSendFollowRequestClick = async () => {
-    if(userData && data) {
+    if (userData && data) {
       await SendFollowRequest(userData.UsrName);
     }
   };
 
   return (
     <div className="flex justify-center items-end pt-16">
-      <div className="w-full max-w-7xl mx-auto p-4 mt-8 rounded-xl" style={{ 
+      <div className="w-full max-w-7xl mx-auto p-4 mt-8 rounded-xl" style={{
         backgroundImage: `url(${userData.UsrBackgroundImage})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
@@ -75,16 +76,20 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userData , onSelect}) => 
       }}>
         <div className="flex items-center justify-between mt-12">
           <div className="flex items-center space-x-4">
-            <img
+            <Image
               className="h-24 w-24 rounded-full border-4 border-white object-cover"
               src={userData.UsrProfileImage}
               alt={userData.UsrName}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto' }}
             />
-           <div className="text-white">
+            <div className="text-white">
               <h2 className="text-4xl font-bold break-words max-w-xl">{userData.UsrDisplayName}</h2>
               <p className="text-md">@{userData.UsrName} - Joined {userData.UsrRegisterDate}</p>
               <p className="text-md">{userFollowers.length} Followers · {userFollowed.length} Following · {userData.UsrScore} Points</p>
-          </div>
+            </div>
           </div>
           {!isProfilePage && !isFriend && (
             <div className="flex space-x-2">
@@ -93,10 +98,10 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userData , onSelect}) => 
             </div>
           )}
         </div>
-        
-          {popup.visible && (
-            <SendPopup message={popup.message} onClose={popup.visible}  />
-          )}
+
+        {popup.visible && (
+          <SendPopup message={popup.message} onClose={popup.visible} />
+        )}
 
         <ProfileNavigation onSelect={onSelect} />
       </div>

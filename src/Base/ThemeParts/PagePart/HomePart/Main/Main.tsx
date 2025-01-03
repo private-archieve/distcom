@@ -1,18 +1,18 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
-import { Fingerprint, Send, Signature, Users, Wallet } from 'lucide-react'
-import { createPost, API_URL, Postlogin } from '@/base/Api/Api'
-import axios from 'axios'
-import Post, { PostProps } from './components/Posts'
+import { API_URL, createPost } from '@/base/Api/Api'
 import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card } from "@/components/ui/card"
+import axios from 'axios'
+import { Fingerprint, Send } from 'lucide-react'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import Post, { PostProps } from './components/Posts'
 
-import { SiteData, useData } from '@/base/Context/DataContext';
-import { checkMinaProvider, requestAccounts } from '@/base/WalletProc/Wallet';
+import { useData } from '@/base/Context/DataContext'
+import { checkMinaProvider, requestAccounts } from '@/base/WalletProc/Wallet'
 
 
 function MainContent() {
@@ -27,65 +27,34 @@ function MainContent() {
   const { userAuthToken, setUserAuthToken } = useData();
   const { isLoggedIn, setLoginStatus } = useData();
   const { siteData, setSiteData, data, updateData } = useData();
-  const formRef = useRef<HTMLFormElement>(null);
-  const [LoginSuccess, setLoginSuccess] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+  // const formRef = useRef<HTMLFormElement>(null);
+  // const [LoginSuccess, setLoginSuccess] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState('');
+  // const [rememberMe, setRememberMe] = useState(false);
 
   const handleWalletLogin = async () => {
     const providerResponse = await checkMinaProvider();
 
     if (providerResponse === true) {
+
       try {
         const walletAddress = await requestAccounts();
 
         if (!walletAddress) {
+          setLoginStatus(false);
           throw new Error('Failed to retrieve wallet address. Please check your wallet extension.');
         } else {
+          setLoginStatus(true);
           console.log("Wallet connected: ", walletAddress);
         }
-
-        const response = await Postlogin({ walletAddress });
-        const { message, status, token, userId, userdata } = response;
-
-        console.log("Response: ", response);
-
-        if (status === "Ok") {
-          setUserAuthToken(token);
-          setLoginSuccess(true);
-          setLoginStatus(true);
-          setUserAuthID(userId);
-          updateData(userdata);
-        } else if (status === "alreadylogged") {
-          console.log("User already logged in");
-        } else if (status === "Bad Request") {
-          setErrorMessage(message);
-          setTimeout(() => setErrorMessage(""), 2500)
-        } else if (status === "Not Found") {
-          setErrorMessage(message);
-          setTimeout(() => setErrorMessage(""), 2500)
-        } else {
-          setErrorMessage(message || "An error occurred during login.");
-          setTimeout(() => setErrorMessage(""), 2500)
-        }
-
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.error(error);
-          setErrorMessage(error.message);
-          setTimeout(() => setErrorMessage(""), 2500)
-        } else {
-          console.error("An unknown error occurred");
-          setErrorMessage("An unknown error occurred");
-          setTimeout(() => setErrorMessage(""), 2500)
-        }
+      } catch (error) {
+        console.error("Error: ", error);
       }
-    } else {
-      setErrorMessage("Provider not found, please log in with a provider.");
-      setTimeout(() => setErrorMessage(""), 2500)
-    }
-  };
 
+    } else {
+      console.error("No provider found");
+    }
+  }
 
 
   const handlePostButtonClick = async () => {
@@ -173,7 +142,10 @@ function MainContent() {
 
       <Card className="p-4">
         <div className="flex items-center justify-between mb-0">
-          {/* <Image src={"/logo-1200.png"} alt="Logo" width={100} height={100} /> */}
+          {/* <Image src={"/logo-1200.png"} alt="Logo" width={100} height={100} width={0}
+                        height={0}
+                        sizes="100vw"
+                        style={{ width: '100%', height: 'auto' }}/> */}
           <Tabs defaultValue="global" className="w-full">
             <TabsList className="grid grid-cols-4 w-full">
               <TabsTrigger value="global">Members</TabsTrigger>
@@ -227,4 +199,3 @@ function MainContent() {
 }
 
 export default MainContent
-

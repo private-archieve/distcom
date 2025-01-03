@@ -1,13 +1,15 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import { useData } from '../../base/Context/DataContext';
-import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-import { PostEmailVerify } from '../../base/Api/Api';
-import { EmailVerificationModal } from './components/EmailVerification/EmailVerificationModal';
+import { PostEmailVerify } from '@/base/Api/Api';
+import { useData } from '@/base/Context/DataContext';
+import Header from '@/base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import { EmailVerificationModal } from './components/EmailVerification/EmailVerificationModal';
+
 
 const languageOptions = [
   { value: 'en', label: 'English' },
@@ -21,7 +23,7 @@ const themeOptions = [
 
 const ProfileSettingsPage = () => {
   const router = useRouter();
-  const { isLoggedIn, data, siteData, isLoading,userAuthToken } = useData();
+  const { isLoggedIn, data, siteData, isLoading, userAuthToken } = useData();
   const [profileImage, setProfileImage] = useState('');
   const [visibleUsername, setVisibleUsername] = useState('');
   const [WalletAddress, setWalletAddress] = useState('');
@@ -48,7 +50,7 @@ const ProfileSettingsPage = () => {
     if (!isLoggedIn) {
       router.push('/login');
     } else {
-      setProfileImage(data?.ProfileImage ||siteData?.SiteDefaultProfileBackgroundImageURL);
+      setProfileImage(data?.ProfileImage || siteData?.SiteDefaultProfileBackgroundImageURL);
       setVisibleUsername(data.Displayname || '');
       setWalletAddress(data.WalletAddress || '');
       setEmail(data.Email || '');
@@ -76,9 +78,9 @@ const ProfileSettingsPage = () => {
     }
   }, []);
 
-  
+
   useEffect(() => {
-    let interval: NodeJS.Timeout | undefined; 
+    let interval: NodeJS.Timeout | undefined;
     if (isButtonDisabled && countdown > 0) {
       interval = setInterval(() => {
         setCountdown((currentCountdown) => {
@@ -98,16 +100,16 @@ const ProfileSettingsPage = () => {
     return () => interval && clearInterval(interval);
   }, [isButtonDisabled, countdown]);
 
-  const handleFormSubmit = (e:any) => {
+  const handleFormSubmit = (e: any) => {
     e.preventDefault();
 
   };
-  
+
   const handleCloseModal = () => {
     setEmailModalOpen(false);
   };
 
-  const handleVerifyEmailCode = (code:any) => {
+  const handleVerifyEmailCode = (code: any) => {
     console.log('Verification code submitted:', code);
     // Call an API to verify the code
     handleCloseModal();
@@ -117,7 +119,7 @@ const ProfileSettingsPage = () => {
     if (isButtonDisabled) return;
 
     setIsButtonDisabled(true);
-    setCountdown(120); 
+    setCountdown(120);
     localStorage.setItem('countdownTimestamp', new Date().getTime().toString());
     localStorage.setItem('countdownValue', '120');
 
@@ -138,7 +140,7 @@ const ProfileSettingsPage = () => {
 
 
   const handleCopyWalletAddress = () => {
- 
+
     navigator.clipboard.writeText(WalletAddress)
       .then(() => {
         console.log('Wallet address copied to clipboard');
@@ -148,7 +150,7 @@ const ProfileSettingsPage = () => {
       });
   };
 
-  const handleProfileImageChange = (e:any) => {
+  const handleProfileImageChange = (e: any) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -161,28 +163,28 @@ const ProfileSettingsPage = () => {
     reader.readAsDataURL(file);
   };
 
-  const handlePrivacySettingsSubmit = (e:any) => {
+  const handlePrivacySettingsSubmit = (e: any) => {
     e.preventDefault();
     console.log('Privacy Settings Saved:', { profileVisibility, activityStatus });
   };
-  const handleNotificationsSettingsSubmit = (e:any)  => {
+  const handleNotificationsSettingsSubmit = (e: any) => {
     e.preventDefault();
     console.log('Notification Settings Saved:', { appNotifications, emailNotifications });
   };
 
-  const handleSecuritySettingsSubmit = (e:any) => {
+  const handleSecuritySettingsSubmit = (e: any) => {
     e.preventDefault();
     console.log('Security Settings Saved:', { twoFactorAuthentication });
   };
-  
+
   return (
     <>
       <Header />
       <Navbar />
       <div className="flex flex-col h-screen">
-      <main className="flex-1 flex justify-center items-center p-4 bg-gray-100">
-      <div className="w-full h-full max-w-4xl bg-white rounded-lg shadow-md p-10 mt-8">
-        <h1 className="text-2xl font-bold text-gray-700 mb-6 mt-8">Settings</h1>      
+        <main className="flex-1 flex justify-center items-center p-4 bg-gray-100">
+          <div className="w-full h-full max-w-4xl bg-white rounded-lg shadow-md p-10 mt-8">
+            <h1 className="text-2xl font-bold text-gray-700 mb-6 mt-8">Settings</h1>
             <Tabs>
               <TabList>
                 <Tab>General</Tab>
@@ -194,15 +196,18 @@ const ProfileSettingsPage = () => {
               <TabPanel>
                 <form onSubmit={handleFormSubmit}>
                   <div className="space-y-6 bg-white p-6 rounded-lg shadow">
-                  <div className="flex justify-center mb-6">
-                    <label htmlFor="profileImageUpload" className="cursor-pointer relative">
-                      <img src={profileImage || 'defaultProfileImageURL'} alt="Profile" className="w-32 h-32 rounded-full border-2 border-gray-300 object-cover" />
-                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-25 opacity-0 hover:opacity-100 transition-opacity duration-300">
-                        <span className="text-white text-sm">Update</span>
-                      </div>
-                      <input type="file" id="profileImageUpload" className="hidden" accept="image/*" onChange={handleProfileImageChange} />
-                    </label>
-                  </div>
+                    <div className="flex justify-center mb-6">
+                      <label htmlFor="profileImageUpload" className="cursor-pointer relative">
+                        <Image src={profileImage || 'defaultProfileImageURL'} alt="Profile" className="w-32 h-32 rounded-full border-2 border-gray-300 object-cover" width={0}
+                          height={0}
+                          sizes="100vw"
+                          style={{ width: '100%', height: 'auto' }} />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-25 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                          <span className="text-white text-sm">Update</span>
+                        </div>
+                        <input type="file" id="profileImageUpload" className="hidden" accept="image/*" onChange={handleProfileImageChange} />
+                      </label>
+                    </div>
                     <div>
                       <label htmlFor="username" className="block text-md font-medium text-gray-700">Visible Username</label>
                       <input
@@ -305,104 +310,104 @@ const ProfileSettingsPage = () => {
                   </form>
                 </div>
               </TabPanel>
-                <TabPanel>
-                  <div className="p-6 bg-white rounded-lg shadow">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">Notification Settings</h2>
-                    <form onSubmit={handleNotificationsSettingsSubmit}>
-                      <div className="mb-6">
-                        <label htmlFor="appNotifications" className="flex items-center cursor-pointer">
-                          <input
-                            id="appNotifications"
-                            type="checkbox"
-                            checked={appNotifications}
-                            onChange={(e) => setAppNotifications(e.target.checked)}
-                            className="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 mr-2"
-                          />
-                          <span className="text-md text-gray-700">App Notifications</span>
-                        </label>
-                      </div>
-                      <div className="mb-6">
-                        <label htmlFor="emailNotifications" className="flex items-center cursor-pointer">
-                          <input
-                            id="emailNotifications"
-                            type="checkbox"
-                            checked={emailNotifications}
-                            onChange={(e) => setEmailNotifications(e.target.checked)}
-                            className="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 mr-2"
-                          />
-                          <span className="text-md text-gray-700">Email Notifications</span>
-                        </label>
-                      </div>
-                      <button
-                        type="submit"
-                        className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
-                      >
-                        Save Notification Settings
-                      </button>
-                    </form>
-                  </div>
-                </TabPanel>
-                <TabPanel>
-                  <div className="p-6 bg-white rounded-lg shadow-md">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">Security Settings</h2>
+              <TabPanel>
+                <div className="p-6 bg-white rounded-lg shadow">
+                  <h2 className="text-xl font-bold text-gray-900 mb-6">Notification Settings</h2>
+                  <form onSubmit={handleNotificationsSettingsSubmit}>
                     <div className="mb-6">
-                      <label className="block text-md font-semibold text-gray-800 mb-2">Email Verification</label>
-                      <div className="mt-2">
-                      <div className="mt-2">
-                            {emailVerified ? (
-                              <span className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm leading-4 font-medium rounded-full text-green-800 bg-green-100">
-                                Your email is verified
-                                <svg className="ml-2 -mr-0.5 h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                              </span>
-                            ) : (
-                              <div>
-                               <button
-                                  onClick={handleSendVerifyEmailRequest}
-                                  disabled={isButtonDisabled}
-                                  className={`px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                >
-                                  {isButtonDisabled ? `Please wait... ${countdown}s` : 'Verify Email'}
-                                </button>
-                                {verificationCodeSent && <span className="text-green-600 ml-3">Verify Code Sent</span>}
-                              </div>
-                            )}
-                          </div>
-                      </div>
-                    </div>
-                    <form onSubmit={handleSecuritySettingsSubmit}>
-                      <div className="mb-6">
-                        <label htmlFor="twoFactorAuth" className="flex items-center cursor-pointer">
-                          <input id="twoFactorAuth" type="checkbox" checked={twoFactorAuthentication} onChange={(e) => setTwoFactorAuthentication(e.target.checked)} className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out mr-2" />
-                          <span className="text-sm font-medium text-gray-800">Enable Two Factor Authentication</span>
-                        </label>
-                      </div>
-                      <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
-                        Save Security Settings
-                      </button>
-                    </form>
-                  </div>
-                </TabPanel>
-                <TabPanel>
-                  <div className="p-4">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">Wallet Settings</h2>
-                    <div className="mb-6">
-                      <label className="block text-md font-semibold text-gray-800 mb-2">Current Wallet Address</label>
-                      <div className="flex gap-4 mb-4 items-center">
+                      <label htmlFor="appNotifications" className="flex items-center cursor-pointer">
                         <input
-                          type="text"
-                          readOnly
-                          value={WalletAddress}
-                          className="flex-1 mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md shadow-sm"
+                          id="appNotifications"
+                          type="checkbox"
+                          checked={appNotifications}
+                          onChange={(e) => setAppNotifications(e.target.checked)}
+                          className="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 mr-2"
                         />
-                        <button
-                        onClick={handleCopyWalletAddress}
-                          className="px-5 py-2 border border-transparent text-sm font-medium rounded-md shadow text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-150">
-                          Copy Address
-                        </button>
+                        <span className="text-md text-gray-700">App Notifications</span>
+                      </label>
+                    </div>
+                    <div className="mb-6">
+                      <label htmlFor="emailNotifications" className="flex items-center cursor-pointer">
+                        <input
+                          id="emailNotifications"
+                          type="checkbox"
+                          checked={emailNotifications}
+                          onChange={(e) => setEmailNotifications(e.target.checked)}
+                          className="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 mr-2"
+                        />
+                        <span className="text-md text-gray-700">Email Notifications</span>
+                      </label>
+                    </div>
+                    <button
+                      type="submit"
+                      className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+                    >
+                      Save Notification Settings
+                    </button>
+                  </form>
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className="p-6 bg-white rounded-lg shadow-md">
+                  <h2 className="text-xl font-bold text-gray-900 mb-6">Security Settings</h2>
+                  <div className="mb-6">
+                    <label className="block text-md font-semibold text-gray-800 mb-2">Email Verification</label>
+                    <div className="mt-2">
+                      <div className="mt-2">
+                        {emailVerified ? (
+                          <span className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm leading-4 font-medium rounded-full text-green-800 bg-green-100">
+                            Your email is verified
+                            <svg className="ml-2 -mr-0.5 h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
+                          </span>
+                        ) : (
+                          <div>
+                            <button
+                              onClick={handleSendVerifyEmailRequest}
+                              disabled={isButtonDisabled}
+                              className={`px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            >
+                              {isButtonDisabled ? `Please wait... ${countdown}s` : 'Verify Email'}
+                            </button>
+                            {verificationCodeSent && <span className="text-green-600 ml-3">Verify Code Sent</span>}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
-                </TabPanel>
+                  <form onSubmit={handleSecuritySettingsSubmit}>
+                    <div className="mb-6">
+                      <label htmlFor="twoFactorAuth" className="flex items-center cursor-pointer">
+                        <input id="twoFactorAuth" type="checkbox" checked={twoFactorAuthentication} onChange={(e) => setTwoFactorAuthentication(e.target.checked)} className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out mr-2" />
+                        <span className="text-sm font-medium text-gray-800">Enable Two Factor Authentication</span>
+                      </label>
+                    </div>
+                    <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                      Save Security Settings
+                    </button>
+                  </form>
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className="p-4">
+                  <h2 className="text-xl font-bold text-gray-900 mb-6">Wallet Settings</h2>
+                  <div className="mb-6">
+                    <label className="block text-md font-semibold text-gray-800 mb-2">Current Wallet Address</label>
+                    <div className="flex gap-4 mb-4 items-center">
+                      <input
+                        type="text"
+                        readOnly
+                        value={WalletAddress}
+                        className="flex-1 mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md shadow-sm"
+                      />
+                      <button
+                        onClick={handleCopyWalletAddress}
+                        className="px-5 py-2 border border-transparent text-sm font-medium rounded-md shadow text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-150">
+                        Copy Address
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </TabPanel>
             </Tabs>
             <EmailVerificationModal isOpen={emailModalOpen} onClose={handleCloseModal} onSubmit={handleVerifyEmailCode} />
           </div>

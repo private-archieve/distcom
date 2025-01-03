@@ -1,74 +1,74 @@
 "use client"
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useData } from '../../../base/Context/DataContext';
+import { useEffect, useState } from 'react';
 import { API_URL, ApiResponseError, PostAcceptMessageRequest, PostRejectMessageRequest } from '../../../base/Api/Api';
 import { isValidMessageRequest } from '../../../base/Api/Sec-1/Checkers/MessageRequests';
+import { useData } from '../../../base/Context/DataContext';
 
 
 export interface MessageRequests {
-    ID: number;
-    ReqAuthor: string;
-    ReqAuthorImage: string;
-    ReqContent: string;
-    ReqDate: string;
-    ReqResponse: string;
-    ReqStatus: string; 
-    ReqTitle: string;
-    ReqType: string;
-  }
-  
+  ID: number;
+  ReqAuthor: string;
+  ReqAuthorImage: string;
+  ReqContent: string;
+  ReqDate: string;
+  ReqResponse: string;
+  ReqStatus: string;
+  ReqTitle: string;
+  ReqType: string;
+}
+
 
 const MessageRequests = () => {
- const [messages, setRequests] = useState<MessageRequests[]>([]);
- const { isLoggedIn, isLoading, data, userAuthToken } = useData();
- const [acceptingId, setAcceptingId] = useState<number | null>(null);
- const [rejectingId, setRejectingId] = useState<number | null>(null);
+  const [messages, setRequests] = useState<MessageRequests[]>([]);
+  const { isLoggedIn, isLoading, data, userAuthToken } = useData();
+  const [acceptingId, setAcceptingId] = useState<number | null>(null);
+  const [rejectingId, setRejectingId] = useState<number | null>(null);
 
- useEffect(() => {
-  if (isLoading || !isLoggedIn)  return;
+  useEffect(() => {
+    if (isLoading || !isLoggedIn) return;
 
-  const fetchMessageRequests = async () => {
-    try {
-      setRequests([]);
-      const response = await axios.get<MessageRequests[] | ApiResponseError>(`${API_URL}/GetRequest/${data?.UserName}/Message`, {
-        headers: {
-            'Authorization': `Bearer ${userAuthToken}`
-        }
-      });  
-
-    if (Array.isArray(response.data)) {
-      response.data.forEach(item => {
-        if ('IsNull' in item && item.IsNull) {
-          setRequests([]);
-          return;
-        } else if ('ErrorMessage' in item && 'ErrorCode' in item) {
-          console.error(`Server error: ${item.ErrorMessage} (Code: ${item.ErrorCode})`);
-          setRequests([]);
-          return;
-        } else if (isValidMessageRequest(item)) {
-          setRequests(prev => {
-            const exists = prev.some(request => request.ID === item.ID);
-            return exists ? prev : [...prev, item];
-          });
-        }
-      });
-      } else {
-        console.error('API response is not an array or contains invalid data');
+    const fetchMessageRequests = async () => {
+      try {
         setRequests([]);
+        const response = await axios.get<MessageRequests[] | ApiResponseError>(`${API_URL}/GetRequest/${data?.UserName}/Message`, {
+          headers: {
+            'Authorization': `Bearer ${userAuthToken}`
+          }
+        });
+
+        if (Array.isArray(response.data)) {
+          response.data.forEach(item => {
+            if ('IsNull' in item && item.IsNull) {
+              setRequests([]);
+              return;
+            } else if ('ErrorMessage' in item && 'ErrorCode' in item) {
+              console.error(`Server error: ${item.ErrorMessage} (Code: ${item.ErrorCode})`);
+              setRequests([]);
+              return;
+            } else if (isValidMessageRequest(item)) {
+              setRequests(prev => {
+                const exists = prev.some(request => request.ID === item.ID);
+                return exists ? prev : [...prev, item];
+              });
+            }
+          });
+        } else {
+          console.error('API response is not an array or contains invalid data');
+          setRequests([]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch friend requests:', error);
       }
-    } catch (error) {
-      console.error('Failed to fetch friend requests:', error);
-    }
-  };
+    };
 
-  if (!isLoading || isLoggedIn) fetchMessageRequests();
-}, [isLoading,isLoggedIn]);
+    if (!isLoading || isLoggedIn) fetchMessageRequests();
+  }, [isLoading, isLoggedIn]);
 
-  const handleAccept = async (requestId:any) => {
+  const handleAccept = async (requestId: any) => {
     if (!data?.UserName) return;
     try {
-      const acceptresponse = await PostAcceptMessageRequest({ UserName: data.UserName, RequestId:requestId, type:"Message", codex:"0x17" },userAuthToken);
+      const acceptresponse = await PostAcceptMessageRequest({ UserName: data.UserName, RequestId: requestId, type: "Message", codex: "0x17" }, userAuthToken);
       if (acceptresponse[0].status && acceptresponse[0].send) {
         setAcceptingId(requestId);
         setTimeout(() => {
@@ -81,10 +81,10 @@ const MessageRequests = () => {
     }
   };
 
-  const handleDecline = async (requestId:any) => {
+  const handleDecline = async (requestId: any) => {
     if (!data?.UserName) return;
     try {
-      const rejectresponse = await PostRejectMessageRequest({ UserName: data.UserName, RequestId:requestId, type:"Message", codex:"0x19" },userAuthToken);
+      const rejectresponse = await PostRejectMessageRequest({ UserName: data.UserName, RequestId: requestId, type: "Message", codex: "0x19" }, userAuthToken);
       if (rejectresponse[0].status && rejectresponse[0].send) {
         setRejectingId(requestId);
         setTimeout(() => {
@@ -103,7 +103,10 @@ const MessageRequests = () => {
       {messages.length > 0 ? (
         messages.map((message) => (
           <div key={message.ID} className={`flex flex-col md:flex-row items-center md:items-start bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 ease-in-out p-4 ${acceptingId === message.ID ? 'fade-out-bounce' : rejectingId === message.ID ? 'fade-out-reject' : ''}`}>
-            <img src={message.ReqAuthorImage} alt="Profile" className="w-20 h-20 rounded-full object-cover mr-4 mb-4 md:mb-0"/>
+            <Image src={message.ReqAuthorImage} alt="Profile" className="w-20 h-20 rounded-full object-cover mr-4 mb-4 md:mb-0" width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto' }} />
             <div className="flex-1">
               <h3 className="text-xl font-bold">{message.ReqAuthor}</h3>
               <p className="text-sm text-gray-500">{message.ReqDate} | {message.ReqTitle}</p>

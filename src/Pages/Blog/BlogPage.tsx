@@ -1,13 +1,14 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDays, faEye, faFolderOpen, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { API_URL } from '@/api/Api';
+import { useData } from '@/base/Context/DataContext';
 import Header from '@/base/ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
-import { useData } from '@/base/Context/DataContext';
+import { faCalendarDays, faEye, faFolderOpen, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 interface Blog {
   Bid: number;
@@ -166,7 +167,10 @@ const Blog: React.FC = () => {
           {filteredBlogs.map((blog) => (
             <div key={blog.Bid} className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
               <a href={`/Blogs/${blog.Bauthor.replace(' ', '')}/${blog.Burl}`}>
-                <img className="w-full h-48 object-fit rounded-t-lg" src={blog.Bimage} alt={blog.Bdesc || blog.Bname + " - Distcom Network"} />
+                <Image className="w-full h-48 object-fit rounded-t-lg" src={blog.Bimage} alt={blog.Bdesc || blog.Bname + " - Distcom Network" width={0}
+                  height={0}
+                  sizes="100vw"
+                  style={{ width: '100%', height: 'auto' }}} />
               </a>
               <div className="p-4">
                 <h2 className="text-lg font-semibold text-gray-900 mb-2">{blog.Bname}</h2>
@@ -182,7 +186,10 @@ const Blog: React.FC = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <img className="h-8 w-8 rounded-full object-cover" src={blog.BauthorImage} alt="Author" />
+                    <Image className="h-8 w-8 rounded-full object-cover" src={blog.BauthorImage} alt="Author" width={0}
+                      height={0}
+                      sizes="100vw"
+                      style={{ width: '100%', height: 'auto' }} />
                     <span className="ml-2 text-sm font-medium text-gray-900"><a href={`/Author/${blog.Bauthor.replace(' ', '')}`} >{blog.Bauthor} </a></span>
                     <span className="ml-2 text-sm font-medium text-gray-900"><FontAwesomeIcon icon={faEye} className="mr-1" />{blog.Bviews}</span>
                   </div>

@@ -1,13 +1,12 @@
 import {
     RuntimeModule,
+    runtimeMethod,
     runtimeModule,
     state,
-    runtimeMethod,
 } from "@proto-kit/module";
 
 import {
-    StateMap,
-    assert
+    StateMap
 } from "@proto-kit/protocol";
 
 import {
@@ -23,19 +22,19 @@ export class UserMessage extends Struct({
     messageId: UInt64,
     content: String,
     timestamp: UInt64
-}) {}
+}) { }
 
 export class UserImage extends Struct({
     imageId: UInt64,
     imageURL: String,
     timestamp: UInt64
-}) {}
+}) { }
 
 export class UserComment extends Struct({
     commentId: UInt64,
     content: String,
     timestamp: UInt64
-}) {}
+}) { }
 
 @runtimeModule()
 export class UserContent extends RuntimeModule<{}> {

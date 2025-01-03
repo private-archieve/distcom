@@ -1,6 +1,6 @@
-import { ItemModule, ItemKey, EntryCardEntity } from '../../../DistcomZKBase/ProtoKit-Base/Proto-EnrtyCards';
-import { PublicKey, Bool, UInt64, Field } from "o1js";
 import assert from 'assert';
+import { PublicKey, UInt64 } from "o1js";
+import { ItemKey, ItemModule } from '../../../DistcomZKBase/ProtoKit-Base/Proto-EnrtyCards';
 
 describe('ItemModule', () => {
     let module;
@@ -23,7 +23,7 @@ describe('ItemModule', () => {
 
         const itemKey = new ItemKey({
             owner: mockPublicKey,
-            id: UInt64.from("1") as any 
+            id: UInt64.from("1") as any
         });
         const card = module.entryCards.get(itemKey);
 
@@ -36,7 +36,7 @@ describe('ItemModule', () => {
 
     it('should use an entry card', () => {
         const eventId = UInt64.from(1);
-        const validFrom = UInt64.from(Date.now() - 1000); 
+        const validFrom = UInt64.from(Date.now() - 1000);
         const validTo = UInt64.from(Date.now() + 10000);
         const itemId = UInt64.from(1);
 
@@ -46,7 +46,7 @@ describe('ItemModule', () => {
 
         const itemKey = new ItemKey({
             owner: mockPublicKey,
-            id: UInt64.from(itemId) 
+            id: UInt64.from(itemId)
         });
         const card = module.entryCards.get(itemKey);
 

@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { API_URL, PostStartChat } from '@/base/Api/Api';
+import { useData } from '@/base/Context/DataContext';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faPhone } from '@fortawesome/free-solid-svg-icons';
-import { API_URL, PostStartChat } from '../../../../base/Api/Api';
-import { useData } from '../../../../base/Context/DataContext';
+import axios from 'axios';
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
 
 interface Friend {
-    id:string;
+    id: string;
     name: string;
     status: string;
     image: string;
@@ -19,16 +20,16 @@ interface NewChatModalProps {
     setIsOpen: (isOpen: boolean) => void;
 }
 
-const NewChat: React.FC<NewChatModalProps> = ({ isOpen, setIsOpen}) => {
-    const { isLoggedIn, isLoading, data,userAuthToken } = useData();
+const NewChat: React.FC<NewChatModalProps> = ({ isOpen, setIsOpen }) => {
+    const { isLoggedIn, isLoading, data, userAuthToken } = useData();
     const [friendsList, setFriendsList] = useState<Friend[]>([]);
     const [hasFriends, setHasFriends] = useState(true);
-    
+
     const handleStartChat = async (friendid: any) => {
-        const response = await PostStartChat({friendid,method:'startchat'},userAuthToken);
+        const response = await PostStartChat({ friendid, method: 'startchat' }, userAuthToken);
         setIsOpen(false)
-      };
-    
+    };
+
     useEffect(() => {
         const fetchFriends = async () => {
             if (!isLoggedIn || isLoading) return;
@@ -37,7 +38,7 @@ const NewChat: React.FC<NewChatModalProps> = ({ isOpen, setIsOpen}) => {
                     headers: {
                         'Authorization': `Bearer ${userAuthToken}`
                     }
-                });                
+                });
                 const friendsData = response.data[0]?.friends;
                 if (friendsData && friendsData.length > 0) {
                     setFriendsList(friendsData);
@@ -48,7 +49,7 @@ const NewChat: React.FC<NewChatModalProps> = ({ isOpen, setIsOpen}) => {
             } catch (error) {
                 console.error('An error occurred during the API request:', error);
             }
-            
+
         };
 
         if (isOpen) {
@@ -68,7 +69,10 @@ const NewChat: React.FC<NewChatModalProps> = ({ isOpen, setIsOpen}) => {
                             {friendsList.map((friend, index) => (
                                 <div key={index} className="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-sm transition-all duration-300 ease-in-out hover:shadow-md hover:bg-gray-50">
                                     <div className="flex items-center">
-                                        <img src={friend.image} alt={friend.name} className="w-14 h-14 rounded-full mr-4 shadow" />
+                                        <Image src={friend.image} alt={friend.name} className="w-14 h-14 rounded-full mr-4 shadow" width={0}
+                                            height={0}
+                                            sizes="100vw"
+                                            style={{ width: '100%', height: 'auto' }} />
                                         <div className="flex flex-col">
                                             <span className="font-medium text-gray-900">{friend.name}</span>
                                             <span className={`mt-2 text-sm font-semibold ${friend.status === 'online' ? 'text-green-500' : friend.status === 'offline' ? 'text-red-500' : 'text-gray-400'}`}>
@@ -76,7 +80,7 @@ const NewChat: React.FC<NewChatModalProps> = ({ isOpen, setIsOpen}) => {
                                             </span>
                                         </div>
                                     </div>
-                                    <button onClick={()=> handleStartChat(friend.id)} className="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white rounded-md px-5 py-2 focus:outline-none shadow transition duration-300 ease-in-out">
+                                    <button onClick={() => handleStartChat(friend.id)} className="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white rounded-md px-5 py-2 focus:outline-none shadow transition duration-300 ease-in-out">
                                         <FontAwesomeIcon icon={faPaperPlane} className="text-lg" />
                                     </button>
                                 </div>
@@ -95,7 +99,7 @@ const NewChat: React.FC<NewChatModalProps> = ({ isOpen, setIsOpen}) => {
             </div>
         </div>
     );
-    
+
 };
 
 export default NewChat;

@@ -1,10 +1,10 @@
 "use client"
-import React, { useState, useRef, useEffect } from 'react';
-import { useData } from '../../../Context/DataContext';
-import Link from 'next/link';
-
+import { faEllipsisV, faGear, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faEllipsisV, faUser } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
+import { useData } from '../../../Context/DataContext';
 
 export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -39,17 +39,23 @@ export default function Header() {
         <div className="container mx-auto px-6 py-3 flex justify-between items-center">
           <Link href="/" className="">
             <div className="flex items-center w-auto">
-              <img src={siteLogoURL} alt="Distcom Network Logo" className="h-8 w-8 mr-2" />
+              <Image src={siteLogoURL} alt="Distcom Network Logo" className="h-8 w-8 mr-2" width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: '100%', height: 'auto' }} />
               <span className="font-bold text-xl text-gray-800">Distcom Network</span>
             </div>
           </Link>
           {isLoggedIn ? (
             <div className="flex items-center relative" ref={dropdownRef}>
               <Link href="/Profile" className="">
-                <img
+                <Image
                   src={profileImageURL}
                   alt="User Profile"
-                  className="h-12 w-12 rounded-full cursor-pointer object-cover mr-2"
+                  className="h-12 w-12 rounded-full cursor-pointer object-cover mr-2" width={0}
+                  height={0}
+                  sizes="100vw"
+                  style={{ width: '100%', height: 'auto' }}
                 />
               </Link>
               <button className="px-4 py-2 rounded focus:outline-none" onClick={toggleDropdown}>

@@ -1,17 +1,16 @@
 "use client"
 
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { faThumbsUp, faEye, faThumbsDown, faMessage, faTags, faFolderOpen, faUserPlus, faShare, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays, faEye, faFolderOpen, faMessage, faShare, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
+import Image from 'next/image';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { API_URL, PostSendDislike, PostSendLike } from '../../Api/Api';
+import { useData } from '../../Context/DataContext';
 import Header from '../../ThemeParts/MainPart/Header/HeaderPart';
 import Navbar from '../../ThemeParts/MainPart/Navbar/Navbar';
-import { API_URL, PostSendDislike, PostSendLike } from '../../Api/Api';
-import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SharePopup from '../../ThemeParts/Popup/SharePopup';
-import { useData } from '../../Context/DataContext';
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
 
 interface BlogPost {
   Bid: string;
@@ -87,7 +86,12 @@ const AuthorDetail = () => {
           <header className="text-center py-6 mb-6 bg-white rounded-lg shadow-lg">
             <h1 className="text-4xl font-sans mb-2 mt-2">{blogs[0].Bname}</h1>
             <div className="flex justify-center items-center text-gray-600 mt-6">
-              <img src={blogs[0].BauthorImage} alt="Author" className="w-20 h-20 rounded-full mr-2" />
+              <Image src={blogs[0].BauthorImage} alt="Author" className="w-20 h-20 rounded-full mr-2"
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: '100%', height: 'auto' }}
+              />
               <div className="inline-flex flex-col">
                 <span className="font-semibold text-lg">{blogs[0].Bauthor}</span>
                 <time className="text-sm" dateTime={blogs[0].Bdate}>{blogs[0].Bdate}</time>
@@ -112,7 +116,12 @@ const AuthorDetail = () => {
             {blogs.map((blog) => (
               <div key={blog.Bid} className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
                 <a href={`/Blogs/${blog.Bauthor.replace(' ', '')}/${blog.Burl}`} >
-                  <img className="w-full h-48 object-fit rounded-t-lg" src={blog.Bimage} alt={blog.Bdesc} />
+                  <Image className="w-full h-48 object-fit rounded-t-lg" src={blog.Bimage} alt={blog.Bdesc}
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: '100%', height: 'auto' }}
+                  />
                 </a>
                 <div className="p-4">
                   <h2 className="text-lg font-semibold text-gray-900 mb-2">{blog.Bname}</h2>
@@ -128,7 +137,11 @@ const AuthorDetail = () => {
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <img className="h-8 w-8 rounded-full object-cover" src={blog.BauthorImage} alt={blog.Bdesc} />
+                      <Image className="h-8 w-8 rounded-full object-cover" src={blog.BauthorImage} alt={blog.Bdesc} width={0}
+                        height={0}
+                        sizes="100vw"
+                        style={{ width: '100%', height: 'auto' }}
+                      />
                       <span className="ml-2 text-sm font-medium text-gray-900">{blog.Bauthor}</span>
                       <span className="ml-2 text-sm font-medium text-gray-900"><FontAwesomeIcon icon={faEye} className="mr-1" />{blog.Bviews}</span>
                     </div>

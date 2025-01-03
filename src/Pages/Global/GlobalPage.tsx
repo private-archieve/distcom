@@ -1,13 +1,12 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import { API_URL } from '@/base/Api/Api';
+import { useData } from '@/base/Context/DataContext';
+import Header from '@/base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
 import axios from 'axios';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDays, faEye, faFolderOpen, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { API_URL } from '../../base/Api/Api';
-import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar';
-import { useData } from '../../base/Context/DataContext';
+import React, { useEffect, useState } from 'react';
 
 interface GlobalContent {
   Bid: number;
@@ -24,7 +23,7 @@ interface GlobalContent {
 }
 
 const GlobalContentComponent: React.FunctionComponent = () => {
-  const { isLoggedIn, isLoading,siteData} = useData();
+  const { isLoggedIn, isLoading, siteData } = useData();
   const [globalContents, setGlobalContents] = useState<GlobalContent[]>([]);
   const [filteredGlobalContents, setFilteredGlobalContents] = useState<GlobalContent[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
@@ -97,13 +96,19 @@ const GlobalContentComponent: React.FunctionComponent = () => {
             <div className="grid grid-cols-1 gap-8">
               {filteredGlobalContents.map((global) => (
                 <div key={global.Bid} className="bg-white rounded-md shadow-lg overflow-hidden">
-                  <img src={global.Gimage} alt={global.Gname} className="w-full h-64 object-cover rounded-t-md"/>
+                  <Image src={global.Gimage} alt={global.Gname} className="w-full h-64 object-cover rounded-t-md" width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: '100%', height: 'auto' }} />
                   <div className="p-6">
                     <h3 className="text-xl font-semibold mb-4">{global.Gname}</h3>
                     <p className="text-gray-700 mb-4">{global.Gcontent}</p>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
-                        <img src={global.GauthorImage} alt={global.Gauthor} className="h-10 w-10 rounded-full object-cover"/>
+                        <Image src={global.GauthorImage} alt={global.Gauthor} className="h-10 w-10 rounded-full object-cover" width={0}
+                          height={0}
+                          sizes="100vw"
+                          style={{ width: '100%', height: 'auto' }} />
                         <span className="ml-3 text-sm font-medium text-gray-900">{global.Gauthor}</span>
                       </div>
                       <a href={`/Blogs/${global.Gurl}`} className="text-blue-600 hover:underline text-sm">Read More →</a>

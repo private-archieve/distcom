@@ -1,11 +1,13 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Header from '../../base/ThemeParts/MainPart/Header/HeaderPart';
-import Navbar from '../../base/ThemeParts/MainPart/Navbar/Navbar';
-import { API_URL } from '../../base/Api/Api';
+import { API_URL } from '@/base/Api/Api';
+import { useData } from '@/base/Context/DataContext';
+import Header from '@/base/ThemeParts/MainPart/Header/HeaderPart';
+import Navbar from '@/base/ThemeParts/MainPart/Navbar/Navbar';
 import axios from 'axios';
-import { useData } from '../../base/Context/DataContext';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 
 interface SearchResultItem {
   ScID: string;
@@ -16,7 +18,7 @@ interface SearchResultItem {
 
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { isLoggedIn, isLoading,siteData} = useData();
+  const { isLoggedIn, isLoading, siteData } = useData();
   const [searchResults, setSearchResults] = useState<SearchResultItem[]>([]);
   const router = useRouter();
 
@@ -47,7 +49,7 @@ const SearchPage = () => {
         }
       });
   }, []);
-  
+
 
   return (
     <>
@@ -76,7 +78,10 @@ const SearchPage = () => {
                   key={item.ScID}
                   className="rounded-lg overflow-hidden shadow-lg transition duration-300 ease-in-out hover:shadow-2xl bg-white"
                 >
-                  <img src={item.ScImage} alt={item.ScName} className="w-full h-48 object-cover" />
+                  <Image src={item.ScImage} alt={item.ScName} className="w-full h-48 object-cover" width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: '100%', height: 'auto' }} />
                   <div className="p-4">
                     <h5 className="font-semibold text-lg text-gray-800">{item.ScName}</h5>
                     <p className="text-sm text-gray-600 mt-1">{item.ScType}</p>
